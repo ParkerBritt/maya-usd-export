@@ -4,6 +4,7 @@ import sys
 
 import maya.cmds as cmds
 import maya.mel as mel
+import argparse
 from playsound import playsound
 
 # import p4 utils
@@ -25,7 +26,7 @@ render_geo_whitelist = ["render"]
 # render_geo_whitelist = ["Render", "Muscles", "Fat"]
 
 
-def main():
+def main(output_path=None):
     load_plugins()
     shot_num = os.getenv("SHOT_NUM")
     start_frame = cmds.playbackOptions(q=True, animationStartTime=True)
@@ -35,8 +36,16 @@ def main():
     frame_step = 1
 
     change_num = p4utils.make_change("animation tool test")
-    export_anim(frame_range, frame_step, change_num)
+    export_anim(frame_range, frame_step, change_num, output_path)
 
+# def config_args():
+#     parser = argparse.ArgumentParser(
+#             prog="Maya Anim Export USD",
+#             description="exports rigged characters as from maya as a usd file",
+#             )
+#     parser.add_argument("-o", "-output")
+#
+#     return parser.parse_args()
 
 def get_characters():
     groups = cmds.ls("geo", long=True)
@@ -66,7 +75,7 @@ def load_plugins():
         cmds.loadPlugin("mayaUsdPlugin")
 
 
-def export_anim(frame_range, frame_step, change_num):
+def export_anim(frame_range, frame_step, change_num, export_file_path):
     # start_frame = frame_range[0]
     # end_frame = frame_range[1]
     # frame_step = frame_range[2]
@@ -94,7 +103,8 @@ def export_anim(frame_range, frame_step, change_num):
         shot_num = os.getenv("SHOT_NUM")
         if not project_root or not shot_num:
             raise Exception("environment variables 'file_root' or 'SHOT_NUM' not set")
-        export_file_path = f"{project_root}/usd/shots/SH{shot_num.zfill(4)}/scene_layers/anims/{character}.usd"
+        if(not export_file_path):
+            export_file_path = f"{project_root}/usd/shots/SH{shot_num.zfill(4)}/scene_layers/anims/{character}.usd"
         print("EXPORT FILE PATH", export_file_path)
         export_file_already_exists = os.path.exists(export_file_path)
         export_file_p4_info = None
