@@ -27,26 +27,32 @@ class ExportAnim:
         geo_whitelist=["render"],
         usd_type="",
         output=None,
+        root_type="",
         start_frame=None,
         end_frame=None,
         do_p4=True,
         debug=False,
+        export_rig=False,
     ):
         self.render_geo_whitelist = geo_whitelist
         self.output = output
+        self.root_type=root_type
         self.debug = debug
         self.do_p4 = do_p4
         self.start_frame = start_frame
         self.end_frame = end_frame
         self.usd_type = usd_type
+        self.joint_grp_path = "rig|Trans_Grp|Control_Grp|Global_Ctrl_Offset|Global_Ctrl|Joint_Grp"
+        self.export_rig = export_rig
         self.frame_step = 1
 
         if debug:
             self.do_p4 = False
-            self.start_frame, self.end_frame = (1001, 1001)
 
         self.load_plugins()
 
+        print("START FRAME", self.start_frame)
+        print('END FRAME', self.end_frame)
         # set start frame to maya scene time range
         if not self.start_frame:
             self.start_frame = cmds.playbackOptions(q=True, animationStartTime=True)
@@ -95,7 +101,9 @@ class ExportAnim:
 
         for i, character in enumerate(characters):
             group_name = matching_groups[i]
+            root_prim = cmds.listRelatives(group_name, parent=True)[0]
             children = cmds.listRelatives(group_name, children=True)
+
             filtered_children = [
                 child for child in children if child in self.render_geo_whitelist
             ]
@@ -136,7 +144,11 @@ class ExportAnim:
             # make selection
             made_selection = False
             cmds.select(clear=True)
+            if self.export_rig:
+                cmds.select(root_prim+"|"+self.joint_grp_path, add=True)
             self.set_usd_type(group_name, self.usd_type)
+
+            self.set_usd_type(root_prim, self.root_type)
             for child in cmds.listRelatives(group_name, children=True):
                 if not child in self.render_geo_whitelist:
                     continue
@@ -163,6 +175,8 @@ class ExportAnim:
                 shadingMode="none",
                 frameRange=frame_range,
                 frameStride=self.frame_step,
+                exportSkels="auto",
+                exportSkin="auto",
             )
 
             # add file to changelist

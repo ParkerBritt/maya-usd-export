@@ -9,10 +9,14 @@ else:
         exit()
 importlib.reload(export_usd)
 
-def export(output=None, debug=False):
+def export(output=None, debug=False, start_frame=None, end_frame=None):
     export_usd.ExportAnim(
         geo_whitelist=["render", "skeleton"],
-        usd_type="xform",
+        usd_type="Xform",
+        root_type="SkelRoot",
         output=output,
         debug=debug,
+        export_rig=True,
+        start_frame=start_frame,
+        end_frame=end_frame,
     )
