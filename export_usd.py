@@ -116,14 +116,22 @@ class ExportAnim:
             print(character, group_name)
 
             project_root = os.getenv("film_root")
-            if not export_file_path:
-                print("export file path:", export_file_path)
-                shot_num = os.getenv("SHOT_NUM")
-                if not project_root or not shot_num:
-                    raise Exception(
-                        "environment variables 'file_root' or 'SHOT_NUM' not set"
-                    )
-                export_file_path = f"{project_root}/usd/shots/SH{shot_num.zfill(4)}/scene_layers/anims/{character}.usd"
+
+            print("export file path:", export_file_path)
+            shot_num = os.getenv("SHOT_NUM")
+            if not project_root or not shot_num:
+                raise Exception(
+                    "environment variables 'file_root' or 'SHOT_NUM' not set"
+                )
+                # export_file_path = f"{project_root}/usd/shots/SH{shot_num.zfill(4)}/scene_layers/anims/{character}.usd"
+
+            shot_num = f"SH{shot_num.zfill(4)}"
+
+            project_root = os.path.normpath(project_root)
+            export_file_path = os.path.normpath(export_file_path)
+
+            export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
+
             print("EXPORT FILE PATH", export_file_path)
             export_file_already_exists = os.path.exists(export_file_path)
             export_file_p4_info = None
@@ -164,20 +172,26 @@ class ExportAnim:
                 continue
 
             # export file
-            frame_range = (self.start_frame, self.end_frame)
-            cmds.mayaUSDExport(
-                file=export_file_path,
-                selection=True,
-                defaultMeshScheme="none",
-                exportVisibility=False,
-                exportUVs=False,
-                exportMaterialCollections=False,
-                shadingMode="none",
-                frameRange=frame_range,
-                frameStride=self.frame_step,
-                exportSkels="auto",
-                exportSkin="auto",
-            )
+            export_args = {
+                    "file":export_file_path,
+                    "selection":True,
+                    "defaultMeshScheme":"none",
+                    "exportVisibility":False,
+                    "exportUVs":False,
+                    "exportMaterialCollections":False,
+                    "shadingMode":"none",
+                    "frameRange":(self.start_frame, self.end_frame),
+                    "frameStride":self.frame_step,
+                    "staticSingleSample":True,
+            }
+
+            if self.export_rig:
+                export_args.update({
+                    "exportSkels":"auto",
+                    "exportSkin":"auto",
+                })
+
+            cmds.mayaUSDExport(**export_args)
 
             # add file to changelist
             if self.do_p4 and (
