@@ -98,6 +98,12 @@ class ExportAnim:
         #        cmds.loadPlugin("AbcExport")
 
         characters, matching_groups = self.get_characters()
+        project_root = os.getenv("film_root")
+        if not project_root:
+            raise Exception(
+                "environment variable 'film_root' not set"
+            )
+        project_root = os.path.normpath(project_root)
 
         for i, character in enumerate(characters):
             group_name = matching_groups[i]
@@ -115,19 +121,17 @@ class ExportAnim:
             print("children:", children)
             print(character, group_name)
 
-            project_root = os.getenv("film_root")
 
             print("export file path:", export_file_path)
             shot_num = os.getenv("SHOT_NUM")
-            if not project_root or not shot_num:
+            if not shot_num:
                 raise Exception(
-                    "environment variables 'file_root' or 'SHOT_NUM' not set"
+                    "environment variable 'SHOT_NUM' not set"
                 )
                 # export_file_path = f"{project_root}/usd/shots/SH{shot_num.zfill(4)}/scene_layers/anims/{character}.usd"
 
             shot_num = f"SH{shot_num.zfill(4)}"
 
-            project_root = os.path.normpath(project_root)
             export_file_path = os.path.normpath(export_file_path)
 
             export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
@@ -183,6 +187,7 @@ class ExportAnim:
                     "frameRange":(self.start_frame, self.end_frame),
                     "frameStride":self.frame_step,
                     "staticSingleSample":True,
+                    "exportBlendShapes":True,
             }
 
             if self.export_rig:
