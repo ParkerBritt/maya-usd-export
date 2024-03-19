@@ -9,7 +9,7 @@ else:
         exit()
 importlib.reload(export_usd)
 
-def export(output=None, debug=False, start_frame=None, end_frame=None):
+def export(output=None, debug=False, start_frame=None, end_frame=None, include_blendshapes=False):
     if not output:
         output="{project_root}/usd/shots/{shot_num}/scene_layers/anims/{character}.usd"
     export_usd.ExportAnim(
@@ -20,5 +20,5 @@ def export(output=None, debug=False, start_frame=None, end_frame=None):
         export_rig=False,
         start_frame=start_frame,
         end_frame=end_frame,
-
+        include_blendshapes=include_blendshapes
     )

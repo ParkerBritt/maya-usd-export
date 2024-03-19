@@ -33,6 +33,7 @@ class ExportAnim:
         do_p4=True,
         debug=False,
         export_rig=False,
+        include_blendshapes=True,
     ):
         self.render_geo_whitelist = geo_whitelist
         self.output = output
@@ -45,6 +46,7 @@ class ExportAnim:
         self.joint_grp_path = "rig|Trans_Grp|Control_Grp|Global_Ctrl_Offset|Global_Ctrl|Joint_Grp"
         self.export_rig = export_rig
         self.frame_step = 1
+        self.include_blendshapes=include_blendshapes
 
         if debug:
             self.do_p4 = False
@@ -187,8 +189,10 @@ class ExportAnim:
                     "frameRange":(self.start_frame, self.end_frame),
                     "frameStride":self.frame_step,
                     "staticSingleSample":True,
-                    "exportBlendShapes":True,
             }
+
+            if self.include_blendshapes:
+                export_args.update({"exportBlendShapes":True})
 
             if self.export_rig:
                 export_args.update({
