@@ -193,12 +193,17 @@ class ExportAnim:
 
             if self.include_blendshapes:
                 export_args.update({"exportBlendShapes":True})
+            else:
+                export_args.update({"exportBlendShapes":False})
 
             if self.export_rig:
                 export_args.update({
                     "exportSkels":"auto",
                     "exportSkin":"auto",
                 })
+
+            print("EXPORTING USD")
+            print("args:\n",export_args)
 
             cmds.mayaUSDExport(**export_args)
 
