@@ -43,7 +43,6 @@ class ExportAnim:
         self.start_frame = start_frame
         self.end_frame = end_frame
         self.usd_type = usd_type
-        self.joint_grp_path = "rig|Trans_Grp|Control_Grp|Global_Ctrl_Offset|Global_Ctrl|Joint_Grp"
         self.export_rig = export_rig
         self.frame_step = 1
         self.include_blendshapes=include_blendshapes
@@ -64,6 +63,25 @@ class ExportAnim:
         if self.do_p4:
             self.change_num = p4utils.make_change("animation tool test")
         self.export_anim(self.output)
+
+    def get_joint_grps(self, character):
+        def traverse(parent_path):
+            attr_name = "joints_grp"
+            found_items = []
+            children = cmds.listRelatives(parent_path, children=True, fullPath=True)
+            if not children:
+                return found_items
+            for child in children:
+                attr_path = child+"."+attr_name
+                if cmds.objExists(attr_path) and cmds.getAttr(attr_path) is True:
+                    found_items.append(child)
+                found_items.extend(traverse(child))
+            
+            return found_items
+
+        rig_path = f"{character}|rig"
+        character_paths = traverse(rig_path)
+        return character_paths
 
     def get_characters(self):
         groups = cmds.ls("geo", long=True)
@@ -159,7 +177,8 @@ class ExportAnim:
             made_selection = False
             cmds.select(clear=True)
             if self.export_rig:
-                cmds.select(root_prim+"|"+self.joint_grp_path, add=True)
+                for joint_grp in self.get_joint_grps(character+"_anim"):
+                    cmds.select(joint_grp, add=True)
             self.set_usd_type(group_name, self.usd_type)
 
             self.set_usd_type(root_prim, self.root_type)
