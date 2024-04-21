@@ -34,6 +34,7 @@ class ExportAnim:
         debug=False,
         export_rig=False,
         include_blendshapes=True,
+        changelist_description=None,
     ):
         self.render_geo_whitelist = geo_whitelist
         self.output = output
@@ -46,6 +47,7 @@ class ExportAnim:
         self.export_rig = export_rig
         self.frame_step = 1
         self.include_blendshapes=include_blendshapes
+        self.changelist_description = changelist_description if changelist_description else "Animation Export"
 
         if debug:
             self.do_p4 = False
@@ -61,7 +63,7 @@ class ExportAnim:
             self.end_frame = cmds.playbackOptions(q=True, animationEndTime=True)
 
         if self.do_p4:
-            self.change_num = p4utils.make_change("Animation export")
+            self.change_num = p4utils.make_change(self.changelist_description)
         self.export_anim(self.output)
 
     def get_joint_grps(self, character):
