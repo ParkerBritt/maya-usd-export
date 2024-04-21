@@ -61,7 +61,7 @@ class ExportAnim:
             self.end_frame = cmds.playbackOptions(q=True, animationEndTime=True)
 
         if self.do_p4:
-            self.change_num = p4utils.make_change("animation tool test")
+            self.change_num = p4utils.make_change("Animation export")
         self.export_anim(self.output)
 
     def get_joint_grps(self, character):
