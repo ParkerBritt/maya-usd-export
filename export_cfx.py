@@ -9,9 +9,10 @@ else:
         exit()
 importlib.reload(export_usd)
 
+
 def export(output=None, debug=False, start_frame=None, end_frame=None):
     if not output:
-        output="{project_root}/shots/{shot_num}/fx/cfx/imports/{character}.usd"
+        output = "/home/will/Downloads/test_usd_export/{character}.usd"
     export_usd.ExportAnim(
         geo_whitelist=["render", "skeleton"],
         usd_type="Xform",

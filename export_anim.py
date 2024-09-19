@@ -9,9 +9,10 @@ else:
         exit()
 importlib.reload(export_usd)
 
+
 def export(output=None, debug=False, start_frame=None, end_frame=None, include_blendshapes=False):
     if not output:
-        output="{project_root}/usd/shots/{shot_num}/scene_layers/anims/{character}.usd"
+        output = "/home/will/Downloads/test_usd_export/{character}.usd"
     export_usd.ExportAnim(
         geo_whitelist=["render"],
         usd_type="",
