@@ -11,7 +11,7 @@ import maya.cmds as cmds
 class ExportAnim:
     def __init__(
         self,
-        geo_whitelist=["render"],
+        geo_whitelist,
         usd_type="",
         output="/home/will/Downloads/test_usd_export/", # directory file is saved too
         root_type="",
@@ -36,13 +36,15 @@ class ExportAnim:
 
         self.load_plugins()
 
-        print("START FRAME", self.start_frame)
-        print('END FRAME', self.end_frame)
         # set start frame to maya scene time range
         if not self.start_frame:
-            self.start_frame = cmds.playbackOptions(q=True, animationStartTime=True)
+            # self.start_frame = cmds.playbackOptions(q=True, animationStartTime=True)  # full timeline
+            self.start_frame = cmds.playbackOptions(q=True, minTime=True)  # playback field
         if not self.end_frame:
-            self.end_frame = cmds.playbackOptions(q=True, animationEndTime=True)
+            # self.end_frame = cmds.playbackOptions(q=True, animationEndTime=True)  # full timeline
+            self.end_frame = cmds.playbackOptions(q=True, maxTime=True)  # playback field
+        print("\nSTART FRAME", self.start_frame)
+        print('END FRAME', self.end_frame, "\n")
 
         self.export_anim(self.output)
 
@@ -51,39 +53,46 @@ class ExportAnim:
             attr_name = "joints_grp"
             found_items = []
             children = cmds.listRelatives(parent_path, children=True, fullPath=True)
+
             if not children:
                 return found_items
+        
             for child in children:
                 attr_path = child+"."+attr_name
-                if cmds.objExists(attr_path) and cmds.getAttr(attr_path) is True:
+                if cmds.objExists(attr_path) == True and cmds.getAttr(attr_path) == True:
                     found_items.append(child)
-                found_items.extend(traverse(child))
-            
+
+                child_found_items = traverse(child)
+                found_items.extend(child_found_items)
+
             return found_items
 
-        rig_path = f"{character}|rig"
-        character_paths = traverse(rig_path)
+        joints_path = f"{character}|rig"
+        character_paths = traverse(joints_path)
         return character_paths
 
     def get_characters(self):
         groups = cmds.ls("geo", long=True)
-        print("found groups", groups)
+        print("found groups", groups, "\n")
 
         matching_groups = []
         characters = []
 
         for grp in groups:
-            print("grp:", grp)
             parent = cmds.listRelatives(grp, parent=True, fullPath=True)
 
             if parent:
                 parent_name = parent[0]
 
-                if parent_name.endswith("_anim"):
-                    characters.append(parent_name[1:-5])
+                if parent_name.endswith("_rig"):
+                    characters.append(parent_name[1:-4])
                     matching_groups.append(grp)
-        print("matching groups", matching_groups)
-        print("characters:", characters)
+
+        if not characters and not matching_groups:
+            print("ERROR: No parent group to geo found, make sure parent group of geo has _rig suffix \n")
+        else:
+            print("matching groups", matching_groups)
+            print("characters:", characters, "\n")
 
         return (characters, matching_groups)
 
@@ -93,7 +102,7 @@ class ExportAnim:
 
     def export_anim(self, export_file_path):
         characters, matching_groups = self.get_characters()
-        project_root = "/home/will/Downloads/test_usd_export/"
+        project_root = self.output
 
         project_root = os.path.normpath(project_root)
 
@@ -106,22 +115,22 @@ class ExportAnim:
                 child for child in children if child in self.render_geo_whitelist
             ]
             if len(filtered_children) == 0:
-                print(f"no groups match the whitelist: {self.render_geo_whitelist}")
+                print(f"no groups match the whitelist: {self.render_geo_whitelist} \n")
                 return
 
-            print("filtered_children/meshes", filtered_children)
-            print("children/meshes:", children)
-            print(character, group_name)
+            print("filtered_children from whitelist", filtered_children)
+            print("children groups:", children, "\n")
 
             # print("export file path:", export_file_path)
-            shot_num = "01"
+            shot_num = "1"
             shot_num = f"SH{shot_num.zfill(4)}"
 
             export_file_path = os.path.normpath(export_file_path)
-            export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
+            # export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
+            export_file_path = f"{project_root}/{shot_num}/{character}/{character}"
             print("EXPORT FILE PATH", export_file_path)
 
-            export_file_already_exists = os.path.exists(export_file_path)
+            export_file_already_exists = os.path.exists(f"{project_root}/{shot_num}/{character}/")
             if export_file_already_exists:
                 print("FILE ALREADY EXISTS, going to OVERWITE")
 
@@ -131,11 +140,13 @@ class ExportAnim:
                 print(f"{export_dirname} does not exist. Making path")
                 os.makedirs(export_dirname)
 
+            print("\n")
+
             # make selection
             made_selection = False
             cmds.select(clear=True)
             if self.export_rig:
-                for joint_grp in self.get_joint_grps(character+"_anim"):
+                for joint_grp in self.get_joint_grps(character+"_rig"):
                     cmds.select(joint_grp, add=True)
             self.set_usd_type(group_name, self.usd_type)
 
@@ -150,7 +161,7 @@ class ExportAnim:
                 made_selection = True
             if not made_selection:
                 print(
-                    f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name}"
+                    f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n"
 )
                 continue
 
@@ -193,3 +204,4 @@ class ExportAnim:
         attr_path = f"{item}.USD_typeName"
         if(cmds.objExists(attr_path)):
             cmds.setAttr(attr_path, usd_type, type="string")
+        else: print(f"cant find {attr_path} not setting attr value: {usd_type}")

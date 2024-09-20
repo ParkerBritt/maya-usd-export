@@ -12,9 +12,9 @@ importlib.reload(export_usd)
 
 def export(output=None, debug=False, start_frame=None, end_frame=None):
     if not output:
-        output = "/home/will/Downloads/test_usd_export/{character}.usd"
+        output = "/home/will/Downloads/test_usd_export/"
     export_usd.ExportAnim(
-        geo_whitelist=["render", "skeleton"],
+        geo_whitelist=["render", "joints"],
         usd_type="Xform",
         root_type="SkelRoot",
         output=output,
