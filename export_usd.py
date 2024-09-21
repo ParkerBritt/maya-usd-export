@@ -2,13 +2,60 @@ import importlib
 import os
 import sys
 
+from maya import OpenMayaUI as omui
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import *
+from PySide2.QtUiTools import *
+from shiboken2 import wrapInstance
+
 import maya.cmds as cmds
 # from playsound import playsound
 
 # self.render_geo_whitelist = ["Render", "Muscles", "Fat"]
 
+mayaMainWindowPtr = omui.MQtUtil.mainWindow()
+mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QWidget)
 
-class ExportAnim:
+class Interface(QWidget):
+    def __init__(self, *args, **kwargs):
+        super(Interface,self).__init__(*args, **kwargs)
+        self.setParent(mayaMainWindow)
+        self.setWindowFlags(Qt.Window)
+        self.initUI()
+        self.setFixedWidth(200)
+        self.setFixedHeight(110)
+        self.setWindowTitle("Maya_USD_Export")
+
+    def initUI(self):
+        self.main_layout_widget = QWidget(self)
+        self.main_layout_widget.setMaximumWidth(200)
+        self.main_layout = QFormLayout(self.main_layout_widget)
+        self.main_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+        shot_num_label = QLabel("Shot Num:")
+        shot_num_lineedit = QLineEdit("1")
+        shot_num_lineedit.setObjectName("shot_number")
+
+        asset_ver_label = QLabel("Asset Version:")
+        asset_ver_lineedit = QLineEdit("1")
+        asset_ver_lineedit.setObjectName("asset_version")
+
+        export_asset_button = QPushButton("Export USD")
+        export_asset_button.setObjectName("export_usd")
+
+        self.main_layout.addRow(shot_num_label, shot_num_lineedit)
+        self.main_layout.addRow(asset_ver_label, asset_ver_lineedit)
+        self.main_layout.addRow(export_asset_button)
+
+        stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
+        with open(stylesheet_path, "r") as file:
+            stylesheet = file.read()
+        self.setStyleSheet(stylesheet)
+
+
+class ExportAnim():
     def __init__(
         self,
         geo_whitelist,
@@ -21,7 +68,7 @@ class ExportAnim:
         export_rig=False,
         include_blendshapes=True,
         changelist_description=None,
-    ):
+    ):  
         self.render_geo_whitelist = geo_whitelist
         self.output = output
         self.root_type = root_type
@@ -46,19 +93,28 @@ class ExportAnim:
         print("\nSTART FRAME", self.start_frame)
         print('END FRAME', self.end_frame, "\n")
 
-        self.export_anim(self.output)
+        self.ui = Interface()
+        self.ui.show()
+        pushButton = self.ui.findChild(QPushButton, "export_usd")
+        QObject.connect(pushButton, SIGNAL("clicked()"), lambda: self.export_anim(self.output))
+        # self.export_anim(self.output)
 
     def get_joint_grps(self, character):
         def traverse(parent_path):
             attr_name = "joints_grp"
             found_items = []
-            children = cmds.listRelatives(parent_path, children=True, fullPath=True)
+            try:
+                children = cmds.listRelatives(parent_path, children=True, fullPath=True)
+            except ValueError:
+                print("Warning: grp_joints does not exist under character")
+                return found_items
 
             if not children:
                 return found_items
         
             for child in children:
                 attr_path = child+"."+attr_name
+                # appends joint grp if they have attr_path on the joints grp (allows you only to export skin joints)
                 if cmds.objExists(attr_path) == True and cmds.getAttr(attr_path) == True:
                     found_items.append(child)
 
@@ -67,12 +123,12 @@ class ExportAnim:
 
             return found_items
 
-        joints_path = f"{character}|rig"
+        joints_path = f"{character}|grp_joints"  # parent group to joints grp
         character_paths = traverse(joints_path)
         return character_paths
 
     def get_characters(self):
-        groups = cmds.ls("geo", long=True)
+        groups = cmds.ls("*geo*", long=True)
         print("found groups", groups, "\n")
 
         matching_groups = []
@@ -122,12 +178,18 @@ class ExportAnim:
             print("children groups:", children, "\n")
 
             # print("export file path:", export_file_path)
-            shot_num = "1"
+            shot_num = self.ui.findChild(QLineEdit, "shot_number")
+            shot_num = shot_num.text()
             shot_num = f"SH{shot_num.zfill(4)}"
+            export_ver = self.ui.findChild(QLineEdit, "asset_version")
+            export_ver = export_ver.text()
+            export_ver = f"v{export_ver.zfill(4)}"
+            character_name = character.split("|")[-1]
+            file_name = f"{character_name}_{export_ver}"
 
-            export_file_path = os.path.normpath(export_file_path)
             # export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
-            export_file_path = f"{project_root}/{shot_num}/{character}/{character}"
+            export_file_path = f"{project_root}/{shot_num}/{character_name}/{file_name}"
+            export_file_path = os.path.normpath(export_file_path)
             print("EXPORT FILE PATH", export_file_path)
 
             export_file_already_exists = os.path.exists(f"{project_root}/{shot_num}/{character}/")
@@ -198,6 +260,7 @@ class ExportAnim:
             # End the Maya session
             print("finished exporting file:", export_file_path)
         print("exported all characters(meshes)")
+        self.ui.close()
         cmds.confirmDialog(message="Export Finished", title="Export Finished")
 
     def set_usd_type(self, item, usd_type):
