@@ -11,9 +11,15 @@ importlib.reload(export_anim)
 import export_cfx
 importlib.reload(export_cfx)
 
+import export_abc
+importlib.reload(export_abc)
+
 def run_export_anim():
     export_anim.export()
 
 def run_export_cfx():
     export_cfx.export()
+
+def run_export_abc():
+    export_abc.ExportAlembic()
 
