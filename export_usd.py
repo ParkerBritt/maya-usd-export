@@ -68,7 +68,7 @@ class ExportAnim():
         self,
         geo_whitelist,
         usd_type="",
-        output="D:/University_Projects/test_usd_export/", # directory file is saved too
+        output="/run/media/will/Will_s SSD1/University_Projects/YR3/Twelvefold/", # directory file is saved too
         root_type="",
         start_frame=None,
         end_frame=None,

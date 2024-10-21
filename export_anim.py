@@ -12,7 +12,7 @@ importlib.reload(export_usd)
 
 def export(output=None, debug=False, start_frame=None, end_frame=None, include_blendshapes=False):
     if not output:
-        output = "D:/University_Projects/test_usd_export/" # {character}.usd
+        output = "/run/media/will/Will_s SSD1/University_Projects/YR3/Twelvefold/" # {character}.usd
     export_usd.ExportAnim(
         geo_whitelist=["render"],
         usd_type="",
