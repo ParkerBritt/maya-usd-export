@@ -68,7 +68,7 @@ class ExportAnim():
         self,
         geo_whitelist,
         usd_type="",
-        output="/run/media/will/Will_s SSD1/University_Projects/YR3/Twelvefold/", # directory file is saved too
+        output="/run/media/will/Will_s SSD1/University_Projects/YR3/Boar/export/", # directory file is saved too
         root_type="",
         start_frame=None,
         end_frame=None,
@@ -123,20 +123,35 @@ class ExportAnim():
             for child in children:
                 attr_path = child+"."+attr_name
                 # appends joint grp if they have attr_path on the joints grp (allows you only to export skin joints)
-                if cmds.objExists(attr_path) == True and cmds.getAttr(attr_path) == True:
-                    found_items.append(child)
+                try:
+                    if cmds.objExists(child) == True and cmds.getAttr(attr_path, asString=True) == "True":
+                        print(f"FOUND ITEM {child}")
+                        found_items.append(child)
+                except ValueError: pass
 
                 child_found_items = traverse(child)
                 found_items.extend(child_found_items)
 
             return found_items
 
-        joints_path = f"{character}|grp_joints"  # parent group to joints grp
+        if self.namespace:
+            joints_path = f"{character}|{self.namespace}:grp_joints"  # parent group to joints grp
+        else:
+            joints_path = f"{character}|grp_joints"
         character_paths = traverse(joints_path)
+        print(f"joint: {character_paths}")
         return character_paths
 
     def get_characters(self):
-        groups = cmds.ls("*geo*", long=True)
+        namespaces = cmds.namespaceInfo(lon=True, r=True)
+        print(namespaces)
+        if any("boar" in namespace for namespace in namespaces):
+            print("boar found")
+            self.namespace = namespaces[1]
+            groups = cmds.ls(f"{namespaces[1]}:geo*", long=True)
+        else:
+            self.namespace = None
+            groups = cmds.ls("*geo*", long=True)
         print("found groups", groups, "\n")
 
         matching_groups = []
@@ -144,9 +159,10 @@ class ExportAnim():
 
         for grp in groups:
             parent = cmds.listRelatives(grp, parent=True, fullPath=True)
-
+            print(parent)
             if parent:
                 parent_name = parent[0]
+                print(parent_name)
 
                 if parent_name.endswith("_rig"):
                     characters.append(parent_name[1:-4])
@@ -172,8 +188,18 @@ class ExportAnim():
 
         for i, character in enumerate(characters):
             group_name = matching_groups[i]
+            print(f"grpname: {group_name}")
             root_prim = cmds.listRelatives(group_name, parent=True)[0]
             children = cmds.listRelatives(group_name, children=True)
+            print(root_prim)
+            print(children)
+
+            if self.namespace:
+                for geo in self.render_geo_whitelist:
+                    new_geo = f"{self.namespace}:{geo}"
+                    index = self.render_geo_whitelist.index(geo)
+                    self.render_geo_whitelist[index] = new_geo
+            print(self.render_geo_whitelist)
 
             filtered_children = [
                 child for child in children if child in self.render_geo_whitelist
@@ -193,6 +219,9 @@ class ExportAnim():
             export_ver = export_ver.text()
             export_ver = f"v{export_ver.zfill(4)}"
             character_name = character.split("|")[-1]
+            if self.namespace:
+                split_name = character_name.split(":")
+                character_name = split_name[-1]
             file_name = f"{character_name}_{export_ver}"
 
             # export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
