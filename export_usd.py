@@ -276,6 +276,7 @@ class ExportAnim():
                     "frameRange":(self.start_frame, self.end_frame),
                     "frameStride":self.frame_step,
                     "staticSingleSample":True,
+                    "stripNamespaces":True,
             }
 
             if self.include_blendshapes:
