@@ -21,9 +21,6 @@ except ModuleNotFoundError:
     from shiboken2 import wrapInstance
 
 import maya.cmds as cmds
-# from playsound import playsound
-
-# self.render_geo_whitelist = ["Render", "Muscles", "Fat"]
 
 mayaMainWindowPtr = omui.MQtUtil.mainWindow()
 mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QWidget)
@@ -35,7 +32,7 @@ class Interface(QWidget):
         self.setWindowFlags(Qt.Window)
         self.initUI()
         self.setFixedWidth(300)
-        self.setFixedHeight(110)
+        self.setFixedHeight(140)
         self.setWindowTitle("Maya_USD_Export")
 
     def initUI(self):
@@ -48,7 +45,7 @@ class Interface(QWidget):
         file_path_layout = QHBoxLayout()
         file_path_lineedit = QLineEdit("tmp_file_path")
         file_path_lineedit.setObjectName("file_path_lineedit")
-        file_path_button =  QPushButton("Open FIle")
+        file_path_button =  QPushButton("Change")
         file_path_button.setObjectName("file_path_button")
         file_path_layout.addWidget(file_path_lineedit)
         file_path_layout.addWidget(file_path_button)
@@ -100,6 +97,7 @@ class ExportAnim():
         self.frame_step = 1
         self.include_blendshapes = include_blendshapes
         self.changelist_description = changelist_description if changelist_description else "Animation Export"
+        self.MESSAGE = "Export Finished"
 
         self.load_plugins()
 
@@ -184,11 +182,13 @@ class ExportAnim():
 
     def get_characters(self):
         namespaces = cmds.namespaceInfo(lon=True, r=True)
+        if "UI" and "shared" in namespaces:
+            namespaces.remove("UI")
+            namespaces.remove("shared")
         print(namespaces)
-        if any("boar" in namespace for namespace in namespaces):
-            print("boar found")
-            self.namespace = namespaces[1]
-            groups = cmds.ls(f"{namespaces[1]}:geo*", long=True)
+        if namespaces:
+            self.namespace = namespaces[-1]
+            groups = cmds.ls(f"{self.namespace}:geo*", long=True)
         else:
             self.namespace = None
             groups = cmds.ls("*geo*", long=True)
@@ -210,6 +210,7 @@ class ExportAnim():
 
         if not characters and not matching_groups:
             print("ERROR: No parent group to geo found, make sure parent group of geo has _rig suffix \n")
+            self.MESSAGE = f"No parent group to geo found, make sure parent group of geo has _rig suffix \n{self.MESSAGE}"
         else:
             print("matching groups", matching_groups)
             print("characters:", characters, "\n")
@@ -222,9 +223,8 @@ class ExportAnim():
 
     def export_anim(self, export_file_path):
         characters, matching_groups = self.get_characters()
-        project_root = self.output
-
-        project_root = os.path.normpath(project_root)
+        self.output = self.file_path_lineedit.text()
+        project_root = os.path.normpath(self.output)
 
         for i, character in enumerate(characters):
             group_name = matching_groups[i]
@@ -244,22 +244,22 @@ class ExportAnim():
             ]
             if len(filtered_children) == 0:
                 print(f"no groups match the whitelist: {self.render_geo_whitelist} \n")
+                self.MESSAGE = f"no groups match the whitelist: {self.render_geo_whitelist} \n{self.MESSAGE}"
                 return
 
             print("filtered_children from whitelist", filtered_children)
             print("children groups:", children, "\n")
 
-            # print("export file path:", export_file_path)
+            # string handling for export
             shot_num = self.ui.findChild(QLineEdit, "shot_number")
             shot_num = shot_num.text()
             shot_num = f"SH{shot_num.zfill(4)}"
             export_ver = self.ui.findChild(QLineEdit, "asset_version")
             export_ver = export_ver.text()
             export_ver = f"v{export_ver.zfill(4)}"
-            character_name = character.split("|")[-1]
+            character_name = character.split('|')[0]
             if self.namespace:
-                split_name = character_name.split(":")
-                character_name = split_name[-1]
+                character_name = character_name.replace(f"{self.namespace}:","")
             file_name = f"{character_name}_{export_ver}"
 
             export_file_path = f"{project_root}/{shot_num}/{character_name}/{file_name}"
@@ -296,9 +296,8 @@ class ExportAnim():
                 self.set_usd_type(child, self.usd_type)
                 made_selection = True
             if not made_selection:
-                print(
-                    f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n"
-)
+                print(f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n")
+                MESSAGE = f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n{MESSAGE}"
                 continue
 
             # export file
@@ -336,7 +335,7 @@ class ExportAnim():
             print("finished exporting file:", export_file_path)
         print("exported all characters(meshes)")
         self.ui.close()
-        cmds.confirmDialog(message="Export Finished", title="Export Finished")
+        cmds.confirmDialog(message=self.MESSAGE, title="Export Finished")
 
     def set_usd_type(self, item, usd_type):
         attr_path = f"{item}.USD_typeName"
