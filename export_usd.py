@@ -1,26 +1,32 @@
-import importlib
 import os
-import sys
 import platform
 from pathlib import Path
 
+import maya.cmds as cmds
 from maya import OpenMayaUI as omui
+
 try:
-    from PySide6.QtCore import *
-    from PySide6.QtGui import *
-    from PySide6.QtWidgets import QWidget
-    from PySide6.QtWidgets import *
-    from PySide6.QtUiTools import *
+    from PySide6.QtCore import Qt, QObject, SIGNAL
+    from PySide6.QtGui import QIcon
+    from PySide6.QtWidgets import (QWidget,
+                                   QHBoxLayout,
+                                   QFormLayout,
+                                   QPushButton,
+                                   QLabel,
+                                   QLineEdit,
+                                   QFileDialog)
     from shiboken6 import wrapInstance
 except ModuleNotFoundError:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import QWidget
-    from PySide2.QtWidgets import *
-    from PySide2.QtUiTools import *
+    from PySide2.QtCore import Qt, QObject, SIGNAL
+    from PySide2.QtGui import QIcon
+    from PySide2.QtWidgets import (QWidget,
+                                   QHBoxLayout,
+                                   QFormLayout,
+                                   QPushButton,
+                                   QLabel,
+                                   QLineEdit,
+                                   QFileDialog)
     from shiboken2 import wrapInstance
-
-import maya.cmds as cmds
 
 mayaMainWindowPtr = omui.MQtUtil.mainWindow()
 mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QWidget)
@@ -123,7 +129,7 @@ class ExportAnim():
         else:
             if platform.system() == "Windows":
                 if os.environ["TWELVEFOLD_ROOT"]:
-                    export_path = os.path.normpath(f"{os.environ}/__ANIM__/export")
+                    export_path = os.path.join(os.environ,"__ANIM__","export")
                     if not os.path.exists(export_path):
                         export_path = os.mkdir(export_path)
                 elif os.environ["MAYA_APP_DIR"]:
@@ -165,8 +171,8 @@ class ExportAnim():
                     if cmds.objExists(child) == True and cmds.getAttr(attr_path, asString=True) == "True":
                         print(f"FOUND ITEM {child}")
                         found_items.append(child)
-                except ValueError: pass
-
+                except ValueError: 
+                    pass
                 child_found_items = traverse(child)
                 found_items.extend(child_found_items)
 
@@ -297,7 +303,7 @@ class ExportAnim():
                 made_selection = True
             if not made_selection:
                 print(f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n")
-                MESSAGE = f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n{MESSAGE}"
+                self.MESSAGE = f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n{self.MESSAGE}"
                 continue
 
             # export file
@@ -341,4 +347,5 @@ class ExportAnim():
         attr_path = f"{item}.USD_typeName"
         if(cmds.objExists(attr_path)):
             cmds.setAttr(attr_path, usd_type, type="string")
-        else: print(f"cant find {attr_path} not setting attr value: {usd_type}")
+        else: 
+            print(f"cant find {attr_path} not setting attr value: {usd_type}")
