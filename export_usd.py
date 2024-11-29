@@ -1,6 +1,8 @@
 import importlib
 import os
 import sys
+import platform
+from pathlib import Path
 
 from maya import OpenMayaUI as omui
 try:
@@ -32,15 +34,24 @@ class Interface(QWidget):
         self.setParent(mayaMainWindow)
         self.setWindowFlags(Qt.Window)
         self.initUI()
-        self.setFixedWidth(200)
+        self.setFixedWidth(300)
         self.setFixedHeight(110)
         self.setWindowTitle("Maya_USD_Export")
 
     def initUI(self):
         self.main_layout_widget = QWidget(self)
-        self.main_layout_widget.setMaximumWidth(200)
+        self.main_layout_widget.setMaximumWidth(500)
         self.main_layout = QFormLayout(self.main_layout_widget)
         self.main_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+        file_path_label = QLabel("File Path:")
+        file_path_layout = QHBoxLayout()
+        file_path_lineedit = QLineEdit("tmp_file_path")
+        file_path_lineedit.setObjectName("file_path_lineedit")
+        file_path_button =  QPushButton("Open FIle")
+        file_path_button.setObjectName("file_path_button")
+        file_path_layout.addWidget(file_path_lineedit)
+        file_path_layout.addWidget(file_path_button)
 
         shot_num_label = QLabel("Shot Num:")
         shot_num_lineedit = QLineEdit("1")
@@ -53,6 +64,7 @@ class Interface(QWidget):
         export_asset_button = QPushButton("Export USD")
         export_asset_button.setObjectName("export_usd")
 
+        self.main_layout.addRow(file_path_label, file_path_layout)
         self.main_layout.addRow(shot_num_label, shot_num_lineedit)
         self.main_layout.addRow(asset_ver_label, asset_ver_lineedit)
         self.main_layout.addRow(export_asset_button)
@@ -68,7 +80,7 @@ class ExportAnim():
         self,
         geo_whitelist,
         usd_type="",
-        output="/run/media/will/Will_s SSD1/University_Projects/YR3/Boar/export/", # directory file is saved too
+        output="/home/will/Downloads/", # directory file is saved too
         root_type="",
         start_frame=None,
         end_frame=None,
@@ -91,21 +103,49 @@ class ExportAnim():
 
         self.load_plugins()
 
-        # set start frame to maya scene time range
         if not self.start_frame:
-            # self.start_frame = cmds.playbackOptions(q=True, animationStartTime=True)  # full timeline
-            self.start_frame = cmds.playbackOptions(q=True, minTime=True)  # playback field
+            self.start_frame = cmds.playbackOptions(q=True, minTime=True)
         if not self.end_frame:
-            # self.end_frame = cmds.playbackOptions(q=True, animationEndTime=True)  # full timeline
-            self.end_frame = cmds.playbackOptions(q=True, maxTime=True)  # playback field
+            self.end_frame = cmds.playbackOptions(q=True, maxTime=True)
         print("\nSTART FRAME", self.start_frame)
         print('END FRAME', self.end_frame, "\n")
 
         self.ui = Interface()
         self.ui.show()
+
         pushButton = self.ui.findChild(QPushButton, "export_usd")
         QObject.connect(pushButton, SIGNAL("clicked()"), lambda: self.export_anim(self.output))
-        # self.export_anim(self.output)
+
+        self.file_path_lineedit = self.ui.findChild(QLineEdit, "file_path_lineedit")
+        file_path_button = self.ui.findChild(QPushButton, "file_path_button")
+        QObject.connect(file_path_button, SIGNAL("clicked()"), lambda: self.open_file_dialog())
+
+        if os.path.exists(self.output):
+            self.file_path_lineedit.setText(self.output)
+        else:
+            if platform.system() == "Windows":
+                if os.environ["TWELVEFOLD_ROOT"]:
+                    export_path = os.path.normpath(f"{os.environ}/__ANIM__/export")
+                    if not os.path.exists(export_path):
+                        export_path = os.mkdir(export_path)
+                elif os.environ["MAYA_APP_DIR"]:
+                    export_path = os.environ["MAYA_APP_DIR"]
+                else:
+                    export_path = Path.home() / "Documents"
+            elif platform.system() == "Linux":
+                if os.environ["MAYA_APP_DIR"]:
+                    export_path = os.environ["MAYA_APP_DIR"]
+                else:
+                    export_path = Path.home() / "Documents"
+
+            self.file_path_lineedit.setText(str(export_path))
+            self.output = str(export_path)
+
+    def open_file_dialog(self):
+        file_path = QFileDialog.getExistingDirectory(self.ui, "Select Directory", dir=self.output)
+        if file_path:
+            self.file_path_lineedit.setText(file_path) 
+            self.output = file_path
 
     def get_joint_grps(self, character):
         def traverse(parent_path):
@@ -191,15 +231,13 @@ class ExportAnim():
             print(f"grpname: {group_name}")
             root_prim = cmds.listRelatives(group_name, parent=True)[0]
             children = cmds.listRelatives(group_name, children=True)
-            print(root_prim)
-            print(children)
 
             if self.namespace:
                 for geo in self.render_geo_whitelist:
                     new_geo = f"{self.namespace}:{geo}"
                     index = self.render_geo_whitelist.index(geo)
                     self.render_geo_whitelist[index] = new_geo
-            print(self.render_geo_whitelist)
+            print(f"geo_whitelist: {self.render_geo_whitelist}")
 
             filtered_children = [
                 child for child in children if child in self.render_geo_whitelist
@@ -224,7 +262,6 @@ class ExportAnim():
                 character_name = split_name[-1]
             file_name = f"{character_name}_{export_ver}"
 
-            # export_file_path = export_file_path.format(project_root=project_root, shot_num=shot_num, character=character)
             export_file_path = f"{project_root}/{shot_num}/{character_name}/{file_name}"
             export_file_path = os.path.normpath(export_file_path)
             print("EXPORT FILE PATH", export_file_path)
