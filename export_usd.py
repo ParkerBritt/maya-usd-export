@@ -191,9 +191,9 @@ class ExportAnim():
         if "UI" and "shared" in namespaces:
             namespaces.remove("UI")
             namespaces.remove("shared")
-        print(namespaces)
+
         if namespaces:
-            self.namespace = namespaces[-1]
+            self.namespace = namespaces[0]
             groups = cmds.ls(f"{self.namespace}:geo*", long=True)
         else:
             self.namespace = None
