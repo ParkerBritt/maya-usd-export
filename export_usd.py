@@ -7,7 +7,6 @@ from maya import OpenMayaUI as omui
 
 try:
     from PySide6.QtCore import Qt, QObject, SIGNAL
-    from PySide6.QtGui import QIcon
     from PySide6.QtWidgets import (QWidget,
                                    QHBoxLayout,
                                    QFormLayout,
@@ -18,7 +17,6 @@ try:
     from shiboken6 import wrapInstance
 except ModuleNotFoundError:
     from PySide2.QtCore import Qt, QObject, SIGNAL
-    from PySide2.QtGui import QIcon
     from PySide2.QtWidgets import (QWidget,
                                    QHBoxLayout,
                                    QFormLayout,
@@ -37,7 +35,7 @@ class Interface(QWidget):
         self.setParent(mayaMainWindow)
         self.setWindowFlags(Qt.Window)
         self.initUI()
-        self.setFixedWidth(300)
+        self.setFixedWidth(290)
         self.setFixedHeight(140)
         self.setWindowTitle("Maya_USD_Export")
 
