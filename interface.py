@@ -33,8 +33,11 @@ from PySide.QtWidgets import (
     QFormLayout,
     QPushButton,
     QLabel,
+    QVBoxLayout,
     QLineEdit,
     QFileDialog,
+    QSpacerItem,
+    QSizePolicy,
 )
 
 
@@ -49,8 +52,10 @@ class Interface(QWidget):
         self.setWindowFlags(Qt.Window)
 
         # set size hinting
-        self.setFixedWidth(290)
-        self.setFixedHeight(140)
+        self.resize(290, 140)
+        self.setMaximumWidth(600)
+        self.setMaximumHeight(140)
+
         self.setWindowTitle("Maya_USD_Export")
 
         # default export path
@@ -58,12 +63,13 @@ class Interface(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.main_layout_widget = QWidget(self)
-        self.main_layout_widget.setMaximumWidth(500)
-        self.main_layout = QFormLayout(self.main_layout_widget)
-        self.main_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # create layouts
+        self.main_layout = QVBoxLayout(self)
+        self.form_layout = QFormLayout()
+        # place form layout in main layout
+        self.main_layout.addLayout(self.form_layout)
+        self.form_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-        self.file_path_label = QLabel("File Path:")
         self.file_path_layout = QHBoxLayout()
         self.file_path_lineedit = QLineEdit(self.file_output_path)
         self.file_path_lineedit.setObjectName("file_path_lineedit")
@@ -73,21 +79,20 @@ class Interface(QWidget):
         self.file_path_layout.addWidget(self.file_path_lineedit)
         self.file_path_layout.addWidget(self.file_path_button)
 
-        self.shot_num_label = QLabel("Shot Num:")
         self.shot_num_lineedit = QLineEdit("0001")
         self.shot_num_lineedit.setObjectName("shot_number")
 
-        self.asset_ver_label = QLabel("Asset Version:")
         self.asset_ver_lineedit = QLineEdit("1")
         self.asset_ver_lineedit.setObjectName("asset_version")
 
         self.export_asset_button = QPushButton("Export USD")
         self.export_asset_button.setObjectName("export_usd")
 
-        self.main_layout.addRow(self.file_path_label, self.file_path_layout)
-        self.main_layout.addRow(self.shot_num_label, self.shot_num_lineedit)
-        self.main_layout.addRow(self.asset_ver_label, self.asset_ver_lineedit)
-        self.main_layout.addRow(self.export_asset_button)
+        # add form items
+        self.form_layout.addRow("File Path:", self.file_path_layout)
+        self.form_layout.addRow("Shot Num:", self.shot_num_lineedit)
+        self.form_layout.addRow("Asset Version:", self.asset_ver_lineedit)
+        self.form_layout.addRow(self.export_asset_button)
 
         stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
         with open(stylesheet_path, "r") as file:
