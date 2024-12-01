@@ -37,6 +37,7 @@ from PySide.QtWidgets import (
     QLineEdit,
     QFileDialog,
     QSpacerItem,
+    QComboBox,
     QSizePolicy,
 )
 
@@ -79,7 +80,7 @@ class Interface(QWidget):
         self.file_path_layout.addWidget(self.file_path_lineedit)
         self.file_path_layout.addWidget(self.file_path_button)
 
-        self.shot_num_lineedit = QLineEdit("0001")
+        self.shot_num_lineedit = QLineEdit("1")
         self.shot_num_lineedit.setObjectName("shot_number")
 
         self.asset_ver_lineedit = QLineEdit("1")
@@ -88,10 +89,16 @@ class Interface(QWidget):
         self.export_asset_button = QPushButton("Export USD")
         self.export_asset_button.setObjectName("export_usd")
 
+        self.file_type_widget = QComboBox()
+        self.file_type_widget.currentTextChanged.connect(lambda text: self.export_asset_button.setText("Export "+text))
+        self.file_type_widget.addItem("USD")
+        self.file_type_widget.addItem("Alembic")
+
         # add form items
         self.form_layout.addRow("File Path:", self.file_path_layout)
         self.form_layout.addRow("Shot Num:", self.shot_num_lineedit)
         self.form_layout.addRow("Asset Version:", self.asset_ver_lineedit)
+        self.form_layout.addRow("Export Type:", self.file_type_widget)
         self.form_layout.addRow(self.export_asset_button)
 
         stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
