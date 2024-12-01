@@ -6,35 +6,49 @@ import sys
 import maya.cmds as cmds
 from maya import OpenMayaUI as omui
 
-try:
-    from PySide6.QtCore import Qt, QObject, SIGNAL
-    from PySide6.QtWidgets import (QWidget,
-                                   QHBoxLayout,
-                                   QFormLayout,
-                                   QPushButton,
-                                   QLabel,
-                                   QLineEdit,
-                                   QFileDialog)
-    from shiboken6 import wrapInstance
-except ModuleNotFoundError:
-    from PySide2.QtCore import Qt, QObject, SIGNAL
-    from PySide2.QtWidgets import (QWidget,
-                                   QHBoxLayout,
-                                   QFormLayout,
-                                   QPushButton,
-                                   QLabel,
-                                   QLineEdit,
-                                   QFileDialog)
-    from shiboken2 import wrapInstance
+import importlib
 
-mayaMainWindowPtr = omui.MQtUtil.mainWindow()
-mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QWidget)
+pyside_versions = ["PySide6", "PySide2"]
+
+for version in pyside_versions:
+    print("Trying pyside version:", version)
+    try:
+        sys.modules["PySide"] = importlib.import_module(version)
+        sys.modules["PySide.QtCore"] = importlib.import_module(f"{version}.QtCore")
+        sys.modules["PySide.QtWidgets"] = importlib.import_module(f"{version}.QtWidgets")
+        shiboken = importlib.import_module(f"shiboken{version[-1]}")
+        wrapInstance = shiboken.wrapInstance
+
+        print("Successful import of", version)
+        break
+    except ModuleNotFoundError:
+        continue
+else:
+    raise ModuleNotFoundError("No PySide module found.")
+
+from PySide.QtCore import Qt, QObject, SIGNAL
+from PySide.QtWidgets import (
+    QWidget,
+    QHBoxLayout,
+    QFormLayout,
+    QPushButton,
+    QLabel,
+    QLineEdit,
+    QFileDialog,
+)
+
 
 class Interface(QWidget):
     def __init__(self, *args, **kwargs):
-        super(Interface,self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+        # parent to maya interface
+        mayaMainWindowPtr = omui.MQtUtil.mainWindow()
+        mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QWidget)
         self.setParent(mayaMainWindow)
         self.setWindowFlags(Qt.Window)
+
+        # set size hinting
         self.setFixedWidth(290)
         self.setFixedHeight(140)
         self.setWindowTitle("Maya_USD_Export")
@@ -60,7 +74,7 @@ class Interface(QWidget):
         self.file_path_layout.addWidget(self.file_path_button)
 
         self.shot_num_label = QLabel("Shot Num:")
-        self.shot_num_lineedit = QLineEdit("1")
+        self.shot_num_lineedit = QLineEdit("0001")
         self.shot_num_lineedit.setObjectName("shot_number")
 
         self.asset_ver_label = QLabel("Asset Version:")
