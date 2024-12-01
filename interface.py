@@ -52,10 +52,6 @@ class Interface(QWidget):
         self.setParent(mayaMainWindow)
         self.setWindowFlags(Qt.Window)
 
-        # set size hinting
-        self.resize(290, 140)
-        self.setMaximumWidth(600)
-        self.setMaximumHeight(140)
 
         self.setWindowTitle("Maya_USD_Export")
 
@@ -63,12 +59,22 @@ class Interface(QWidget):
         self.file_output_path = os.getcwd()
         self.initUI()
 
+        # set sizing hinting
+        print("MINIMUM HEIGHT:", self.minimumSizeHint().height())
+        print("MINIMUM HEIGHT:", self.sizeHint().height())
+        self.resize(300, self.minimumSizeHint().height())
+
+        self.setMaximumHeight(self.minimumSizeHint().height()+80)
+        self.setMaximumWidth(800)
+
     def initUI(self):
         # create layouts
         self.main_layout = QVBoxLayout(self)
         self.form_layout = QFormLayout()
         # place form layout in main layout
+        self.main_layout.addStretch()
         self.main_layout.addLayout(self.form_layout)
+        self.main_layout.addStretch()
         self.form_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.file_path_layout = QHBoxLayout()
@@ -90,6 +96,7 @@ class Interface(QWidget):
         self.export_asset_button.setObjectName("export_usd")
 
         self.file_type_widget = QComboBox()
+        self.file_type_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.file_type_widget.currentTextChanged.connect(lambda text: self.export_asset_button.setText("Export "+text))
         self.file_type_widget.addItem("USD")
         self.file_type_widget.addItem("Alembic")
