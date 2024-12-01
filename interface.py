@@ -1,6 +1,7 @@
 import os
 import platform
 from pathlib import Path
+import sys
 
 import maya.cmds as cmds
 from maya import OpenMayaUI as omui
@@ -34,10 +35,13 @@ class Interface(QWidget):
         super(Interface,self).__init__(*args, **kwargs)
         self.setParent(mayaMainWindow)
         self.setWindowFlags(Qt.Window)
-        self.initUI()
         self.setFixedWidth(290)
         self.setFixedHeight(140)
         self.setWindowTitle("Maya_USD_Export")
+
+        # default export path
+        self.file_output_path = os.getcwd()
+        self.initUI()
 
     def initUI(self):
         self.main_layout_widget = QWidget(self)
@@ -45,35 +49,42 @@ class Interface(QWidget):
         self.main_layout = QFormLayout(self.main_layout_widget)
         self.main_layout.setLabelAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-        file_path_label = QLabel("File Path:")
-        file_path_layout = QHBoxLayout()
-        file_path_lineedit = QLineEdit("tmp_file_path")
-        file_path_lineedit.setObjectName("file_path_lineedit")
-        file_path_button =  QPushButton("Change")
-        file_path_button.setObjectName("file_path_button")
-        file_path_layout.addWidget(file_path_lineedit)
-        file_path_layout.addWidget(file_path_button)
+        self.file_path_label = QLabel("File Path:")
+        self.file_path_layout = QHBoxLayout()
+        self.file_path_lineedit = QLineEdit(self.file_output_path)
+        self.file_path_lineedit.setObjectName("file_path_lineedit")
+        self.file_path_button =  QPushButton("Change")
+        self.file_path_button.setObjectName("file_path_button")
+        self.file_path_button.clicked.connect(self.open_file_dialog)
+        self.file_path_layout.addWidget(self.file_path_lineedit)
+        self.file_path_layout.addWidget(self.file_path_button)
 
-        shot_num_label = QLabel("Shot Num:")
-        shot_num_lineedit = QLineEdit("1")
-        shot_num_lineedit.setObjectName("shot_number")
+        self.shot_num_label = QLabel("Shot Num:")
+        self.shot_num_lineedit = QLineEdit("1")
+        self.shot_num_lineedit.setObjectName("shot_number")
 
-        asset_ver_label = QLabel("Asset Version:")
-        asset_ver_lineedit = QLineEdit("1")
-        asset_ver_lineedit.setObjectName("asset_version")
+        self.asset_ver_label = QLabel("Asset Version:")
+        self.asset_ver_lineedit = QLineEdit("1")
+        self.asset_ver_lineedit.setObjectName("asset_version")
 
-        export_asset_button = QPushButton("Export USD")
-        export_asset_button.setObjectName("export_usd")
+        self.export_asset_button = QPushButton("Export USD")
+        self.export_asset_button.setObjectName("export_usd")
 
-        self.main_layout.addRow(file_path_label, file_path_layout)
-        self.main_layout.addRow(shot_num_label, shot_num_lineedit)
-        self.main_layout.addRow(asset_ver_label, asset_ver_lineedit)
-        self.main_layout.addRow(export_asset_button)
+        self.main_layout.addRow(self.file_path_label, self.file_path_layout)
+        self.main_layout.addRow(self.shot_num_label, self.shot_num_lineedit)
+        self.main_layout.addRow(self.asset_ver_label, self.asset_ver_lineedit)
+        self.main_layout.addRow(self.export_asset_button)
 
         stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
         with open(stylesheet_path, "r") as file:
             stylesheet = file.read()
         self.setStyleSheet(stylesheet)
+
+    def open_file_dialog(self):
+        file_path = QFileDialog.getExistingDirectory(self, "Select Directory", dir=self.file_output_path)
+        if file_path:
+            self.file_path_lineedit.setText(file_path) 
+            self.file_output_path = file_path
 
 def start_interface():
     ui = Interface()
