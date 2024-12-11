@@ -2,6 +2,7 @@ import maya.cmds as cmds
 
 class Selection():
     def __init__(self):
+        self.selection_data = {}
         self.render_geo_whitelist = ["render","bone"] # DEBUG
 
         self.namespace = self.check_for_namespaces()
@@ -10,13 +11,29 @@ class Selection():
 
         self.export_rig = True # DEBUG
         for i, character in enumerate(characters):
-            self.select_joint_grps(character)
+            joint_grp_list = self.select_joint_grps(character)
             filtered_children, root_prim = self.get_geo_grps(group_name=matching_groups[i])
 
+            print("\n")
+            print(f"filtered_children: {filtered_children}")
+            print(f"root_prim: {root_prim}")
+            print(f"joint_grp_list: {joint_grp_list}")
+            temp_dict = {
+                "root_prim": root_prim,
+                "filtered_children": filtered_children,
+                "joint_grp_path": joint_grp_list
+            }
+
+            self.selection_data[root_prim] = temp_dict
+
     def select_joint_grps(self, character):
+        joint_grp_list = []
         if self.export_rig is True:
             for joint_grp in self.get_joint_grps(f"{character}_rig"):
-                cmds.select(joint_grp, add=True)
+                print(f"joint_grp: {joint_grp}")
+                # cmds.select(joint_grp, add=True)
+                joint_grp_list.append(joint_grp)
+            return joint_grp_list
 
     def check_for_namespaces(self):
         # check for existing namespaces and remove mayas constant namespaces
@@ -131,3 +148,6 @@ class Selection():
             cmds.setAttr(attr_path, usd_type, type="string")
         else: 
             print(f"cant find {attr_path} not setting attr value: {usd_type}")
+
+    def return_data(self):
+        return self.selection_data
