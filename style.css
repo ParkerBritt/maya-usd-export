@@ -7,11 +7,12 @@ test {
     background-color: #25292c;
 }
 
-QComboBox {
-    border: none;
-    background-color: #1b1e20;
-    border-radius: 8px;
-}
+ QComboBox {
+     border: none;
+     background-color: #1b1e20;
+     border-radius: 1px;
+     padding: 5px 10px;
+ }
 
 QGroupBox {
     background-color: #2a2e32;
