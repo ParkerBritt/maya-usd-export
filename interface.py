@@ -39,6 +39,9 @@ from PySide.QtWidgets import (
     QSpacerItem,
     QComboBox,
     QSizePolicy,
+    QCheckBox,
+    QSpinBox,
+    QAbstractSpinBox,
 )
 
 
@@ -62,7 +65,7 @@ class Interface(QWidget):
         # set sizing hinting
         print("MINIMUM HEIGHT:", self.minimumSizeHint().height())
         print("MINIMUM HEIGHT:", self.sizeHint().height())
-        self.resize(300, self.minimumSizeHint().height())
+        self.resize(self.minimumSizeHint().height()*2.5, self.minimumSizeHint().height())
 
         self.setMaximumHeight(self.minimumSizeHint().height()+80)
         self.setMaximumWidth(800)
@@ -86,12 +89,6 @@ class Interface(QWidget):
         self.file_path_layout.addWidget(self.file_path_lineedit)
         self.file_path_layout.addWidget(self.file_path_button)
 
-        self.shot_num_lineedit = QLineEdit("1")
-        self.shot_num_lineedit.setObjectName("shot_number")
-
-        self.asset_ver_lineedit = QLineEdit("1")
-        self.asset_ver_lineedit.setObjectName("asset_version")
-
         self.export_asset_button = QPushButton("Export USD")
         self.export_asset_button.setObjectName("export_usd")
 
@@ -101,10 +98,36 @@ class Interface(QWidget):
         self.file_type_widget.addItem("USD")
         self.file_type_widget.addItem("Alembic")
 
+        self.animation_type_widget = QComboBox()
+        self.animation_type_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.animation_type_widget.addItem("Static")
+        self.animation_type_widget.addItem("Animation Cache")
+        self.animation_type_widget.addItem("CFX")
+
+        self.w_frame_lower = QSpinBox()
+        self.w_frame_upper = QSpinBox()
+        self.w_frame_lower.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.w_frame_upper.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.w_frame_lower.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.w_frame_upper.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.w_frame_lower.setToolTip("Lower frame range")
+        self.w_frame_upper.setToolTip("Upper frame range")
+        self.w_frame_lower
+
+        self.w_frame_step = QSpinBox()
+        self.w_frame_step.setButtonSymbols(QAbstractSpinBox.NoButtons)
+        self.w_frame_step.setToolTip("Frame Step\nIndicates how many frames to skip for each saved geometry")
+
+        self.anim_range_layout = QHBoxLayout()
+        self.anim_range_layout.addWidget(self.w_frame_lower)
+        self.anim_range_layout.addWidget(self.w_frame_upper)
+        self.anim_range_layout.addWidget(self.w_frame_step)
+
+
         # add form items
         self.form_layout.addRow("File Path:", self.file_path_layout)
-        self.form_layout.addRow("Shot Num:", self.shot_num_lineedit)
-        self.form_layout.addRow("Asset Version:", self.asset_ver_lineedit)
+        self.form_layout.addRow("Frame Range:", self.anim_range_layout)
+        self.form_layout.addRow("Animation Type:", self.animation_type_widget)
         self.form_layout.addRow("Export Type:", self.file_type_widget)
         self.form_layout.addRow(self.export_asset_button)
 
