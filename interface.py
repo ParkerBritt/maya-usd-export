@@ -99,11 +99,8 @@ class Interface(QWidget):
         self.file_type_widget.addItem("Alembic")
 
         self.w_anim_type = AnimTypeDropdown()
-        self.w_anim_range = AnimRangeLayout()
+        self.w_anim_range = AnimRangeWidget()
 
-        self.w_anim_type.currentTextChanged.connect(lambda text: (
-            [self.form_layout.itemAt(i).widget().setVisible(text != "Static") for i in (4, 5)]
-            ))
 
 
 
@@ -114,6 +111,13 @@ class Interface(QWidget):
         self.form_layout.addRow("Frame Range:", self.w_anim_range)
         self.form_layout.addRow("Export Type:", self.file_type_widget)
         self.form_layout.addRow(self.export_asset_button)
+
+        # hide anim range when anim type is set to static
+        self.w_anim_type.currentTextChanged.connect(lambda text: (
+            [self.form_layout.itemAt(i).widget().setVisible(text != AnimTypeDropdown.anim_types["static"]) for i in (4, 5)]
+            ))
+        # set default dropdown text
+        self.w_anim_type.currentTextChanged.emit(AnimTypeDropdown.anim_types["static"])
 
         stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
         with open(stylesheet_path, "r") as file:
@@ -131,7 +135,7 @@ def start_interface():
     ui.show()
 
 
-class AnimRangeLayout(QWidget):
+class AnimRangeWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.w_frame_lower = QSpinBox()
@@ -157,13 +161,13 @@ class AnimRangeLayout(QWidget):
 
 
 class AnimTypeDropdown(QComboBox):
+    anim_types = {
+        "static":"Static",
+        "cache":"Animation Cache",
+        "cfx":"CFX"
+    }
     def __init__(self):
         super().__init__()
-        self.anim_types = {
-            "static":"Static",
-            "cache":"Animation Cache",
-            "cfx":"CFX"
-        }
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.addItem(self.anim_types["static"])
         self.addItem(self.anim_types["cache"])
