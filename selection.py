@@ -21,7 +21,8 @@ class Selection():
             temp_dict = {
                 "root_prim": root_prim,
                 "filtered_children": filtered_children,
-                "joint_grp_path": joint_grp_list
+                "joint_grp_path": joint_grp_list,
+                "group_name": matching_groups[i]
             }
 
             self.selection_data[root_prim] = temp_dict
@@ -36,7 +37,7 @@ class Selection():
             return joint_grp_list
 
     def check_for_namespaces(self):
-        # check for existing namespaces and remove mayas constant namespaces
+        '''check for existing namespaces and remove mayas constant namespaces'''
         namespaces = cmds.namespaceInfo(lon=True, r=True)
         if "UI" and "shared" in namespaces:
             namespaces.remove("UI")
@@ -51,7 +52,7 @@ class Selection():
         return namespace
 
     def get_characters(self):
-        # formatting for namespaces
+        '''formatting for namespaces and finds groups within rig structure'''
         if self.namespace:
             groups = cmds.ls(f"{self.namespace}:geo*", long=True)
         else:
@@ -61,7 +62,6 @@ class Selection():
         matching_groups = []
         characters = []
 
-        # finding rig root and character var
         for grp in groups:
             parent = cmds.listRelatives(grp, parent=True, fullPath=True)
             if parent:
@@ -81,6 +81,8 @@ class Selection():
         return (characters, matching_groups)
 
     def get_geo_grps(self, group_name):
+        '''find root and child groups/prims and filter 
+        these through specified groups per to export'''
         root_prim = cmds.listRelatives(group_name, parent=True)[0]
         children = cmds.listRelatives(group_name, children=True)
 
@@ -104,6 +106,7 @@ class Selection():
         return (filtered_children, root_prim)
 
     def get_joint_grps(self, character):
+        '''find the joints and joint groups within the rig structure'''
         def traverse(parent_path):
             # traverse filters through children of character to find grp with "joints_grp" attr
             attr_name = "joints_grp"
@@ -143,6 +146,7 @@ class Selection():
         return character_paths
     
     def set_usd_primtype(self, item, usd_type):
+        '''set the USD type on the group eg skelroot, xform etc'''
         attr_path = f"{item}.USD_typeName"
         if(cmds.objExists(attr_path)):
             cmds.setAttr(attr_path, usd_type, type="string")
