@@ -44,6 +44,10 @@ from PySide.QtWidgets import (
     QAbstractSpinBox,
 )
 
+from maya_usd_export import selection, export_usd
+importlib.reload(selection)
+importlib.reload(export_usd)
+
 
 class Interface(QWidget):
     def __init__(self, *args, **kwargs):
@@ -101,10 +105,6 @@ class Interface(QWidget):
         self.w_anim_type = AnimTypeDropdown()
         self.w_anim_range = AnimRangeWidget()
 
-
-
-
-
         # add form items
         self.form_layout.addRow("File Path:", self.file_path_layout)
         self.form_layout.addRow("Animation Type:", self.w_anim_type)
@@ -119,6 +119,14 @@ class Interface(QWidget):
         # set default dropdown text
         self.w_anim_type.currentTextChanged.emit(AnimTypeDropdown.anim_types["static"])
 
+        self.export_asset_button.clicked.connect(lambda: Export(output=self.file_path_lineedit.text(),
+                                                                export_type=self.file_type_widget.currentText(),
+                                                                anim_type=self.w_anim_type.currentText(),
+                                                                start_frame=self.w_anim_range.return_frames()[0],
+                                                                end_frame=self.w_anim_range.return_frames()[1],
+                                                                step_frame=self.w_anim_range.return_frames()[2]
+                                                                ))
+
         stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
         with open(stylesheet_path, "r") as file:
             stylesheet = file.read()
@@ -130,7 +138,9 @@ class Interface(QWidget):
             self.file_path_lineedit.setText(file_path) 
             self.file_output_path = file_path
 
+
 def start_interface():
+    print("start interface ran")
     ui = Interface()
     ui.show()
 
@@ -146,10 +156,15 @@ class AnimRangeWidget(QWidget):
         self.w_frame_upper.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.w_frame_lower.setToolTip("Lower frame range")
         self.w_frame_upper.setToolTip("Upper frame range")
+        self.w_frame_lower.setRange(-5000,5000)
+        self.w_frame_upper.setRange(-5000,5000)
+        self.w_frame_lower.setValue(1001)
+        self.w_frame_upper.setValue(1101)
 
         self.w_frame_step = QSpinBox()
         self.w_frame_step.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.w_frame_step.setToolTip("Frame Step\nIndicates how many frames to skip for each saved geometry")
+        self.w_frame_step.setValue(1)
 
         self.main_layout = QHBoxLayout()
         self.setLayout(self.main_layout)
@@ -158,6 +173,9 @@ class AnimRangeWidget(QWidget):
         self.main_layout.addWidget(self.w_frame_upper)
         self.main_layout.addWidget(self.w_frame_step)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
+
+    def return_frames(self):
+        return (self.w_frame_lower.value(), self.w_frame_upper.value(), self.w_frame_step.value())
 
 
 class AnimTypeDropdown(QComboBox):
@@ -173,3 +191,57 @@ class AnimTypeDropdown(QComboBox):
         self.addItem(self.anim_types["cache"])
         self.addItem(self.anim_types["cfx"])
 
+class Export():
+    def __init__(self, output=None, export_type=None, anim_type=None, start_frame=1001, end_frame=1101, step_frame=1):
+        anim_configs = {
+            "CFX": {
+                "geo_whitelist": ['render', 'muscle', 'bone'],
+                "usd_type": "Xform",
+                "root_type": "SkelRoot",
+                "export_rig": True,
+                "include_blendshapes": True,
+                "start_frame": start_frame,
+                "end_frame": end_frame
+            },
+            "Animation Cache": {
+                "geo_whitelist": ['render'],
+                "usd_type": "",
+                "root_type": "",
+                "export_rig": False,
+                "include_blendshapes": False,
+                "start_frame": start_frame,
+                "end_frame": end_frame
+            },
+            "Static": {
+                "geo_whitelist": ['render'],
+                "usd_type": "",
+                "root_type": "",
+                "export_rig": False,
+                "include_blendshapes": True,
+                "start_frame": 0,
+                "end_frame": 1
+            }
+        }
+        config = anim_configs.get(anim_type, None)
+        if not config:
+            raise KeyError("Config from anim_type is empty or not within anim_configs")
+
+        selection_instance = selection.Selection(render_geo_whitelist=config.get("geo_whitelist", ['render']),
+                                                 export_rig=config.get("export_rig", False))
+        selection_data = selection_instance.return_data()
+        
+        if export_type == "USD":
+            export_usd.ExportAnim(output=output,
+                                  character_dict=selection_data,
+                                  start_frame=config.get("start_frame", start_frame),
+                                  end_frame=config.get("end_frame", end_frame),
+                                  step_frame=step_frame,
+                                  usd_type=config.get("usd_type", ""),
+                                  root_type=config.get("root_type", ""),
+                                  export_rig=config.get("export_rig", False),
+                                  include_blendshapes=config.get("include_blendshapes", False)
+                                )
+        elif export_type == "Alembic":
+            pass
+        else:
+            raise TypeError("wrong type for export_type varible passed")
