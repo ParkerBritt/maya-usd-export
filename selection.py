@@ -1,38 +1,39 @@
 import maya.cmds as cmds
 
 class Selection():
-    def __init__(self):
+    def __init__(self,
+                 render_geo_whitelist=["render"],
+                 export_rig=False):
+
         self.selection_data = {}
-        self.render_geo_whitelist = ["render","bone"] # DEBUG
+        self.render_geo_whitelist = render_geo_whitelist
+        self.export_rig = export_rig
 
         self.namespace = self.check_for_namespaces()
 
         characters, matching_groups = self.get_characters()
 
-        self.export_rig = True # DEBUG
         for i, character in enumerate(characters):
             joint_grp_list = self.select_joint_grps(character)
             filtered_children, root_prim = self.get_geo_grps(group_name=matching_groups[i])
 
-            print("\n")
-            print(f"filtered_children: {filtered_children}")
+            print(f"\nfiltered_children: {filtered_children}")
             print(f"root_prim: {root_prim}")
-            print(f"joint_grp_list: {joint_grp_list}")
+            print(f"joint_grp_list: {joint_grp_list}\n")
             temp_dict = {
                 "root_prim": root_prim,
                 "filtered_children": filtered_children,
                 "joint_grp_path": joint_grp_list,
-                "group_name": matching_groups[i]
+                "group_name": matching_groups[i],
+                "namespace": self.namespace
             }
 
-            self.selection_data[root_prim] = temp_dict
+            self.selection_data[character] = temp_dict
 
     def select_joint_grps(self, character):
         joint_grp_list = []
         if self.export_rig is True:
             for joint_grp in self.get_joint_grps(f"{character}_rig"):
-                print(f"joint_grp: {joint_grp}")
-                # cmds.select(joint_grp, add=True)
                 joint_grp_list.append(joint_grp)
             return joint_grp_list
 
@@ -57,7 +58,6 @@ class Selection():
             groups = cmds.ls(f"{self.namespace}:geo*", long=True)
         else:
             groups = cmds.ls("*geo*", long=True)
-        print("found groups", groups, "\n")
 
         matching_groups = []
         characters = []
@@ -66,17 +66,13 @@ class Selection():
             parent = cmds.listRelatives(grp, parent=True, fullPath=True)
             if parent:
                 parent_name = parent[0]
-                if parent_name.endswith("_rig"):
-                    characters.append(parent_name[1:-4])
+                if parent_name.endswith("rig"):
+                    characters.append(parent_name)
                     matching_groups.append(grp)
 
         # tell user if _rig cannot be found
         if not characters and not matching_groups:
-            print("ERROR: No parent group to geo found, make sure parent group of geo has _rig suffix \n")
-            #self.MESSAGE = f"No parent group to geo found, make sure parent group of geo has _rig suffix \n{self.MESSAGE}"
-        else:
-            print("matching groups", matching_groups)
-            print("characters:", characters, "\n")
+            cmds.warning("No parent group to geo found, make sure parent group of geo has _rig suffix \n")
 
         return (characters, matching_groups)
 
@@ -97,12 +93,7 @@ class Selection():
         ]
         if len(filtered_children) == 0:
             print(f"no groups match the whitelist: {self.render_geo_whitelist} \n")
-            self.MESSAGE = f"no groups match the whitelist: {self.render_geo_whitelist} \n{self.MESSAGE}"
             return
-        
-        print(f"\ngeo_whitelist: {self.render_geo_whitelist}")
-        print(f"found geo groups: {children}")
-        print(f"filtered geo from whitelist {filtered_children}")
         return (filtered_children, root_prim)
 
     def get_joint_grps(self, character):
@@ -114,7 +105,7 @@ class Selection():
             try:
                 children = cmds.listRelatives(parent_path, children=True, fullPath=True)
             except ValueError:
-                print("Warning: grp_joints does not exist under character")
+                cmds.Warning("grp_joints does not exist under character")
                 return found_items
 
             if not children:
@@ -151,7 +142,7 @@ class Selection():
         if(cmds.objExists(attr_path)):
             cmds.setAttr(attr_path, usd_type, type="string")
         else: 
-            print(f"cant find {attr_path} not setting attr value: {usd_type}")
+            cmds.Warning(f"cant find {attr_path} not setting attr value: {usd_type}")
 
     def return_data(self):
         return self.selection_data
