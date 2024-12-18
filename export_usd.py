@@ -8,63 +8,60 @@ from maya import OpenMayaUI as omui
 class ExportAnim():
     def __init__(
         self,
-        geo_whitelist,
         usd_type="",
         output=None,
         root_type="",
         start_frame=None,
         end_frame=None,
-        debug=False,
+        step_frame=1,
         export_rig=False,
         include_blendshapes=True,
-        changelist_description=None,
+        character_dict=None
     ):  
-        self.render_geo_whitelist = geo_whitelist
         self.output = output
         self.root_type = root_type
-        self.debug = debug
         self.start_frame = start_frame
         self.end_frame = end_frame
         self.usd_type = usd_type
         self.export_rig = export_rig
-        self.frame_step = 1
+        self.frame_step = step_frame
         self.include_blendshapes = include_blendshapes
-        self.changelist_description = changelist_description if changelist_description else "Animation Export"
+        self.character_dict = character_dict
         self.MESSAGE = "Export Finished"
 
         self.load_plugins()
-
-        print("\nSTART FRAME", self.start_frame)
-        print('END FRAME', self.end_frame, "\n")
+        self.export_anim()
 
     def load_plugins(self):
         if not cmds.pluginInfo("mayaUsdPlugin", query=True, loaded=True):
             cmds.loadPlugin("mayaUsdPlugin")
 
-    def export_anim(self, export_file_path):
-        for character in character_dict:
-            # make selection
-            made_selection = False
+    def export_anim(self):
+        for character in self.character_dict.values():
+            group_name = character["group_name"]
+            root_prim = character["root_prim"]
+
             cmds.select(clear=True)
             if self.export_rig:
-                for joint_grp in JOINTGRPHERE:
+                for joint_grp in character["joint_grp_path"]:
                     cmds.select(joint_grp, add=True)
 
             self.set_usd_type(group_name, self.usd_type)
             self.set_usd_type(root_prim, self.root_type)
 
-            for child in cmds.listRelatives(group_name, children=True): # Ask parker what this was for
-                if not child in self.render_geo_whitelist:
-                    continue
-
+            for child in character["filtered_children"]:
                 child = f"{group_name}|{child}"
                 cmds.select(child, add=True)
                 self.set_usd_type(child, self.usd_type)
-                made_selection = True
-            if not made_selection:
-                print(f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n")
-                self.MESSAGE = f"ERROR: Could not file element of {self.render_geo_whitelist} in {group_name} \n{self.MESSAGE}"
-                continue
+
+            if character["namespace"]:
+                root_prim = root_prim.replace(f"{character['namespace']}:", "")
+            
+            self.output = os.path.normpath(self.output)
+            if not os.path.exists(self.output):
+                print(f"\npath does not exists making directory:\n{self.output}")
+                os.makedirs(self.output)
+            export_file_path = f"{self.output}/{root_prim}"
 
             # export file
             export_args = {
@@ -72,7 +69,7 @@ class ExportAnim():
                     "selection":True,
                     "defaultMeshScheme":"none",
                     "exportVisibility":False,
-                    "exportUVs":False,
+                    "exportUVs":True,
                     "exportMaterialCollections":False,
                     "shadingMode":"none",
                     "frameRange":(self.start_frame, self.end_frame),
@@ -81,7 +78,6 @@ class ExportAnim():
                     "stripNamespaces":True,
             }
             
-            # need to add a way to click true to export blendshapes
             if self.include_blendshapes:
                 export_args.update({"exportBlendShapes":True})
             else:
@@ -93,14 +89,10 @@ class ExportAnim():
                     "exportSkin":"auto",
                 })
 
-            print("EXPORTING USD...")
-            print("USD export args:\n",export_args)
-
+            print(f"\nEXPORTING USD...\nUSD export args: {export_args}\n")
             cmds.mayaUSDExport(**export_args)
 
-            # End the Maya session
-            print("finished exporting file:", export_file_path)
-        print("exported all characters(meshes)")
+        self.MESSAGE = f"{self.MESSAGE}\nExported to: {export_file_path}.usd"
         cmds.confirmDialog(message=self.MESSAGE, title="Export Finished")
 
     def set_usd_type(self, item, usd_type):
