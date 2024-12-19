@@ -17,7 +17,7 @@ class ExportAnim():
         export_rig=False,
         include_blendshapes=True,
         character_dict=None
-    ):  
+        ):  
         self.output = output
         self.root_type = root_type
         self.start_frame = start_frame
