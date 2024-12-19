@@ -26,28 +26,29 @@ class ExportAlembic():
 
             cmds.select(clear=True)
 
+            root = f"-root {root_prim}" # " ".join(f"-root {item}" for item in filtered_children)
+
             if character["namespace"]:
                 root_prim = root_prim.replace(f"{character['namespace']}:","")
             file_name = f"{root_prim}.abc"
 
-            root = " ".join(f"-root {item}" for item in filtered_children)
+            for item in filtered_children:
+                cmds.select(item, add=True, hierarchy=True)
 
             self.output = os.path.normpath(self.output)
             if not os.path.exists(self.output):
                 print(f"\npath does not exist making directory:\n{self.output}")
                 os.makedirs(self.output)
             self.output = f"{self.output}/{file_name}"
-            print(self.output)
-
-            print("\n")
 
             export_args = (
                 f"-frameRange {self.start_frame} {self.end_frame} "
-                f"-uvWrite -stripNamespaces " # -worldSpace "
+                f"-uvWrite -stripNamespaces -worldSpace -selection "
                 f"-file {self.output} "
                 f"-step {self.step_frame} "
                 f"{root} "
             )
-            print(f"Exporting alembic with args: {export_args}")
+            print(f"\nExporting alembic with args: {export_args}")
             cmds.AbcExport (j=export_args)
-        cmds.confirmDialog(message="Export Finished", title="Export Finished")
+            cmds.select(clear=True)
+        cmds.confirmDialog(message=f"Export Finished\nExported to: {self.output}", title="Export Finished")
