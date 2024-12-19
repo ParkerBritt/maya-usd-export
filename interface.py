@@ -44,7 +44,7 @@ from PySide.QtWidgets import (
     QAbstractSpinBox,
 )
 
-from maya_usd_export import selection, export_usd, export_abc
+from maya_usd_export_dev import selection, export_usd, export_abc
 importlib.reload(selection)
 importlib.reload(export_usd)
 importlib.reload(export_abc)
@@ -230,6 +230,9 @@ class Export():
         selection_instance = selection.Selection(render_geo_whitelist=config.get("geo_whitelist", ['render']),
                                                  export_rig=config.get("export_rig", False))
         selection_data = selection_instance.return_data()
+        if not selection_data:
+            cmds.warning("selection_data is empty, no selection made aborting export")
+            return
         
         if export_type == "USD":
             export_usd.ExportAnim(output=output,
