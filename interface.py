@@ -44,11 +44,9 @@ from PySide.QtWidgets import (
     QAbstractSpinBox,
 )
 
-from maya_usd_export_dev import selection, export_usd, export_abc
-importlib.reload(selection)
-importlib.reload(export_usd)
-importlib.reload(export_abc)
-
+from . import selection, export_usd, export_abc
+for module in [selection, export_usd, export_abc]:
+    importlib.reload(module)
 
 class Interface(QWidget):
     def __init__(self, *args, **kwargs):
