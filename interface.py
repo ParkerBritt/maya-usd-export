@@ -44,9 +44,10 @@ from PySide.QtWidgets import (
     QAbstractSpinBox,
 )
 
-from maya_usd_export import selection, export_usd
+from maya_usd_export import selection, export_usd, export_abc
 importlib.reload(selection)
 importlib.reload(export_usd)
+importlib.reload(export_abc)
 
 
 class Interface(QWidget):
@@ -242,6 +243,11 @@ class Export():
                                   include_blendshapes=config.get("include_blendshapes", False)
                                 )
         elif export_type == "Alembic":
-            pass
+            export_abc.ExportAlembic(output=output,
+                                     character_dict=selection_data,
+                                     start_frame=config.get("start_frame", start_frame),
+                                     end_frame=config.get("end_frame", end_frame),
+                                     step_frame=step_frame
+                                )
         else:
             raise TypeError("wrong type for export_type varible passed")
