@@ -105,7 +105,7 @@ class Selection():
             try:
                 children = cmds.listRelatives(parent_path, children=True, fullPath=True)
             except ValueError:
-                cmds.Warning("grp_joints does not exist under character")
+                cmds.warning("grp_joints does not exist under character")
                 return found_items
 
             if not children:
@@ -142,7 +142,7 @@ class Selection():
         if(cmds.objExists(attr_path)):
             cmds.setAttr(attr_path, usd_type, type="string")
         else: 
-            cmds.Warning(f"cant find {attr_path} not setting attr value: {usd_type}")
+            cmds.warning(f"cant find {attr_path} not setting attr value: {usd_type}")
 
     def return_data(self):
         return self.selection_data
