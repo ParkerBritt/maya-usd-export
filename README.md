@@ -7,6 +7,10 @@
 
 This repo contains shelf tools for exporting **Maya** animations as **USD** files.
 
+<div align="center">
+    <img src="screenshots/user_interface.png" alt="interface">
+</div>
+
 ## Features
 - **Simplified inteface for exporting animated assets**
 - **Static, Animation Cache, CFX export type**
