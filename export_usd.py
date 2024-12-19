@@ -91,7 +91,7 @@ class ExportAnim():
 
             print(f"\nEXPORTING USD...\nUSD export args: {export_args}\n")
             cmds.mayaUSDExport(**export_args)
-
+            cmds.select(clear=True)
         self.MESSAGE = f"{self.MESSAGE}\nExported to: {export_file_path}.usd"
         cmds.confirmDialog(message=self.MESSAGE, title="Export Finished")
 
