@@ -135,14 +135,6 @@ class Selection():
         character_paths = traverse(joints_path)
         print(f"joint path: {character_paths}")
         return character_paths
-    
-    def set_usd_primtype(self, item, usd_type):
-        '''set the USD type on the group eg skelroot, xform etc'''
-        attr_path = f"{item}.USD_typeName"
-        if(cmds.objExists(attr_path)):
-            cmds.setAttr(attr_path, usd_type, type="string")
-        else: 
-            cmds.warning(f"cant find {attr_path} not setting attr value: {usd_type}")
 
     def return_data(self):
         return self.selection_data

@@ -41,10 +41,9 @@ class ExportAlembic():
 
             print("\n")
 
-            #command = "-frameRange " + str(self.start_frame) + " " + str(self.end_frame) +" -uvWrite -stripNamespaces -worldSpace " + root + " -file " + self.output + " -s " + str(self.step_frame)
             export_args = (
                 f"-frameRange {self.start_frame} {self.end_frame} "
-                f"-uvWrite -stripNamespaces -worldSpace "
+                f"-uvWrite -stripNamespaces " # -worldSpace "
                 f"-file {self.output} "
                 f"-step {self.step_frame} "
                 f"{root} "
