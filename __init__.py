@@ -1,5 +1,5 @@
 from importlib import reload
 
-from . import export_anim
+from . import interface
+reload(interface)
 from .interface import start_interface
-reload(export_anim)
