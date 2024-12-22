@@ -28,6 +28,7 @@ This repo contains shelf tools for exporting **Maya** animations as **USD** file
 - Run the following code within mayas script editor or shelf tool
 ```python
 import maya_usd_export
+maya_usd_export.start_interface()
 ```
 
 ## Rig Requirements
