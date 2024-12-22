@@ -17,9 +17,6 @@ class Selection():
             joint_grp_list = self.select_joint_grps(character)
             filtered_children, root_prim = self.get_geo_grps(group_name=matching_groups[i])
 
-            print(f"\nfiltered_children: {filtered_children}")
-            print(f"root_prim: {root_prim}")
-            print(f"joint_grp_list: {joint_grp_list}\n")
             temp_dict = {
                 "root_prim": root_prim,
                 "filtered_children": filtered_children,
@@ -38,7 +35,7 @@ class Selection():
             return joint_grp_list
 
     def check_for_namespaces(self):
-        '''check for existing namespaces and remove mayas constant namespaces'''
+        # check for existing namespaces and remove mayas constant namespaces
         namespaces = cmds.namespaceInfo(lon=True, r=True)
         if "UI" and "shared" in namespaces:
             namespaces.remove("UI")
@@ -49,11 +46,10 @@ class Selection():
             namespace = namespaces[0]
         else:
             namespace = None
-        print("found namespace:", namespace, "\n")
         return namespace
 
     def get_characters(self):
-        '''formatting for namespaces and finds groups within rig structure'''
+        # formatting for namespaces and finds groups within rig structure
         if self.namespace:
             groups = cmds.ls(f"{self.namespace}:geo*", long=True)
         else:
@@ -77,8 +73,7 @@ class Selection():
         return (characters, matching_groups)
 
     def get_geo_grps(self, group_name):
-        '''find root and child groups/prims and filter 
-        these through specified groups per to export'''
+        #find root and child groups/prims and filter these through specified groups per to export
         root_prim = cmds.listRelatives(group_name, parent=True)[0]
         children = cmds.listRelatives(group_name, children=True)
 
@@ -92,12 +87,11 @@ class Selection():
             child for child in children if child in self.render_geo_whitelist
         ]
         if len(filtered_children) == 0:
-            print(f"no groups match the whitelist: {self.render_geo_whitelist} \n")
             return
         return (filtered_children, root_prim)
 
     def get_joint_grps(self, character):
-        '''find the joints and joint groups within the rig structure'''
+        # find the joints and joint groups within the rig structure
         def traverse(parent_path):
             # traverse filters through children of character to find grp with "joints_grp" attr
             attr_name = "joints_grp"
@@ -133,7 +127,6 @@ class Selection():
         else:
             joints_path = f"{character}|grp_joints"
         character_paths = traverse(joints_path)
-        print(f"joint path: {character_paths}")
         return character_paths
 
     def return_data(self):
