@@ -2,17 +2,49 @@
 <p align="center"}>
   <img src="https://img.shields.io/badge/Maya-37A5CC?style=for-the-badge&logo=autodeskmaya&logoColor=white">
   <img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue">
-  <img src="https://img.shields.io/badge/Perforce-20a9dc?style=for-the-badge&logo=perforce&logoColor=404040">
+  <img src="https://img.shields.io/badge/Qt-41CD52?style=for-the-badge&logo=Qt&logoColor=white">
 </p>
 
 This repo contains shelf tools for exporting **Maya** animations as **USD** files.
-> This repository is for personal development purposes and the tools included are built with a specific custom pipeline in mind.
-> You may find yourself needing to change what suffixes to search for or how certain environment variables effect the export.
+
+<div align="center">
+    <img src="screenshots/user_interface.png" alt="interface">
+</div>
 
 ## Features
-- **automatic export properly formatted animated assets**
+- **Simplified inteface for exporting animated assets**
+- **Static, Animation Cache, CFX export type**
+- **Custom export location**
+- **Custom frame range**
 
 ## Installation
 ### Requirements
-- Perforce
 - Autodesk Maya
+- Maya USD Plugin
+- Maya Alembic Plugin
+
+### Running Tool
+- Place code within maya scripts folder
+- Run the following code within mayas script editor or shelf tool
+```python
+import maya_usd_export
+maya_usd_export.start_interface()
+```
+
+## Rig Requirements
+**Following groups in heirarchy require specific attributes for CFX export:**
+- USD_typeName:
+  - grp_rig
+  - geo
+  - render
+  - muscle
+  - bone
+- joints_grp
+  - skin_joint
+
+Currently grp_joints must exist for joints_grp attr to be found
+
+**Rig should generally following this structure:**
+<div align="left">
+  <img src="screenshots/rig_hierarchy.png" alt="Rig Hierarchy" style="border-radius: 50px;" width="400">
+</div>
