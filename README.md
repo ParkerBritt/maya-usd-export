@@ -48,3 +48,7 @@ Currently grp_joints must exist for joints_grp attr to be found
 <div align="left">
   <img src="screenshots/rig_hierarchy.png" alt="Rig Hierarchy" style="border-radius: 50px;" width="400">
 </div>
+
+# Development
+### Dependencies
+pytest
