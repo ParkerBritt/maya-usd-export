@@ -31,5 +31,5 @@ if [ -z "$(echo ${PIP_LIST} | grep pytest)" ]; then
 fi
 echo "found pytest"
 
-"${MAYAPY_PATH}" -m pytest "${BASE_DIR}/tests.py"
+"${MAYAPY_PATH}" -m pytest "${BASE_DIR}/tests.py" -s
 
