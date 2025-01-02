@@ -51,4 +51,7 @@ Currently grp_joints must exist for joints_grp attr to be found
 
 # Development
 ### Dependencies
-pytest
+**pytest**  
+```sh
+/usr/autodesk/maya/bin/mayapy -m pip install pytest
+```
