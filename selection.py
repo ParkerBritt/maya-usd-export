@@ -31,7 +31,7 @@ class Selection():
     def select_joint_grps(self, character):
         joint_grp_list = []
         if self.export_rig is True:
-            for joint_grp in self.get_joint_grps(f"{character}_rig"):
+            for joint_grp in self.get_joint_grps(character):
                 joint_grp_list.append(joint_grp)
             return joint_grp_list
 
