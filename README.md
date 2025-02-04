@@ -13,7 +13,7 @@ This repo contains shelf tools for exporting **Maya** animations as **USD** file
 
 ## Features
 - **Simplified inteface for exporting animated assets**
-- **Static, Animation Cache, CFX export type**
+- **Capable of exporting static, animated, or cfx meshes**
 - **Custom export location**
 - **Custom frame range**
 
@@ -23,9 +23,9 @@ This repo contains shelf tools for exporting **Maya** animations as **USD** file
 - Maya USD Plugin
 - Maya Alembic Plugin
 
-### Running Tool
-- Place code within maya scripts folder
-- Run the following code within mayas script editor or shelf tool
+### Step 1. Add to maya scripts directory
+located at '''~/maya/scripts``` on linux
+### Step 2. Run the code within mayas script editor or shelf tool
 ```python
 import maya_usd_export
 maya_usd_export.start_interface()
@@ -44,7 +44,7 @@ maya_usd_export.start_interface()
 
 Currently grp_joints must exist for joints_grp attr to be found
 
-**Rig should generally following this structure:**
+**The current selection algorithm expects a rig with the following heirarcy naming:**
 <div align="left">
   <img src="screenshots/rig_hierarchy.png" alt="Rig Hierarchy" style="border-radius: 50px;" width="400">
 </div>
@@ -55,3 +55,5 @@ Currently grp_joints must exist for joints_grp attr to be found
 ```sh
 /usr/autodesk/maya/bin/mayapy -m pip install pytest
 ```
+### Resources
+[usd export command](https://github.com/Autodesk/maya-usd/tree/dev/lib/mayaUsd/commands)
