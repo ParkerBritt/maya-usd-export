@@ -2,9 +2,10 @@
 
 MAYAPY_PATH="/usr/autodesk/maya/bin/mayapy"
 if [ ! -e ]; then
-    echo "Error: mayapy not found" >&2
+    echo "Error: mayapy not found: ${MAYAPY_PATH}" >&2
     exit 1
 fi
+echo "MayaPy found at: ${MAYAPY_PATH}"
 
 
 # get path of currently running script
@@ -26,7 +27,7 @@ PIP_LIST=$("${MAYAPY_PATH}" -m pip list 2>/dev/null)
 # echo "${PIP_LIST}"
 # check pytest is installed
 if [ -z "$(echo ${PIP_LIST} | grep pytest)" ]; then
-    echo "Error: failed to find pytest" >&2
+    echo "Error: pytest not installed, fix with '${MAYAPY_PATH} -m pip install pytest'" >&2
     exit 1
 fi
 echo "found pytest"
