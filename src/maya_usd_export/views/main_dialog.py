@@ -44,10 +44,6 @@ from PySide.QtWidgets import (
     QAbstractSpinBox,
 )
 
-from . import selection, export_usd, export_abc
-for module in [selection, export_usd, export_abc]:
-    importlib.reload(module)
-
 class Interface(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -59,7 +55,7 @@ class Interface(QWidget):
         self.setWindowFlags(Qt.Window)
 
 
-        self.setWindowTitle("Maya_USD_Export")
+        self.setWindowTitle("Maya USD Export")
 
         # default export path
         self.file_output_path = os.getcwd()
@@ -118,18 +114,18 @@ class Interface(QWidget):
         # set default dropdown text
         self.w_anim_type.currentTextChanged.emit(AnimTypeDropdown.anim_types["static"])
 
-        self.export_asset_button.clicked.connect(lambda: Export(output=self.file_path_lineedit.text(),
-                                                                export_type=self.file_type_widget.currentText(),
-                                                                anim_type=self.w_anim_type.currentText(),
-                                                                start_frame=self.w_anim_range.return_frames()[0],
-                                                                end_frame=self.w_anim_range.return_frames()[1],
-                                                                step_frame=self.w_anim_range.return_frames()[2]
-                                                                ))
+        # self.export_asset_button.clicked.connect(lambda: Export(output=self.file_path_lineedit.text(),
+        #                                                         export_type=self.file_type_widget.currentText(),
+        #                                                         anim_type=self.w_anim_type.currentText(),
+        #                                                         start_frame=self.w_anim_range.return_frames()[0],
+        #                                                         end_frame=self.w_anim_range.return_frames()[1],
+        #                                                         step_frame=self.w_anim_range.return_frames()[2]
+        #                                                         ))
 
-        stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
-        with open(stylesheet_path, "r") as file:
-            stylesheet = file.read()
-        self.setStyleSheet(stylesheet)
+        # stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
+        # with open(stylesheet_path, "r") as file:
+        #     stylesheet = file.read()
+        # self.setStyleSheet(stylesheet)
 
     def open_file_dialog(self):
         file_path = QFileDialog.getExistingDirectory(self, "Select Directory", dir=self.file_output_path)
