@@ -1,30 +1,13 @@
-import os
-import platform
+import platform, os, sys
 from pathlib import Path
-import sys
 
 import maya.cmds as cmds
 from maya import OpenMayaUI as omui
+# from maya_usd_export.widgets.collapsible_container import CollapsibleContainer
 
-import importlib
+from maya_usd_export.utils import pyside_importer
+PySide, PySide.QtCore, PySide.QtWidgets, shiboken = pyside_importer.import_all()
 
-pyside_versions = ["PySide6", "PySide2"]
-
-for version in pyside_versions:
-    print("Trying pyside version:", version)
-    try:
-        sys.modules["PySide"] = importlib.import_module(version)
-        sys.modules["PySide.QtCore"] = importlib.import_module(f"{version}.QtCore")
-        sys.modules["PySide.QtWidgets"] = importlib.import_module(f"{version}.QtWidgets")
-        shiboken = importlib.import_module(f"shiboken{version[-1]}")
-        wrapInstance = shiboken.wrapInstance
-
-        print("Successful import of", version)
-        break
-    except ModuleNotFoundError:
-        continue
-else:
-    raise ModuleNotFoundError("No PySide module found.")
 
 from PySide.QtCore import Qt, QObject, SIGNAL
 from PySide.QtWidgets import (
@@ -44,14 +27,12 @@ from PySide.QtWidgets import (
     QAbstractSpinBox,
 )
 
-class Interface(QWidget):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        # parent to maya interface
-        mayaMainWindowPtr = omui.MQtUtil.mainWindow()
-        mayaMainWindow = wrapInstance(int(mayaMainWindowPtr), QWidget)
-        self.setParent(mayaMainWindow)
+class Interface(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.setParent(parent)
         self.setWindowFlags(Qt.Window)
 
 
@@ -114,18 +95,6 @@ class Interface(QWidget):
         # set default dropdown text
         self.w_anim_type.currentTextChanged.emit(AnimTypeDropdown.anim_types["static"])
 
-        # self.export_asset_button.clicked.connect(lambda: Export(output=self.file_path_lineedit.text(),
-        #                                                         export_type=self.file_type_widget.currentText(),
-        #                                                         anim_type=self.w_anim_type.currentText(),
-        #                                                         start_frame=self.w_anim_range.return_frames()[0],
-        #                                                         end_frame=self.w_anim_range.return_frames()[1],
-        #                                                         step_frame=self.w_anim_range.return_frames()[2]
-        #                                                         ))
-
-        # stylesheet_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"style.css")
-        # with open(stylesheet_path, "r") as file:
-        #     stylesheet = file.read()
-        # self.setStyleSheet(stylesheet)
 
     def open_file_dialog(self):
         file_path = QFileDialog.getExistingDirectory(self, "Select Directory", dir=self.file_output_path)
@@ -135,8 +104,11 @@ class Interface(QWidget):
 
 
 def start_interface():
-    print("start interface ran")
-    ui = Interface()
+    # parent to maya interface
+    mayaMainWindowPtr = omui.MQtUtil.mainWindow()
+    mayaMainWindow = shiboken.wrapInstance(int(mayaMainWindowPtr), QWidget)
+
+    ui = Interface(mayaMainWindow)
     ui.show()
 
 
@@ -185,66 +157,3 @@ class AnimTypeDropdown(QComboBox):
         self.addItem(self.anim_types["static"])
         self.addItem(self.anim_types["cache"])
         self.addItem(self.anim_types["cfx"])
-
-class Export():
-    def __init__(self, output=None, export_type=None, anim_type=None, start_frame=1001, end_frame=1101, step_frame=1):
-        anim_configs = {
-            "CFX": {
-                "geo_whitelist": ['render', 'muscle', 'bone'],
-                "usd_type": "Xform",
-                "root_type": "SkelRoot",
-                "export_rig": True,
-                "include_blendshapes": True,
-                "start_frame": start_frame,
-                "end_frame": end_frame
-            },
-            "Animation Cache": {
-                "geo_whitelist": ['render'],
-                "usd_type": "",
-                "root_type": "",
-                "export_rig": False,
-                "include_blendshapes": False,
-                "start_frame": start_frame,
-                "end_frame": end_frame
-            },
-            "Static": {
-                "geo_whitelist": ['render'],
-                "usd_type": "",
-                "root_type": "",
-                "export_rig": False,
-                "include_blendshapes": True,
-                "start_frame": 0,
-                "end_frame": 1
-            }
-        }
-        config = anim_configs.get(anim_type, None)
-        if not config:
-            raise KeyError("Config from anim_type is empty or not within anim_configs")
-
-        selection_instance = selection.Selection(render_geo_whitelist=config.get("geo_whitelist", ['render']),
-                                                 export_rig=config.get("export_rig", False))
-        selection_data = selection_instance.return_data()
-        if not selection_data:
-            cmds.warning("selection_data is empty, no selection made aborting export")
-            return
-        
-        if export_type == "USD":
-            export_usd.ExportAnim(output=output,
-                                  character_dict=selection_data,
-                                  start_frame=config.get("start_frame", start_frame),
-                                  end_frame=config.get("end_frame", end_frame),
-                                  step_frame=step_frame,
-                                  usd_type=config.get("usd_type", ""),
-                                  root_type=config.get("root_type", ""),
-                                  export_rig=config.get("export_rig", False),
-                                  include_blendshapes=config.get("include_blendshapes", False)
-                                )
-        elif export_type == "Alembic":
-            export_abc.ExportAlembic(output=output,
-                                     character_dict=selection_data,
-                                     start_frame=config.get("start_frame", start_frame),
-                                     end_frame=config.get("end_frame", end_frame),
-                                     step_frame=step_frame
-                                )
-        else:
-            raise TypeError("wrong type for export_type varible passed")
