@@ -43,8 +43,6 @@ class Interface(QWidget):
         self.initUI()
 
         # set sizing hinting
-        print("MINIMUM HEIGHT:", self.minimumSizeHint().height())
-        print("MINIMUM HEIGHT:", self.sizeHint().height())
         self.resize(self.minimumSizeHint().height()*2.5, self.minimumSizeHint().height())
 
         self.setMaximumHeight(self.minimumSizeHint().height()+80)
