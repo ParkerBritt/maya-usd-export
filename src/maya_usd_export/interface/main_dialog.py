@@ -9,6 +9,7 @@ from maya_usd_export.utils import pyside_importer
 _, _, qtw, shiboken = pyside_importer.import_all()
 
 from maya_usd_export.interface.options.general_options import GeneralOptions
+from maya_usd_export.interface.options.selection_options import SelectionOptions
 
 
 from PySide.QtCore import Qt, QObject, SIGNAL
@@ -62,10 +63,13 @@ class Interface(qtw.QScrollArea):
         self.scroll.setFrameShape(qtw.QFrame.NoFrame)
 
         # add form items
-        general_options = CollapsibleContainer("General Options")
-        general_options.addWidget(GeneralOptions())
-        self.main_layout.addWidget(general_options)
-        self.main_layout.addWidget(CollapsibleContainer("Selection"))
+        general_options_container = CollapsibleContainer("General Options")
+        general_options_container.addWidget(GeneralOptions())
+        self.main_layout.addWidget(general_options_container)
+
+        selection_options_container = CollapsibleContainer("Selection Options")
+        selection_options_container.addWidget(SelectionOptions())
+        self.main_layout.addWidget(selection_options_container)
 
 
 def start_interface():
