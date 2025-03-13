@@ -13,13 +13,13 @@ def import_all():
         print("Trying pyside version:", version)
         try:
             PySide = importlib.import_module(version)
-            # sys.modules["PySide"] = PySide
+            sys.modules["PySide"] = PySide
 
             PySide.QtCore = importlib.import_module(f"{version}.QtCore")
-            # sys.modules["PySide.QtCore"] = PySide.QtCore
+            sys.modules["PySide.QtCore"] = PySide.QtCore
 
             PySide.QtWidgets = importlib.import_module(f"{version}.QtWidgets")
-            # sys.modules["PySide.QtWidgets"] = 
+            sys.modules["PySide.QtWidgets"] =  PySide.QtWidgets
 
             shiboken = importlib.import_module(f"shiboken{version[-1]}")
 

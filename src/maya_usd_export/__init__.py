@@ -1,1 +1,0 @@
-from maya_usd_export.views.main_dialog import start_interface

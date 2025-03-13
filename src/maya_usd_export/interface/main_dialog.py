@@ -6,7 +6,7 @@ from maya import OpenMayaUI as omui
 # from maya_usd_export.widgets.collapsible_container import CollapsibleContainer
 
 from maya_usd_export.utils import pyside_importer
-PySide, PySide.QtCore, PySide.QtWidgets, shiboken = pyside_importer.import_all()
+_, _, _, shiboken = pyside_importer.import_all()
 
 
 from PySide.QtCore import Qt, QObject, SIGNAL
