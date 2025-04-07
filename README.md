@@ -6,6 +6,8 @@
 </p>
 
 This repo contains shelf tools for exporting **Maya** animations as **USD** files.
+> [!IMPORTANT]
+> This repo is currently undergoing a major refactor/complete rewrite
 
 <div align="center">
     <img src="screenshots/user_interface.png" alt="interface">
