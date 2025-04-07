@@ -1,1 +1,1 @@
-from maya_usd_export.interface.main_dialog import start_interface
+from maya_usd_export.interface.start_interface import start_interface

@@ -2,7 +2,6 @@ import platform, os, sys
 from pathlib import Path
 
 import maya.cmds as cmds
-from maya import OpenMayaUI as omui
 from maya_usd_export.interface.widgets.collapsible_container import CollapsibleContainer
 
 from maya_usd_export.utils import pyside_importer
@@ -71,13 +70,19 @@ class Interface(qtw.QScrollArea):
         selection_options_container.addWidget(SelectionOptions())
         self.main_layout.addWidget(selection_options_container)
 
+        # footer buttons
+        footer_buttons_layout = qtw.QHBoxLayout()
+        self.main_layout.addStretch()
+        self.main_layout.addLayout(footer_buttons_layout)
 
-def start_interface():
-    # parent to maya interface
-    mayaMainWindowPtr = omui.MQtUtil.mainWindow()
-    mayaMainWindow = shiboken.wrapInstance(int(mayaMainWindowPtr), QWidget)
+        self.export_button = qtw.QPushButton("export")
+        self.cancel_button = qtw.QPushButton("cancel")
 
-    ui = Interface(mayaMainWindow)
-    ui.show()
+        footer_buttons_layout.addStretch()
+        footer_buttons_layout.addWidget(self.export_button)
+        footer_buttons_layout.addWidget(self.cancel_button)
+
+
+
 
 
