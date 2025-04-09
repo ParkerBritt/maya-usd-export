@@ -23,7 +23,8 @@ except Exception as e:
 
 cube1 = cmds.polyCube()
 cube2 = cmds.polyCube()
-cmds.select([cube1[0]])
+torus1 = cmds.polyTorus()
+cmds.select([torus1[0]])
 
 try:
     cmds.helloWorld()
