@@ -7,6 +7,9 @@ set(PROJECT_NAME maya_usd_export)
 
 project(${PROJECT_NAME})
 
+# options
+option(BUILD_TESTS "builds tests" ON)
+
 # set vars
 set(MAYA_LOCATION "/usr/autodesk/maya" CACHE PATH "Path to maya installation")
 set(USD_LOCATION "/opt/USD" CACHE PATH "Path to usd instalation")
@@ -38,6 +41,7 @@ include(
 
 set(SOURCE_FILES
     src/entry.cpp
+    src/export/export.cpp
 )
 
 set(
@@ -62,3 +66,17 @@ target_link_libraries(${PROJECT_NAME}
     "${USD_LOCATION}/lib/libusd_usdGeom.so"
     # "${USD_LOCATION}/lib/libusd_vt.so"
 )
+
+if(BUILD_TESTS)
+    message(STATUS "BUILDING TESTS")
+    find_package(Catch2 3 REQUIRED)
+
+    add_executable(tests tests/unit-tests/test-main.cpp)
+    target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+
+    
+    # ctest
+    include(CTest)
+    include(Catch)
+    catch_discover_tests(tests)
+endif()

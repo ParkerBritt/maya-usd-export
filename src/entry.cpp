@@ -12,6 +12,8 @@
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/points.h>
 
+#include "export.h"
+
 DeclareSimpleCommand( helloWorld, "Autodesk", "2021" );
 
 using namespace pxr;
@@ -19,6 +21,7 @@ using namespace pxr;
 MStatus helloWorld::doIt( const MArgList& args )
 {
     cout << "Entry\n";
+    foo();
     return MS::kSuccess;
 
     std::string exportPath(args.asString(0).asChar());

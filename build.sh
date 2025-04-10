@@ -42,11 +42,11 @@ fi
 
 ninja
 
-# echo
-# echo ------------------
-# echo    Unit Tests
-# echo ------------------
-# "${BASE_DIR}/build/tests"
+echo
+echo ------------------
+echo    Unit Tests
+echo ------------------
+"${BASE_DIR}/build/tests"
 
 echo
 echo ------------------

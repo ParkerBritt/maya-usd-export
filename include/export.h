@@ -3,3 +3,5 @@ namespace maya_usd_export{
     public:
     };
 }
+
+void foo();

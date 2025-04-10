@@ -1,5 +1,11 @@
 #include "export.h"
+#include <iostream>
 
-maya_usd_export::Export(){
-    
+
+void foo(){
+    std::cout << "BAR\n";
 }
+
+// maya_usd_export::Export(){
+//     
+// }
