@@ -22,9 +22,6 @@ echo "BUILD DIR " $BUILD_DIR
 
 
 echo "BUILDING"
-cd /opt/hfs20.5.332/
-source houdini_setup
-
 
 CLEAN_BUILD=0
 if [ "$CLEAN_BUILD" -eq 1 ] && [ -d "$BUILD_DIR" ]; then
