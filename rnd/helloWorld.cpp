@@ -16,9 +16,13 @@ DeclareSimpleCommand( helloWorld, "Autodesk", "2021" );
 
 using namespace pxr;
 
-MStatus helloWorld::doIt( const MArgList& )
+MStatus helloWorld::doIt( const MArgList& args )
 {
     cout << "Start\n";
+
+    std::string exportPath(args.asString(0).asChar());
+    cout << "exporting file to: " << exportPath << '\n';
+    
 
     MSelectionList selectionList;
     MGlobal::getActiveSelectionList(selectionList);
@@ -41,7 +45,7 @@ MStatus helloWorld::doIt( const MArgList& )
         usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
     }
 
-    UsdStageRefPtr stage = UsdStage::CreateNew("/home/s5709975/Downloads/usd_cpp_export_test.usda");
+    UsdStageRefPtr stage = UsdStage::CreateNew(exportPath);
 
     // UsdGeomXform xform = UsdGeomXform::Define(stage, SdfPath("/CubeGroup"));
     // UsdGeomCube cube = UsdGeomCube::Define(stage, SdfPath("/CubeGroup/Cube"));

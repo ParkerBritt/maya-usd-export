@@ -27,7 +27,7 @@ torus1 = cmds.polyTorus()
 cmds.select([torus1[0]])
 
 try:
-    cmds.helloWorld()
+    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usd")
     print("helloWorld command executed successfully!")
 except Exception as e:
     sys.stderr.write("Error executing helloWorld: {}\n".format(e))

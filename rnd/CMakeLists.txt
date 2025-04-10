@@ -4,10 +4,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 set(PROJECT_NAME helloWorld)
-set(MAYA_LOCATION "/usr/autodesk/maya2023")
-set(USD_LOCATION "/transfer/Parker/usd-build")
 
 project(${PROJECT_NAME})
+
+# set vars
+set(MAYA_LOCATION "/usr/autodesk/maya" CACHE PATH "Path to maya installation")
+set(USD_LOCATION "/opt/USD" CACHE PATH "Path to usd instalation")
+
+message(STATUS "Setting MAYA_LOCATION to '${MAYA_LOCATION}'")
+message(STATUS "Setting USD_LOCATION to '${USD_LOCATION}'")
+
+if(NOT DEFINED ENV{DEVKIT_LOCATION})
+    message(FATAL_ERROR "$DEVKIT_LOCATION is not set. Please set it as an env var.")
+endif()
+
 
 
 # silence warnings
