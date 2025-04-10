@@ -53,9 +53,6 @@ def test_foo(load_plug, new_scene):
 
     cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usd")
 
-def test_bar(load_plug, new_scene):
-    print("test bar")
-    cube1 = cmds.polyCube()
 
 
 

@@ -19,6 +19,9 @@ if(NOT DEFINED ENV{DEVKIT_LOCATION})
 endif()
 
 
+# export compile commands for linter
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 
 # silence warnings
 add_compile_options(
@@ -34,7 +37,7 @@ include(
 )
 
 set(SOURCE_FILES
-    src/export/export.cpp
+    src/entry.cpp
 )
 
 set(
@@ -46,6 +49,7 @@ set(
 include_directories(
     "${USD_LOCATION}/include"
     $ENV{DEVKIT_LOCATION}/devkit/ufe/include
+    include
 )
 
 add_definitions(-std=c++17)
