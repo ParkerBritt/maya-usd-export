@@ -3,6 +3,6 @@
 
 TEST_CASE( "Test export", "[export]" ) {
     REQUIRE( 1 == 1 );
-    // foo();
+    foo();
     // REQUIRE( 1 != 1 );
 }

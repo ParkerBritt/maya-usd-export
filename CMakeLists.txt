@@ -35,13 +35,33 @@ add_compile_options(
  -Wno-cast-user-defined
 )
 
-include(
-    $ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake
+
+# setup core
+add_library(maya_usd_export_core STATIC
+    src/export/export.cpp
 )
+
+set_target_properties(maya_usd_export_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+target_include_directories(maya_usd_export_core
+    PRIVATE "${USD_LOCATION}/include"
+    PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
+    PUBLIC include
+)
+target_link_libraries(maya_usd_export_core
+    "${USD_LOCATION}/lib/libusd_usd.so"
+    "${USD_LOCATION}/lib/libusd_usdGeom.so"
+    # "${USD_LOCATION}/lib/libusd_vt.so"
+)
+
+
+# setup plugin
+
+# load devkit
+include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 
 set(SOURCE_FILES
     src/entry.cpp
-    src/export/export.cpp
 )
 
 set(
@@ -49,30 +69,28 @@ set(
     OpenMaya
     Foundation
 )
+build_plugin()
 
-include_directories(
-    "${USD_LOCATION}/include"
-    $ENV{DEVKIT_LOCATION}/devkit/ufe/include
-    include
+target_link_libraries(${PROJECT_NAME} maya_usd_export_core)
+
+target_include_directories(maya_usd_export_core
+    PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
 )
+
+# include_directories(
+# )
 
 add_definitions(-std=c++17)
 
-build_plugin()
 
 
-target_link_libraries(${PROJECT_NAME}
-    "${USD_LOCATION}/lib/libusd_usd.so"
-    "${USD_LOCATION}/lib/libusd_usdGeom.so"
-    # "${USD_LOCATION}/lib/libusd_vt.so"
-)
 
 if(BUILD_TESTS)
     message(STATUS "BUILDING TESTS")
     find_package(Catch2 3 REQUIRED)
 
     add_executable(tests tests/unit-tests/test-main.cpp)
-    target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+    target_link_libraries(tests PRIVATE Catch2::Catch2WithMain maya_usd_export_core)
 
     
     # ctest
