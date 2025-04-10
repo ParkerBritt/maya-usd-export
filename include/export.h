@@ -1,7 +1,10 @@
+#include <pxr/usd/usd/stage.h>
+
 namespace maya_usd_export{
-    class Export {
-    public:
-    };
+class PrimWriter {
+public:
+    PrimWriter();
+    void writePrim(pxr::UsdStageRefPtr stage);
+};
 }
 
-void foo();

@@ -52,3 +52,7 @@ echo ------------------
 "${BASE_DIR}/tests/system-tests/start-system-tests.sh"
 
 
+echo
+echo ------------------
+echo   Build Success
+echo ------------------

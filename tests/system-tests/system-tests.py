@@ -51,7 +51,7 @@ def test_foo(load_plug, new_scene):
     torus1 = cmds.polyTorus()
     cmds.select([torus1[0]])
 
-    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usd")
+    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usda")
 
 
 

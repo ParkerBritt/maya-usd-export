@@ -16,7 +16,6 @@ set(USD_LOCATION "/opt/USD" CACHE PATH "Path to usd instalation")
 
 message(STATUS "Setting MAYA_LOCATION to '${MAYA_LOCATION}'")
 message(STATUS "Setting USD_LOCATION to '${USD_LOCATION}'")
-
 if(NOT DEFINED ENV{DEVKIT_LOCATION})
     message(FATAL_ERROR "$DEVKIT_LOCATION is not set. Please set it as an env var.")
 endif()
@@ -44,8 +43,8 @@ add_library(maya_usd_export_core STATIC
 set_target_properties(maya_usd_export_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(maya_usd_export_core
-    PRIVATE "${USD_LOCATION}/include"
-    PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
+    BEFORE PUBLIC "${USD_LOCATION}/include"
+    PUBLIC $ENV{DEVKIT_LOCATION}/devkit/ufe/include
     PUBLIC include
 )
 target_link_libraries(maya_usd_export_core
@@ -58,11 +57,11 @@ target_link_libraries(maya_usd_export_core
 # setup plugin
 
 # load devkit
-include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 
 set(SOURCE_FILES
     src/entry.cpp
 )
+include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 
 set(
     LIBRARIES
@@ -71,14 +70,17 @@ set(
 )
 build_plugin()
 
-target_link_libraries(${PROJECT_NAME} maya_usd_export_core)
+target_link_libraries(${PROJECT_NAME}
+    maya_usd_export_core
+    "${USD_LOCATION}/lib/libusd_usd.so"
+)
 
-target_include_directories(maya_usd_export_core
+target_include_directories(${PROJECT_NAME}
+    # BEFORE becasue maya's tbb is broken so it uses this one
+    BEFORE PRIVATE "${USD_LOCATION}/include"
     PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
 )
 
-# include_directories(
-# )
 
 add_definitions(-std=c++17)
 
@@ -91,6 +93,11 @@ if(BUILD_TESTS)
 
     add_executable(tests tests/unit-tests/test-main.cpp)
     target_link_libraries(tests PRIVATE Catch2::Catch2WithMain maya_usd_export_core)
+
+    target_include_directories(tests
+        BEFORE PUBLIC "${USD_LOCATION}/include"
+    )
+
 
     
     # ctest
