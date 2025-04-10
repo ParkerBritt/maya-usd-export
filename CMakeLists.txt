@@ -34,7 +34,7 @@ include(
 )
 
 set(SOURCE_FILES
-    helloWorld.cpp
+    src/export/export.cpp
 )
 
 set(
