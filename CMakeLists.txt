@@ -3,7 +3,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-set(PROJECT_NAME helloWorld)
+set(PROJECT_NAME maya_usd_export)
 
 project(${PROJECT_NAME})
 

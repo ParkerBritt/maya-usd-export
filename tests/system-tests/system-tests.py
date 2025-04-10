@@ -11,10 +11,10 @@ import maya.standalone
 
 @pytest.fixture(scope="module")
 def plugin_path():
-    plug_path = os.path.normpath(os.path.join(__file__, "../../../build/helloWorld.so"))
+    plug_path = os.path.normpath(os.path.join(__file__, "../../../build/maya_usd_export.so"))
     plug_exists = os.path.exists(plug_path)
 
-    assert plug_exists, f"Could not find export.so at {plug_path}"
+    assert plug_exists, f"Could not find maya_usd_export.so at {plug_path}"
     return plug_path
 
 @pytest.fixture(scope="module")
