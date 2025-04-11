@@ -1,6 +1,3 @@
-#ifndef PRIM_WRITER_H
-#define PRIM_WRITER_H
-
 #include "export.h"
 #include <iostream>
 
@@ -17,11 +14,11 @@
 #include <pxr/usd/usdGeom/points.h>
 
 
-maya_usd_export::PrimWriter::PrimWriter(){
+MayaUSDExport::PrimWriter::PrimWriter(){
     std::cout << "constructor\n";    
 }
 
-void maya_usd_export::PrimWriter::writePrim(pxr::UsdStageRefPtr stage){
+void MayaUSDExport::PrimWriter::writePrim(pxr::UsdStageRefPtr stage){
 
 
     MSelectionList selectionList;
@@ -30,7 +27,7 @@ void maya_usd_export::PrimWriter::writePrim(pxr::UsdStageRefPtr stage){
     MDagPath dagPath;
     selectionList.getDagPath(0, dagPath);
 
-    cout << "hello2 path: " << dagPath.fullPathName() << "\n";
+    cout << "export geo path: " << dagPath.fullPathName() << "\n";
 
     MFnMesh mesh(dagPath);
 
@@ -46,12 +43,11 @@ void maya_usd_export::PrimWriter::writePrim(pxr::UsdStageRefPtr stage){
     }
 
 
-    auto billboard = pxr::UsdGeomPoints::Define(stage, pxr::SdfPath("/mesh"));
+    auto newPrim = pxr::UsdGeomPoints::Define(stage, pxr::SdfPath("/mesh"));
 
-    billboard.CreatePointsAttr(pxr::VtValue{usdPointArray});
+    newPrim.CreatePointsAttr(pxr::VtValue{usdPointArray});
 
 
     cout << "End\n";
 }
 
-#endif

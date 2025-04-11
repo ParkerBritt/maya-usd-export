@@ -13,7 +13,7 @@ MStatus helloWorld::doIt( const MArgList& args )
     std::string exportPath(args.asString(0).asChar());
     pxr::UsdStageRefPtr stage = pxr::UsdStage::CreateNew(exportPath);
 
-    maya_usd_export::PrimWriter primWriter;
+    MayaUSDExport::PrimWriter primWriter;
     primWriter.writePrim(stage);
 
     cout << "exporting file to: " << exportPath << '\n';

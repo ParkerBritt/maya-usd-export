@@ -1,6 +1,9 @@
+#ifndef PRIM_WRITER_H
+#define PRIM_WRITER_H
+
 #include <pxr/usd/usd/stage.h>
 
-namespace maya_usd_export{
+namespace MayaUSDExport{
 class PrimWriter {
 public:
     PrimWriter();
@@ -8,3 +11,4 @@ public:
 };
 }
 
+#endif

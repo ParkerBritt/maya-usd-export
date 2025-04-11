@@ -8,7 +8,7 @@ set(PROJECT_NAME maya_usd_export)
 project(${PROJECT_NAME})
 
 # options
-option(BUILD_TESTS "builds tests" ON)
+option(BUILD_TESTS "builds tests" OFF)
 
 # set vars
 set(MAYA_LOCATION "/usr/autodesk/maya" CACHE PATH "Path to maya installation")
@@ -21,6 +21,7 @@ endif()
 
 message(STATUS "Setting MAYA_LOCATION to '${MAYA_LOCATION}'")
 message(STATUS "Setting USD_LOCATION to '${USD_LOCATION}'")
+message(STATUS "Setting DEVKIT_LOCATION to '$ENV{DEVKIT_LOCATION}'")
 if(NOT DEFINED ENV{DEVKIT_LOCATION})
     message(FATAL_ERROR "$DEVKIT_LOCATION is not set. Please set it as an env var.")
 endif()
@@ -43,14 +44,16 @@ add_compile_options(
 # setup core
 add_library(maya_usd_export_core STATIC
     src/export/export.cpp
+    src/export/exportItem.cpp
 )
 
 set_target_properties(maya_usd_export_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(maya_usd_export_core
-    BEFORE PUBLIC "${USD_LOCATION}/include"
-    PUBLIC $ENV{DEVKIT_LOCATION}/devkit/ufe/include
     PUBLIC include
+    PUBLIC "${USD_LOCATION}/include"
+    PRIVATE "$ENV{DEVKIT_LOCATION}/include"
+    # PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
 )
 target_link_libraries(maya_usd_export_core
     "${USD_LOCATION}/lib/libusd_usd.so"
@@ -83,7 +86,6 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     # BEFORE becasue maya's tbb is broken so it uses this one
     BEFORE PRIVATE "${USD_LOCATION}/include"
-    PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
 )
 
 
@@ -111,13 +113,39 @@ if(BUILD_TESTS)
 
     # source tests
     add_executable(tests tests/unit-tests/test-main.cpp)
-    # link to core lib
-    target_link_libraries(tests PRIVATE Catch2::Catch2WithMain maya_usd_export_core)
 
-    target_include_directories(tests
-        BEFORE PUBLIC "${USD_LOCATION}/include"
+
+    # link to core lib
+
+    set(LIBRARY_DIRS $ENV{DEVKIT_LOCATION})
+    find_library(OpenMaya_PATH
+        NAMES OpenMaya
+        PATHS ${LIBRARY_DIRS}
+        NO_DEFAULT_PATH
+    )
+    find_library(Foundation_PATH
+        NAMES Foundation
+        PATHS ${LIBRARY_DIRS}
+        NO_DEFAULT_PATH
     )
 
+    message(STATUS "OPEN MAYA PATH: ${OpenMaya_PATH}")
+    message(STATUS "OPEN FOUNDATION PATH: ${Foundation_PATH}")
+
+    target_link_libraries(tests PRIVATE
+        Catch2::Catch2WithMain
+        maya_usd_export_core
+        # ${OpenMaya_PATH}
+        # ${Foundation_PATH}
+    )
+
+    target_include_directories(tests BEFORE
+         PUBLIC "${USD_LOCATION}/include"
+    )
+
+    # target_include_directories(tests
+    #     PUBLIC "$ENV{DEVKIT_LOCATION}/include"
+    # )
 
     
     # ctest
