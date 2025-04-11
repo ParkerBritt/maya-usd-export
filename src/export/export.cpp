@@ -1,4 +1,5 @@
 #include "export.h"
+#include "export/exportItem.h"
 #include <iostream>
 
 #include <maya/MGlobal.h>
@@ -18,34 +19,37 @@ MayaUSDExport::PrimWriter::PrimWriter(){
     std::cout << "constructor\n";    
 }
 
-void MayaUSDExport::PrimWriter::writePrim(pxr::UsdStageRefPtr stage){
+void MayaUSDExport::PrimWriter::addExportItem(ExportItem _exportItem){
+    m_exportItems.push_back(_exportItem);
+}
 
 
-    MSelectionList selectionList;
-    MGlobal::getActiveSelectionList(selectionList);
+void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
-    MDagPath dagPath;
-    selectionList.getDagPath(0, dagPath);
+    for(MayaUSDExport::ExportItem exportItem : m_exportItems){
+        cout << "export geo path: " << exportItem.dagPath.fullPathName() << "\n";
+        MStringArray pathSplit;
+        exportItem.dagPath.fullPathName().split('|', pathSplit);
+        std::string geoName = pathSplit[pathSplit.length()-1].asChar();
+        cout << "geo name: " << geoName << "\n";
+        MFnMesh mesh(exportItem.dagPath);
 
-    cout << "export geo path: " << dagPath.fullPathName() << "\n";
-
-    MFnMesh mesh(dagPath);
-
-    MFloatPointArray mayaPointArray;
-    mesh.getPoints(mayaPointArray);
+        MFloatPointArray mayaPointArray;
+        mesh.getPoints(mayaPointArray);
 
 
-    pxr::VtArray<pxr::GfVec3f> usdPointArray;
+        pxr::VtArray<pxr::GfVec3f> usdPointArray;
 
-    for(auto point : mayaPointArray){
-        cout << "point: " << point << '\n';
-        usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
+        for(auto point : mayaPointArray){
+            // cout << "point: " << point << '\n';
+            usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
+        }
+
+
+        auto newPrim = pxr::UsdGeomPoints::Define(stage, pxr::SdfPath("/"+geoName));
+
+        newPrim.CreatePointsAttr(pxr::VtValue{usdPointArray});
     }
-
-
-    auto newPrim = pxr::UsdGeomPoints::Define(stage, pxr::SdfPath("/mesh"));
-
-    newPrim.CreatePointsAttr(pxr::VtValue{usdPointArray});
 
 
     cout << "End\n";

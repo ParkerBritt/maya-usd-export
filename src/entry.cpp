@@ -1,8 +1,15 @@
 #include <maya/MSimple.h>
+#include <maya/MGlobal.h>
+#include <maya/MSelectionList.h>
+#include <maya/MDagPath.h>
+#include <maya/MFnMesh.h>
+#include <maya/MFloatPointArray.h>
 
 #include <pxr/usd/usd/stage.h>
+#include <sys/select.h>
 
 #include "export.h"
+#include "export/exportItem.h"
 
 DeclareSimpleCommand( helloWorld, "Autodesk", "2021" );
 
@@ -13,8 +20,24 @@ MStatus helloWorld::doIt( const MArgList& args )
     std::string exportPath(args.asString(0).asChar());
     pxr::UsdStageRefPtr stage = pxr::UsdStage::CreateNew(exportPath);
 
+    // get items in scene
+    MSelectionList selectionList;
+    MGlobal::getActiveSelectionList(selectionList);
+
     MayaUSDExport::PrimWriter primWriter;
-    primWriter.writePrim(stage);
+
+    std::vector<MayaUSDExport::ExportItem> exportItems;
+    MDagPath dagPath;
+    for(size_t i=0; i<selectionList.length(); ++i){
+        selectionList.getDagPath(i, dagPath);
+        cout << "adding geo path: " << dagPath.fullPathName() << "\n";
+
+        MayaUSDExport::ExportItem exportItem(dagPath);
+        primWriter.addExportItem(exportItem);
+    }
+
+
+    primWriter.writePrims(stage);
 
     cout << "exporting file to: " << exportPath << '\n';
     stage->GetRootLayer()->Save();

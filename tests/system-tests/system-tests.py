@@ -49,7 +49,7 @@ def test_foo(load_plug, new_scene):
     cube1 = cmds.polyCube()
     cube2 = cmds.polyCube()
     torus1 = cmds.polyTorus()
-    cmds.select([torus1[0]])
+    cmds.select(cube1[0], [torus1[0]])
 
     cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usda")
 

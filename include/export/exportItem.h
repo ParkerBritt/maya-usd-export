@@ -6,7 +6,10 @@
 namespace MayaUSDExport{
 class ExportItem{
 public:
-    ExportItem(MDagPath);
+    ExportItem(MDagPath _dagPath);
+    MDagPath dagPath;
+    // add exportArgs
+
 };
 }
 
