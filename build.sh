@@ -29,12 +29,12 @@ if [ "$CLEAN_BUILD" -eq 1 ] && [ -d "$BUILD_DIR" ]; then
     rm -rf $BUILD_DIR
     mkdir -p $BUILD_DIR
     cd $BUILD_DIR
-    cmake -G Ninja ..
+    cmake -G Ninja "$@" ..
 else
     echo "Build dir doesn't exist, creating one now"
     mkdir -p $BUILD_DIR
     cd $BUILD_DIR
-    cmake -G Ninja ..
+    cmake -G Ninja "$@" ..
 fi
 
 ninja

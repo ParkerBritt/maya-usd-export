@@ -12,7 +12,12 @@ option(BUILD_TESTS "builds tests" ON)
 
 # set vars
 set(MAYA_LOCATION "/usr/autodesk/maya" CACHE PATH "Path to maya installation")
-set(USD_LOCATION "/opt/USD" CACHE PATH "Path to usd instalation")
+# set from USD_LOCATION environment variable if exists
+if(NOT DEFINED USD_LOCATION AND DEFINED ENV{USD_LOCATION})
+    set(USD_LOCATION $ENV{USD_LOCATION} CACHE PATH "Path to USD installation")
+else()
+    set(USD_LOCATION "/opt/USD" CACHE PATH "Path to USD installation")
+endif()
 
 message(STATUS "Setting MAYA_LOCATION to '${MAYA_LOCATION}'")
 message(STATUS "Setting USD_LOCATION to '${USD_LOCATION}'")
@@ -85,13 +90,28 @@ target_include_directories(${PROJECT_NAME}
 add_definitions(-std=c++17)
 
 
-
-
 if(BUILD_TESTS)
     message(STATUS "BUILDING TESTS")
-    find_package(Catch2 3 REQUIRED)
+    # try to find catch2 for testing
+    find_package(Catch2 3 QUIET)
 
+    # download if not found
+    if(NOT Catch2_FOUND)
+        message(STATUS "Catch2 not found, using FetchContent to download it")
+
+        include(FetchContent)
+        FetchContent_Declare(
+            Catch2
+            GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+            GIT_TAG        v3.8.1
+        )
+        FetchContent_MakeAvailable(Catch2)
+    endif()
+
+
+    # source tests
     add_executable(tests tests/unit-tests/test-main.cpp)
+    # link to core lib
     target_link_libraries(tests PRIVATE Catch2::Catch2WithMain maya_usd_export_core)
 
     target_include_directories(tests
