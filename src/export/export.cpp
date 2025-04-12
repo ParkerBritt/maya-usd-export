@@ -39,16 +39,35 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
 
         pxr::VtArray<pxr::GfVec3f> usdPointArray;
+        pxr::VtArray<int> usdVertexCount;
+        pxr::VtArray<int> usdVertexIndices;
 
-        for(auto point : mayaPointArray){
+
+        // create points
+        for(size_t i=0; i<mayaPointArray.length(); ++i){
             // cout << "point: " << point << '\n';
+            auto point = mayaPointArray[i]; 
             usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
         }
 
 
-        auto newPrim = pxr::UsdGeomPoints::Define(stage, pxr::SdfPath("/"+geoName));
+        // connect points
+        MIntArray mayaVertexCount;
+        MIntArray mayaVertexIndices;
+        mesh.getVertices(mayaVertexCount, mayaVertexIndices);
+        for(size_t i=0; i<mayaVertexCount.length();++i){
+            usdVertexCount.push_back(mayaVertexCount[i]);
+        }
+        for(size_t i=0; i<mayaVertexIndices.length();++i){
+            usdVertexIndices.push_back(mayaVertexIndices[i]);
+        }
+
+
+        auto newPrim = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath("/"+geoName));
 
         newPrim.CreatePointsAttr(pxr::VtValue{usdPointArray});
+        newPrim.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});
+        newPrim.CreateFaceVertexIndicesAttr(pxr::VtValue{usdVertexIndices});
     }
 
 
