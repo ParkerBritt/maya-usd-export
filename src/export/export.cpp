@@ -1,5 +1,6 @@
 #include "export.h"
 #include "export/exportItem.h"
+#include "pxr/usd/sdf/path.h"
 #include <iostream>
 
 #include <maya/MGlobal.h>
@@ -25,6 +26,8 @@ void MayaUSDExport::PrimWriter::addExportItem(ExportItem _exportItem){
 
 
 void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
+
+    bool CREATE_PARENTS = true;
 
     for(MayaUSDExport::ExportItem exportItem : m_exportItems){
         cout << "export geo path: " << exportItem.dagPath.fullPathName() << "\n";
@@ -63,7 +66,18 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         }
 
 
-        auto newPrim = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath("/"+geoName));
+        // create parents
+        std::string primPathStr;
+        for(auto parent : pathSplit){
+            primPathStr += '/';
+            primPathStr += parent.asChar();
+
+            if(CREATE_PARENTS){
+                pxr::UsdGeomXform::Define(stage, pxr::SdfPath(primPathStr));
+            }
+        }
+        cout << "parent: " << primPathStr << "\n";
+        auto newPrim = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr+'/'+geoName));
 
         newPrim.CreatePointsAttr(pxr::VtValue{usdPointArray});
         newPrim.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});

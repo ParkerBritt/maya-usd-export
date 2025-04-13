@@ -53,6 +53,19 @@ def test_foo(load_plug, new_scene):
 
     cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usda")
 
+def test_parents(load_plug, new_scene):
+    print("test parents")
+    cube1 = cmds.polyCube()
+    cube2 = cmds.polyCube()
+    torus1 = cmds.polyTorus()
 
+    xform = cmds.createNode('transform', name='parentXform')
+    print("xform:", xform)
+
+    cmds.parent(cube1, xform)
+
+    cmds.select(cube1[0], torus1[0])
+
+    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usda")
 
 
