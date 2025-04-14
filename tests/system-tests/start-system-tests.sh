@@ -13,5 +13,6 @@ if [ ! -d "$BASE_DIR" ]; then
     exit
 fi
 
-/usr/autodesk/maya/bin/mayapy -m pytest -s "${BASE_DIR}/system-tests.py"
+echo "$@"
+/usr/autodesk/maya/bin/mayapy -m pytest -s "${BASE_DIR}/system-tests.py" "$@"
 

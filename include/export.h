@@ -10,6 +10,7 @@ public:
     PrimWriter();
     void writePrims(pxr::UsdStageRefPtr stage);
     void addExportItem(ExportItem _exportItem);
+    pxr::VtArray<pxr::GfVec3f> convertMayaPoints(MDagPath _meshPath);
     std::vector<ExportItem> m_exportItems;
 };
 }

@@ -1,10 +1,10 @@
 #include "export.h"
 #include "export/exportItem.h"
 #include "pxr/usd/sdf/path.h"
+#include "pxr/usd/usd/attribute.h"
 #include <iostream>
 
 #include <maya/MGlobal.h>
-#include <maya/MSelectionList.h>
 #include <maya/MDagPath.h>
 #include <maya/MFnMesh.h>
 #include <maya/MFloatPointArray.h>
@@ -14,6 +14,7 @@
 #include <pxr/usd/usdGeom/cube.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/points.h>
+#include <tuple>
 
 
 MayaUSDExport::PrimWriter::PrimWriter(){
@@ -38,21 +39,8 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         cout << "geo name: " << geoName << "\n";
         MFnMesh mesh(exportItem.dagPath);
 
-        MFloatPointArray mayaPointArray;
-        mesh.getPoints(mayaPointArray);
-
-
-        pxr::VtArray<pxr::GfVec3f> usdPointArray;
         pxr::VtArray<int> usdVertexCount;
         pxr::VtArray<int> usdVertexIndices;
-
-
-        // create points
-        for(size_t i=0; i<mayaPointArray.length(); ++i){
-            // cout << "point: " << point << '\n';
-            auto point = mayaPointArray[i]; 
-            usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
-        }
 
 
         // connect points
@@ -80,12 +68,34 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         cout << "parent: " << primPathStr << "\n";
         auto newPrim = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr+'/'+geoName));
 
-        newPrim.CreatePointsAttr(pxr::VtValue{usdPointArray});
+        pxr::UsdAttribute pointsAttr = newPrim.CreatePointsAttr(pxr::VtValue{convertMayaPoints(exportItem.dagPath)});
         newPrim.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});
         newPrim.CreateFaceVertexIndicesAttr(pxr::VtValue{usdVertexIndices});
+
+        for(int i=0; i<6; i++)
+        {
+            MGlobal::viewFrame(i);
+            pointsAttr.Set(pxr::VtValue{convertMayaPoints(exportItem.dagPath)}, i);
+        }
     }
 
 
     cout << "End\n";
+}
+
+pxr::VtArray<pxr::GfVec3f> MayaUSDExport::PrimWriter::convertMayaPoints(MDagPath _meshPath){
+    MFnMesh mesh;
+    // MGlobal::viewFrame(i);
+    mesh.setObject(_meshPath);
+
+    MFloatPointArray mayaPointArray;
+    mesh.getPoints(mayaPointArray);
+
+    pxr::VtArray<pxr::GfVec3f> usdPointArray;
+    for(size_t i=0; i<mayaPointArray.length(); ++i){
+        auto point = mayaPointArray[i]; 
+        usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
+    }
+    return usdPointArray;
 }
 

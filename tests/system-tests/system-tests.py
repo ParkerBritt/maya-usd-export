@@ -38,7 +38,17 @@ def new_scene():
     print("creating new scene")
     cmds.file(new=True, force=True)
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
+def write_maya_file(request):
+    yield
+    tmp_dir = tempfile.mkdtemp(prefix=f"maya_file_{request.node.name}_")
+
+    output_path = os.path.join(tmp_dir, "scene.ma")
+    print(f"writing maya scene to {output_path}")
+    cmds.file(rename=output_path)
+    cmds.file(save=True, type="mayaAscii")
+
+@pytest.fixture(scope="module", autouse=True)
 def load_plug(plugin_path, init_standalone):
     print("loading plugin")
     if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
@@ -52,14 +62,14 @@ def load_plug(plugin_path, init_standalone):
 
 
 @pytest.fixture(scope="session")
-def tmp_dir_parent():
-    DESTROY_TMP_DIRS = True
+def tmp_dir_parent(request):
     tmp_dir = tempfile.mkdtemp(prefix="maya_usd_export_tests_")
     print("created tmp dir:", tmp_dir)
 
     yield tmp_dir
 
-    if(DESTROY_TMP_DIRS):
+    keep_tmp_dirs = request.config.getoption("--keep-tmp-dirs")
+    if(not keep_tmp_dirs):
         print("destroying tmp dir:", tmp_dir)
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
@@ -75,17 +85,17 @@ def tmp_dir(tmp_dir_parent, request):
     # shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
-def test_foo(load_plug, new_scene, tmp_dir):
-    print("test foo")
-    cube1 = cmds.polyCube()
-    cube2 = cmds.polyCube()
-    torus1 = cmds.polyTorus()
-    cmds.select(cube1[0], [torus1[0]])
+# def test_foo(load_plug, new_scene, tmp_dir):
+#     print("test foo")
+#     cube1 = cmds.polyCube()
+#     cube2 = cmds.polyCube()
+#     torus1 = cmds.polyTorus()
+#     cmds.select(cube1[0], [torus1[0]])
 
-    export_path = os.path.join(tmp_dir, "export_test.usda")
-    cmds.USDExport(export_path)
+#     export_path = os.path.join(tmp_dir, "export_test.usda")
+#     cmds.USDExport(export_path)
 
-def test_parenting(load_plug, new_scene, tmp_dir):
+def test_parenting(new_scene, tmp_dir):
     from pxr import Usd, UsdGeom
     cube1 = cmds.polyCube()
     cube2 = cmds.polyCube()
@@ -117,5 +127,42 @@ def test_parenting(load_plug, new_scene, tmp_dir):
     # inverse test
     prim = stage.GetPrimAtPath("/fakeparent")
     assert not prim.IsValid()
+
+def test_animation(new_scene, tmp_dir, write_maya_file):
+    from pxr import Usd, UsdGeom
+
+    cube1 = cmds.polyCube()
+
+    xform_parent = cmds.createNode('transform', name='parentXform')
+
+    cmds.parent(cube1, xform_parent)
+    print("cube:", cube1)
+
+    # animate translation Y from 0 at frame 0 to 0.5 at frame 5
+    cmds.setKeyframe("pCubeShape1", attribute="translateY", value=0, time=0)
+    cmds.setKeyframe("pCubeShape1", attribute="translateY", value=0.5, time=5)
+
+    # select for export
+    cmds.select(cube1[0])
+
+    export_path = os.path.join(tmp_dir, "export_test.usda")
+    cmds.USDExport(export_path)
+
+    stage = Usd.Stage.Open(export_path)
+    prim = stage.GetPrimAtPath("/parentXform/pCube1/pCube1")
+    assert prim.IsValid(), "Invalid prim"
+    points = UsdGeom.Points(prim)
+    positions_attr = points.GetPointsAttr()
+
+    time_code = 0
+    positions = positions_attr.Get(time_code)
+    assert positions == [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5)], f"points not in expected position: {positions}"
+
+    time_code = 5
+    positions = positions_attr.Get(time_code)
+    assert positions == [(-0.5, 0, 0.5), (0.5, 0, 0.5), (-0.5, 1, 0.5), (0.5, 1, 0.5), (-0.5, 1, -0.5), (0.5, 1, -0.5), (-0.5, 0, -0.5), (0.5, 0, -0.5)], f"points not in expected position: {positions}"
+
+
+
 
 
