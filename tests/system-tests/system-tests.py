@@ -196,7 +196,7 @@ def test_rig_animation(new_scene, tmp_dir):
     stage = Usd.Stage.Open(export_path)
     prim = stage.GetPrimAtPath("/rig/skinned_geo/skinned_geo")
     assert prim.IsValid(), "Invalid prim"
-    print("TYPE:", prim.GetTypeName())
+    assert prim.GetTypeName() == "Mesh"
     points = UsdGeom.Points(prim)
     positions_attr = points.GetPointsAttr()
 
