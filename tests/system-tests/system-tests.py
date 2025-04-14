@@ -48,18 +48,31 @@ def load_plug(plugin_path, init_standalone):
             maya.standalone.uninitialize()
             pytest.fail(f"Failed to load plugin: {e}\n")
 
-    assert cmds.pluginInfo(plugin_path, query=True, loaded=True)
+    assert cmds.pluginInfo(plugin_path, query=True, loaded=True), "maya_usd_export failed to load"
 
 
-@pytest.fixture(scope="function")
-def tmp_dir():
-    tmp_dir = tempfile.mkdtemp(prefix="maya_usd_export_test")
+@pytest.fixture(scope="session")
+def tmp_dir_parent():
+    DESTROY_TMP_DIRS = True
+    tmp_dir = tempfile.mkdtemp(prefix="maya_usd_export_tests_")
     print("created tmp dir:", tmp_dir)
 
     yield tmp_dir
 
-    print("destroying tmp dir:", tmp_dir)
-    shutil.rmtree(tmp_dir, ignore_errors=True)
+    if(DESTROY_TMP_DIRS):
+        print("destroying tmp dir:", tmp_dir)
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+
+@pytest.fixture(scope="function")
+def tmp_dir(tmp_dir_parent, request):
+    tmp_dir = tempfile.mkdtemp(prefix=f"{request.node.name}_", dir=tmp_dir_parent)
+    print("created tmp dir:", tmp_dir)
+
+    return tmp_dir
+    # yield tmp_dir
+
+    # print("destroying tmp dir:", tmp_dir)
+    # shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
 def test_foo(load_plug, new_scene, tmp_dir):
@@ -70,22 +83,39 @@ def test_foo(load_plug, new_scene, tmp_dir):
     cmds.select(cube1[0], [torus1[0]])
 
     export_path = os.path.join(tmp_dir, "export_test.usda")
-    cmds.helloWorld(export_path)
+    cmds.USDExport(export_path)
 
-def test_parents(load_plug, new_scene, tmp_dir):
-    print("test parents")
+def test_parenting(load_plug, new_scene, tmp_dir):
+    from pxr import Usd, UsdGeom
     cube1 = cmds.polyCube()
     cube2 = cmds.polyCube()
     torus1 = cmds.polyTorus()
 
-    xform = cmds.createNode('transform', name='parentXform')
-    print("xform:", xform)
+    xform_parent = cmds.createNode('transform', name='parentXform')
+    xform_child = cmds.createNode('transform', name='childXform')
 
-    cmds.parent(cube1, xform)
+    cmds.parent(cube1, xform_parent)
+    cmds.parent(xform_child, xform_parent)
+    cmds.parent(cube2, xform_child)
 
-    cmds.select(cube1[0], torus1[0])
+    cmds.select(cube1[0], cube2[0],torus1[0])
 
     export_path = os.path.join(tmp_dir, "export_test.usda")
-    cmds.helloWorld(export_path)
+    cmds.USDExport(export_path)
+
+    stage = Usd.Stage.Open(export_path)
+
+    def prim_exists(parent_path):
+        prim = stage.GetPrimAtPath(parent_path)
+        assert prim.IsValid(), f"Expected prim {parent_path} not found in USD stage"
+
+    # check expected parents exist
+    prim_exists("/pTorus1")
+    prim_exists("/parentXform/pCube1")
+    prim_exists("/parentXform/childXform/pCube2")
+
+    # inverse test
+    prim = stage.GetPrimAtPath("/fakeparent")
+    assert not prim.IsValid()
 
 

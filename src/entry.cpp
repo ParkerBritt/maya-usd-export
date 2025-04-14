@@ -11,10 +11,10 @@
 #include "export.h"
 #include "export/exportItem.h"
 
-DeclareSimpleCommand( helloWorld, "Autodesk", "2021" );
+DeclareSimpleCommand( USDExport, "Autodesk", "2021" );
 
 
-MStatus helloWorld::doIt( const MArgList& args )
+MStatus USDExport::doIt( const MArgList& args )
 {
     cout << "Entry\n";
     std::string exportPath(args.asString(0).asChar());
