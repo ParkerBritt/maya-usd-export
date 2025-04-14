@@ -57,7 +57,6 @@ target_include_directories(maya_usd_export_core
     PUBLIC "${USD_LOCATION}/include"
     PRIVATE "$ENV{DEVKIT_LOCATION}/include"
     PUBLIC include
-    # PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
 )
 target_link_libraries(maya_usd_export_core
     "${USD_LOCATION}/lib/libusd_usd.so"
@@ -94,6 +93,18 @@ target_include_directories(${PROJECT_NAME}
 
 
 add_definitions(-std=c++17)
+
+
+# ----
+# build interface
+# ----
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+qt_standard_project_setup()
+
+qt_add_executable(qt_interface
+    src/interface/interface_main.cpp
+)
+target_link_libraries(qt_interface PRIVATE Qt6::Core Qt6::Widgets)
 
 
 if(BUILD_TESTS)
