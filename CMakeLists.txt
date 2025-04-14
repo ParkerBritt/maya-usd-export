@@ -33,11 +33,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # silence warnings
 add_compile_options(
+# maya devkit warnings
  -Wno-deprecated
  -Wno-redundant-move
  -Wno-missing-field-initializers
  -Wno-deprecated-copy
  -Wno-cast-user-defined
+
+ # silence tbb usd compile issue
  -Wno-changes-meaning
 )
 

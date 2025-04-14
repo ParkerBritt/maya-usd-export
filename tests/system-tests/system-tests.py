@@ -1,6 +1,8 @@
 import sys
 import os
 import pytest
+import tempfile
+import shutil
 
 import pytest
 import maya.cmds as cmds
@@ -36,7 +38,7 @@ def new_scene():
     print("creating new scene")
     cmds.file(new=True, force=True)
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def load_plug(plugin_path, init_standalone):
     print("loading plugin")
     if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
@@ -49,17 +51,28 @@ def load_plug(plugin_path, init_standalone):
     assert cmds.pluginInfo(plugin_path, query=True, loaded=True)
 
 
+@pytest.fixture(scope="function")
+def tmp_dir():
+    tmp_dir = tempfile.mkdtemp(prefix="maya_usd_export_test")
+    print("created tmp dir:", tmp_dir)
 
-def test_foo(load_plug, new_scene):
+    yield tmp_dir
+
+    print("destroying tmp dir:", tmp_dir)
+    shutil.rmtree(tmp_dir, ignore_errors=True)
+
+
+def test_foo(load_plug, new_scene, tmp_dir):
     print("test foo")
     cube1 = cmds.polyCube()
     cube2 = cmds.polyCube()
     torus1 = cmds.polyTorus()
     cmds.select(cube1[0], [torus1[0]])
 
-    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usda")
+    export_path = os.path.join(tmp_dir, "export_test.usda")
+    cmds.helloWorld(export_path)
 
-def test_parents(load_plug, new_scene):
+def test_parents(load_plug, new_scene, tmp_dir):
     print("test parents")
     cube1 = cmds.polyCube()
     cube2 = cmds.polyCube()
@@ -72,6 +85,7 @@ def test_parents(load_plug, new_scene):
 
     cmds.select(cube1[0], torus1[0])
 
-    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usda")
+    export_path = os.path.join(tmp_dir, "export_test.usda")
+    cmds.helloWorld(export_path)
 
 
