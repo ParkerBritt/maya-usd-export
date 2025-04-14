@@ -38,6 +38,7 @@ add_compile_options(
  -Wno-missing-field-initializers
  -Wno-deprecated-copy
  -Wno-cast-user-defined
+ -Wno-changes-meaning
 )
 
 
@@ -50,9 +51,9 @@ add_library(maya_usd_export_core STATIC
 set_target_properties(maya_usd_export_core PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(maya_usd_export_core
-    PUBLIC include
     PUBLIC "${USD_LOCATION}/include"
     PRIVATE "$ENV{DEVKIT_LOCATION}/include"
+    PUBLIC include
     # PRIVATE $ENV{DEVKIT_LOCATION}/devkit/ufe/include
 )
 target_link_libraries(maya_usd_export_core

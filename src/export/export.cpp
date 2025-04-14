@@ -28,6 +28,7 @@ void MayaUSDExport::PrimWriter::addExportItem(ExportItem _exportItem){
 void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
     bool CREATE_PARENTS = true;
+    bool TIME_VARYING = true;
 
     for(MayaUSDExport::ExportItem exportItem : m_exportItems){
         cout << "export geo path: " << exportItem.dagPath.fullPathName() << "\n";

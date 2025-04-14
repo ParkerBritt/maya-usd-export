@@ -8,8 +8,14 @@ import maya.cmds as cmds
 import maya.standalone 
 
 
+@pytest.fixture(scope="session", autouse=True)
+def load_maya_usd(init_standalone):
+    print("loading mayausdplugin")
+    if not cmds.pluginInfo("mayaUsdPlugin", query=True, loaded=True):
+        cmds.loadPlugin("mayaUsdPlugin")
 
-@pytest.fixture(scope="module")
+
+@pytest.fixture(scope="session")
 def plugin_path():
     plug_path = os.path.normpath(os.path.join(__file__, "../../../build/maya_usd_export.so"))
     plug_exists = os.path.exists(plug_path)
@@ -17,7 +23,7 @@ def plugin_path():
     assert plug_exists, f"Could not find maya_usd_export.so at {plug_path}"
     return plug_path
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def init_standalone():
     print("starting standalone")
     maya.standalone.initialize(name="python")
