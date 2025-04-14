@@ -74,6 +74,7 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
         for(int i=0; i<6; i++)
         {
+            cout << "frame: " << i << "\n";
             MGlobal::viewFrame(i);
             pointsAttr.Set(pxr::VtValue{convertMayaPoints(exportItem.dagPath)}, i);
         }
@@ -94,6 +95,7 @@ pxr::VtArray<pxr::GfVec3f> MayaUSDExport::PrimWriter::convertMayaPoints(MDagPath
     pxr::VtArray<pxr::GfVec3f> usdPointArray;
     for(size_t i=0; i<mayaPointArray.length(); ++i){
         auto point = mayaPointArray[i]; 
+        cout << point[0] << ' ' << point[1] << ' ' << point[2] << "\n";
         usdPointArray.push_back(pxr::GfVec3f(point[0], point[1], point[2]));
     }
     return usdPointArray;

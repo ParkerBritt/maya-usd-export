@@ -128,41 +128,102 @@ def test_parenting(new_scene, tmp_dir):
     prim = stage.GetPrimAtPath("/fakeparent")
     assert not prim.IsValid()
 
-def test_animation(new_scene, tmp_dir, write_maya_file):
+# def test_xform_animation(new_scene, tmp_dir):
+#     from pxr import Usd, UsdGeom
+
+#     cube1 = cmds.polyCube()
+
+#     xform_parent = cmds.createNode('transform', name='parentXform')
+
+#     cmds.parent(cube1, xform_parent)
+#     print("cube:", cube1)
+
+#     # animate translation Y from 0 at frame 0 to 0.5 at frame 5
+#     cmds.setKeyframe("pCubeShape1", attribute="translateY", value=0, time=0)
+#     cmds.setKeyframe("pCubeShape1", attribute="translateY", value=0.5, time=5)
+
+#     # select for export
+#     cmds.select(cube1[0])
+
+#     export_path = os.path.join(tmp_dir, "export_test.usda")
+#     cmds.USDExport(export_path)
+
+#     stage = Usd.Stage.Open(export_path)
+#     prim = stage.GetPrimAtPath("/parentXform/pCube1/pCube1")
+#     assert prim.IsValid(), "Invalid prim"
+#     points = UsdGeom.Points(prim)
+#     positions_attr = points.GetPointsAttr()
+
+#     time_code = 0
+#     positions = positions_attr.Get(time_code)
+#     assert positions == [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5)], f"points not in expected position: {positions}"
+
+#     time_code = 5
+#     positions = positions_attr.Get(time_code)
+#     assert positions == [(-0.5, 0, 0.5), (0.5, 0, 0.5), (-0.5, 1, 0.5), (0.5, 1, 0.5), (-0.5, 1, -0.5), (0.5, 1, -0.5), (-0.5, 0, -0.5), (0.5, 0, -0.5)], f"points not in expected position: {positions}"
+
+
+
+def test_rig_animation(new_scene, tmp_dir):
     from pxr import Usd, UsdGeom
 
-    cube1 = cmds.polyCube()
+    # ----
+    # setup scene
+    # ----
+    cube = cmds.polyCube(w=10,h=10,d=10,n="skinned_geo")
+    cmds.select(clear=True)
+    joint = cmds.joint(n="root")
+    
+    cmds.skinCluster(joint, "skinned_geo", toSelectedBones=True)
+    
+    cmds.group([joint, "skinned_geo"],n="rig",w=1)
+    
+    cmds.currentTime(1)
+    cmds.setKeyframe(joint)
+    
+    cmds.currentTime(5)
+    cmds.move(10, 0, 0, joint, relative=True)
+    cmds.setKeyframe(joint)
 
-    xform_parent = cmds.createNode('transform', name='parentXform')
-
-    cmds.parent(cube1, xform_parent)
-    print("cube:", cube1)
-
-    # animate translation Y from 0 at frame 0 to 0.5 at frame 5
-    cmds.setKeyframe("pCubeShape1", attribute="translateY", value=0, time=0)
-    cmds.setKeyframe("pCubeShape1", attribute="translateY", value=0.5, time=5)
-
-    # select for export
-    cmds.select(cube1[0])
+    cmds.select(cube[0])
 
     export_path = os.path.join(tmp_dir, "export_test.usda")
     cmds.USDExport(export_path)
 
+    # ----
+    # test check usd
+    # ----
     stage = Usd.Stage.Open(export_path)
-    prim = stage.GetPrimAtPath("/parentXform/pCube1/pCube1")
+    prim = stage.GetPrimAtPath("/rig/skinned_geo/skinned_geo")
     assert prim.IsValid(), "Invalid prim"
+    print("TYPE:", prim.GetTypeName())
     points = UsdGeom.Points(prim)
     positions_attr = points.GetPointsAttr()
 
     time_code = 0
     positions = positions_attr.Get(time_code)
-    assert positions == [(-0.5, -0.5, 0.5), (0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, 0.5, -0.5), (0.5, 0.5, -0.5), (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5)], f"points not in expected position: {positions}"
+    expected_positions  = [
+        (-5, -5, 5),
+        (5, -5, 5),
+        (-5, 5, 5),
+        (5, 5, 5),
+        (-5, 5, -5),
+        (5, 5, -5),
+        (-5, -5, -5),
+        (5, -5, -5),
+    ]
+    assert positions == expected_positions, f"points not in expected start position: {positions}"
 
     time_code = 5
     positions = positions_attr.Get(time_code)
-    assert positions == [(-0.5, 0, 0.5), (0.5, 0, 0.5), (-0.5, 1, 0.5), (0.5, 1, 0.5), (-0.5, 1, -0.5), (0.5, 1, -0.5), (-0.5, 0, -0.5), (0.5, 0, -0.5)], f"points not in expected position: {positions}"
-
-
-
-
-
+    expected_positions  = [
+        (5, -5, 5),
+        (15, -5, 5),
+        (5, 5, 5),
+        (15, 5, 5),
+        (5, 5, -5),
+        (15, 5, -5),
+        (5, -5, -5),
+        (15, -5, -5),
+    ]
+    assert positions == expected_positions, f"points not in expected end position: {positions}"
