@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 set(PROJECT_NAME maya_usd_export)
+set(CMAKE_AUTOMOC ON)
 
 project(${PROJECT_NAME})
 
@@ -71,6 +72,8 @@ target_link_libraries(maya_usd_export_core
 
 set(SOURCE_FILES
     src/entry.cpp
+    src/dialog.cpp
+    include/dialog.h
 )
 include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 
@@ -78,11 +81,14 @@ set(
     LIBRARIES
     OpenMaya
     Foundation
+    # Qt5Core
+    # Qt5Widgets
 )
 build_plugin()
 
 target_link_libraries(${PROJECT_NAME}
     maya_usd_export_core
+    # "$ENV{DEVKIT_LOCATION}/devkit/lib/libQt5Core.so"
     "${USD_LOCATION}/lib/libusd_usd.so"
 )
 
@@ -98,15 +104,17 @@ add_definitions(-std=c++17)
 # ----
 # build interface
 # ----
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
-qt_standard_project_setup()
-
-qt_add_executable(qt_interface
-    src/interface/interface_main.cpp
+# set(CMAKE_PREFIX_PATH "$ENV{DEVKIT_LOCATION}/cmake/qt_5.15.2")
+# set(CMAKE_PREFIX_PATH "$ENV{DEVKIT_LOCATION}/devkit")
+find_package(Qt5 REQUIRED COMPONENTS Widgets Core)
+message(STATUS "QT DIR: ${Qt5_DIR}")
+target_include_directories(${PROJECT_NAME}
+    PRIVATE "$ENV{DEVKIT_LOCATION}/include"
 )
-target_link_libraries(qt_interface PRIVATE Qt6::Core Qt6::Widgets)
 
-
+# ----
+# build tests
+# ----
 if(BUILD_TESTS)
     message(STATUS "BUILDING TESTS")
     # try to find catch2 for testing

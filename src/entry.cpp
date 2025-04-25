@@ -17,14 +17,13 @@
 #include "export.h"
 #include "export/exportItem.h"
 
+// ---- cli command ----
 class USDExport : public MPxCommand
 {
     public:
         USDExport();
         virtual ~USDExport();
         MStatus doIt( const MArgList& );
-        MStatus redoIt();
-        MStatus undoIt();
         bool isUndoable() const;
         static void* creator();
 };
@@ -64,26 +63,46 @@ MStatus USDExport::doIt( const MArgList& args) {
 
     return MS::kSuccess;
 }
-MStatus USDExport::redoIt() {
-    cout << "In USDExport::redoIt()\n";
-    return MS::kSuccess;
-}
-MStatus USDExport::undoIt() {
-    cout << "In USDExport::undoIt()\n";
-    return MS::kSuccess;
-}
 bool USDExport::isUndoable() const {
-    cout << "In USDExport::isUndoable()\n";
-    return true;
+    return false;
 }
 void* USDExport::creator() {
     cout << "In USDExport::creator()\n";
     return new USDExport();
 }
+
+// ---- gui command ----
+class USDExportGUI : public MPxCommand
+{
+    public:
+        USDExportGUI();
+        MStatus doIt( const MArgList& );
+        bool isUndoable() const;
+        static void* creator();
+};
+USDExportGUI::USDExportGUI() {
+    cout << "In USDExportGUI::USDExportGUI()\n";
+}
+// MStatus USDExportGUI::doIt( const MArgList& args) {
+//     cout << "hello world!\n";
+
+//     return MS::kSuccess;
+// }
+bool USDExportGUI::isUndoable() const {
+    return false;
+}
+void* USDExportGUI::creator() {
+    cout << "In USDExportGUI::creator()\n";
+    return new USDExportGUI();
+}
+
+
+
 MStatus initializePlugin( MObject obj )
 {
     MFnPlugin plugin( obj, "Parker Britt", "0.1", "Any" );
     plugin.registerCommand( "USDExport", USDExport::creator );
+    plugin.registerCommand( "USDExportGUI", USDExportGUI::creator );
     cout << "In initializePlugin()\n";
     return MS::kSuccess;
 }
@@ -91,6 +110,26 @@ MStatus uninitializePlugin( MObject obj )
 {
     MFnPlugin plugin( obj );
     plugin.deregisterCommand( "USDExport" );
+    plugin.deregisterCommand( "USDExportGUI" );
     cout << "In uninitializePlugin()\n";
     return MS::kSuccess;
 }
+
+#include <QtCore/QPointer>
+#include "dialog.h"
+
+
+static QPointer<USDExportInterface> gInterface;
+
+
+MStatus USDExportGUI::doIt( const MArgList& args) {
+    if (gInterface.isNull()) {
+        gInterface = new USDExportInterface("Test");
+        gInterface->show();
+    } else {
+        gInterface->showNormal();
+        gInterface->raise();
+    }
+    return MS::kSuccess;
+}
+
