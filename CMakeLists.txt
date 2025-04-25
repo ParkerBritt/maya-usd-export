@@ -74,6 +74,8 @@ set(SOURCE_FILES
     src/entry.cpp
     src/dialog.cpp
     include/dialog.h
+    include/interface/widgets/CollapsibleContainer.h
+    src/interface/widgets/CollapsibleContainer.cpp
 )
 include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 

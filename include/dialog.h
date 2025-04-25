@@ -1,8 +1,9 @@
 #pragma once
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QWidget>
+#include <QtWidgets/QScrollArea>
 
-class USDExportInterface : public QWidget
+class USDExportInterface : public QScrollArea
 {
     Q_OBJECT
 public:
