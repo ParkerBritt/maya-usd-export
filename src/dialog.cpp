@@ -27,9 +27,7 @@ USDExportInterface::USDExportInterface(QWidget* parent)
     generalOptionsContainer->addWidget(new QPushButton("world"));
     mainLayout->addWidget(generalOptionsContainer);
 
-    // auto *generalOptionsContainer = CollapsibleContainer("General Options");
-    // mainLayout->addWidget(button1);
-
+    scroll->setWidgetResizable(true);
     scroll->setWidget(mainWidget);
 
 }
