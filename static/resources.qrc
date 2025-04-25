@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/collapse_arrow_right.png</file>
+        <file>icons/collapse_arrow_down.png</file>
+    </qresource>
+</RCC>
+

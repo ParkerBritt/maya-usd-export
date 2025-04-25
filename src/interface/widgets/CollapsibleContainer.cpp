@@ -17,6 +17,7 @@ CollapsibleContainer::CollapsibleContainer(const QString& _title, QWidget* _pare
 
     m_headButton = new QPushButton(_title);
     QObject::connect(m_headButton, &QPushButton::clicked, this, &CollapsibleContainer::headerClickedSlot);
+    m_headButton->setIcon(QIcon(":/icons/collapse_arrow_down.png"));
     // TODO: set icon
 
 
@@ -44,11 +45,11 @@ void CollapsibleContainer::headerClickedSlot()
     if(m_contentsWidget->isVisible())
     {
         // TODO: set icon down
-        std::cout << "icon down\n";
+        m_headButton->setIcon(QIcon(":/icons/collapse_arrow_down.png"));
     }
     else
     {
         // TODO: set icon right
-        std::cout << "icon right\n";
+        m_headButton->setIcon(QIcon(":/icons/collapse_arrow_right.png"));
     }
 }

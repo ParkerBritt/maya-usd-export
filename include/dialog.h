@@ -7,6 +7,6 @@ class USDExportInterface : public QScrollArea
 {
     Q_OBJECT
 public:
-    USDExportInterface(const QString& text, QWidget* parent = nullptr);
+    USDExportInterface(QWidget* parent = nullptr);
 };
 

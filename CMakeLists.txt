@@ -27,6 +27,8 @@ if(NOT DEFINED ENV{DEVKIT_LOCATION})
     message(FATAL_ERROR "$DEVKIT_LOCATION is not set. Please set it as an env var.")
 endif()
 
+find_package(Qt5 REQUIRED COMPONENTS Widgets Core)
+qt5_add_resources(RESOURCES static/resources.qrc)
 
 # export compile commands for linter
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -72,10 +74,14 @@ target_link_libraries(maya_usd_export_core
 
 set(SOURCE_FILES
     src/entry.cpp
+
+    # interface
     src/dialog.cpp
     include/dialog.h
     include/interface/widgets/CollapsibleContainer.h
     src/interface/widgets/CollapsibleContainer.cpp
+    ${RESOURCES}
+
 )
 include($ENV{DEVKIT_LOCATION}/cmake/pluginEntry.cmake)
 
@@ -108,7 +114,6 @@ add_definitions(-std=c++17)
 # ----
 # set(CMAKE_PREFIX_PATH "$ENV{DEVKIT_LOCATION}/cmake/qt_5.15.2")
 # set(CMAKE_PREFIX_PATH "$ENV{DEVKIT_LOCATION}/devkit")
-find_package(Qt5 REQUIRED COMPONENTS Widgets Core)
 message(STATUS "QT DIR: ${Qt5_DIR}")
 target_include_directories(${PROJECT_NAME}
     PRIVATE "$ENV{DEVKIT_LOCATION}/include"

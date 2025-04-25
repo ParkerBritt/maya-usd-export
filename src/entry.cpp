@@ -119,16 +119,17 @@ MStatus uninitializePlugin( MObject obj )
 #include "dialog.h"
 
 
-static QPointer<USDExportInterface> gInterface;
 
 
 MStatus USDExportGUI::doIt( const MArgList& args) {
-    if (gInterface.isNull()) {
-        gInterface = new USDExportInterface("Test");
-        gInterface->show();
+    static QPointer<USDExportInterface> interface;
+
+    if (interface.isNull()) {
+        interface = new USDExportInterface();
+        interface->show();
     } else {
-        gInterface->showNormal();
-        gInterface->raise();
+        interface->showNormal();
+        interface->raise();
     }
     return MS::kSuccess;
 }

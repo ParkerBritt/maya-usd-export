@@ -8,7 +8,7 @@
 #include "dialog.h"
 #include "interface/widgets/CollapsibleContainer.h"
 
-USDExportInterface::USDExportInterface(const QString& text, QWidget* parent)
+USDExportInterface::USDExportInterface(QWidget* parent)
 {
     setWindowTitle("Maya USD Export");
 
@@ -24,7 +24,7 @@ USDExportInterface::USDExportInterface(const QString& text, QWidget* parent)
 
     // add form items
     CollapsibleContainer *generalOptionsContainer = new CollapsibleContainer("General Options", this);
-    generalOptionsContainer->addWidget(new QPushButton("Hello"));
+    generalOptionsContainer->addWidget(new QPushButton("world"));
     mainLayout->addWidget(generalOptionsContainer);
 
     // auto *generalOptionsContainer = CollapsibleContainer("General Options");
