@@ -1,21 +1,40 @@
-#include <maya/MSimple.h>
+// plugin
+#include <stdio.h>
+#include <maya/MString.h>
+#include <maya/MArgList.h>
+#include <maya/MFnPlugin.h>
+#include <maya/MPxCommand.h>
+#include <maya/MIOStream.h>
+
+// doit
 #include <maya/MGlobal.h>
 #include <maya/MSelectionList.h>
 #include <maya/MDagPath.h>
 #include <maya/MFnMesh.h>
 #include <maya/MFloatPointArray.h>
-
 #include <pxr/usd/usd/stage.h>
 #include <sys/select.h>
-
 #include "export.h"
 #include "export/exportItem.h"
 
-DeclareSimpleCommand( USDExport, "Autodesk", "2021" );
-
-
-MStatus USDExport::doIt( const MArgList& args )
+class USDExport : public MPxCommand
 {
+    public:
+        USDExport();
+        virtual ~USDExport();
+        MStatus doIt( const MArgList& );
+        MStatus redoIt();
+        MStatus undoIt();
+        bool isUndoable() const;
+        static void* creator();
+};
+USDExport::USDExport() {
+    cout << "In USDExport::USDExport()\n";
+}
+USDExport::~USDExport() {
+    cout << "In USDExport::~USDExport()\n";
+}
+MStatus USDExport::doIt( const MArgList& args) {
     cout << "Entry\n";
     std::string exportPath(args.asString(0).asChar());
     pxr::UsdStageRefPtr stage = pxr::UsdStage::CreateNew(exportPath);
@@ -44,5 +63,34 @@ MStatus USDExport::doIt( const MArgList& args )
 
 
     return MS::kSuccess;
-
+}
+MStatus USDExport::redoIt() {
+    cout << "In USDExport::redoIt()\n";
+    return MS::kSuccess;
+}
+MStatus USDExport::undoIt() {
+    cout << "In USDExport::undoIt()\n";
+    return MS::kSuccess;
+}
+bool USDExport::isUndoable() const {
+    cout << "In USDExport::isUndoable()\n";
+    return true;
+}
+void* USDExport::creator() {
+    cout << "In USDExport::creator()\n";
+    return new USDExport();
+}
+MStatus initializePlugin( MObject obj )
+{
+    MFnPlugin plugin( obj, "Parker Britt", "0.1", "Any" );
+    plugin.registerCommand( "USDExport", USDExport::creator );
+    cout << "In initializePlugin()\n";
+    return MS::kSuccess;
+}
+MStatus uninitializePlugin( MObject obj )
+{
+    MFnPlugin plugin( obj );
+    plugin.deregisterCommand( "USDExport" );
+    cout << "In uninitializePlugin()\n";
+    return MS::kSuccess;
 }
