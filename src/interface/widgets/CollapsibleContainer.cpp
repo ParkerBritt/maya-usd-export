@@ -15,10 +15,10 @@ CollapsibleContainer::CollapsibleContainer(const QString& _title, QWidget* _pare
     m_mainLayout->setAlignment(Qt::AlignTop);
     this->setLayout(m_mainLayout);
 
-    m_headButton = new QPushButton(_title);
+    m_headButton = new QPushButton("    "+_title);
     QObject::connect(m_headButton, &QPushButton::clicked, this, &CollapsibleContainer::headerClickedSlot);
     m_headButton->setIcon(QIcon(":/icons/collapse_arrow_down.png"));
-    // TODO: set icon
+    m_headButton->setStyleSheet("text-align:left;");
 
 
     m_mainLayout->addWidget(m_headButton);
