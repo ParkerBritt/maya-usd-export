@@ -80,6 +80,9 @@ set(SOURCE_FILES
     include/dialog.h
     include/interface/widgets/CollapsibleContainer.h
     src/interface/widgets/CollapsibleContainer.cpp
+
+    include/interface/widgets/GeneralOptions.h
+    src/interface/widgets/GeneralOptions.cpp
     ${RESOURCES}
 
 )

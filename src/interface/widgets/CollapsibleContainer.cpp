@@ -13,6 +13,7 @@ CollapsibleContainer::CollapsibleContainer(const QString& _title, QWidget* _pare
 {
     m_mainLayout = new QVBoxLayout();
     m_mainLayout->setAlignment(Qt::AlignTop);
+    m_mainLayout->setContentsMargins(0,0,0,0);
     this->setLayout(m_mainLayout);
 
     m_headButton = new QPushButton("    "+_title);
