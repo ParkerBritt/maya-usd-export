@@ -73,11 +73,11 @@ target_link_libraries(maya_usd_export_core
 # load devkit
 
 set(SOURCE_FILES
-    src/entry.cpp
+    src/plugin_entry.cpp
 
     # interface
-    src/dialog.cpp
-    include/dialog.h
+    src/interface/main_export_dialog.cpp
+    include/interface/main_export_dialog.h
     include/interface/widgets/CollapsibleContainer.h
     src/interface/widgets/CollapsibleContainer.cpp
 

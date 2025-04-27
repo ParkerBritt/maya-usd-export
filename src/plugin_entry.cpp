@@ -17,6 +17,10 @@
 #include "export.h"
 #include "export/exportItem.h"
 
+// interface
+#include <QtCore/QPointer>
+#include "interface/main_export_dialog.h"
+
 // ---- cli command ----
 class USDExport : public MPxCommand
 {
@@ -115,8 +119,6 @@ MStatus uninitializePlugin( MObject obj )
     return MS::kSuccess;
 }
 
-#include <QtCore/QPointer>
-#include "dialog.h"
 
 
 

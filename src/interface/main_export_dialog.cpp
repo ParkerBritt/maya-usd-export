@@ -5,7 +5,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QFrame>
 
-#include "dialog.h"
+#include "interface/main_export_dialog.h"
 #include "interface/widgets/CollapsibleContainer.h"
 #include "interface/widgets/GeneralOptions.h"
 
