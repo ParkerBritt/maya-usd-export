@@ -78,11 +78,15 @@ set(SOURCE_FILES
     # interface
     src/interface/main_export_dialog.cpp
     include/interface/main_export_dialog.h
+
     include/interface/widgets/CollapsibleContainer.h
     src/interface/widgets/CollapsibleContainer.cpp
 
     include/interface/widgets/GeneralOptions.h
     src/interface/widgets/GeneralOptions.cpp
+
+    include/interface/widgets/SelectionOptions.h
+    src/interface/widgets/SelectionOptions.cpp
     ${RESOURCES}
 
 )

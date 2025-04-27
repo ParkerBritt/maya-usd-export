@@ -10,6 +10,7 @@
 #include "QtWidgets/qpushbutton.h"
 #include "interface/widgets/CollapsibleContainer.h"
 #include "interface/widgets/GeneralOptions.h"
+#include "interface/widgets/SelectionOptions.h"
 
 USDExportInterface::USDExportInterface(QWidget* parent)
 {
@@ -42,7 +43,7 @@ void USDExportInterface::initUI()
     m_mainLayout->addWidget(generalOptionsContainer);
 
     CollapsibleContainer *selectionOptionsContainer = new CollapsibleContainer("Selection Options", this);
-    selectionOptionsContainer->addWidget(new QPushButton("world"));
+    selectionOptionsContainer->addWidget(new SelectionOptions());
     m_mainLayout->addWidget(selectionOptionsContainer);
 
     auto *footerButtonsLayout = new QHBoxLayout();
