@@ -12,6 +12,10 @@ public:
 
     QBoxLayout *m_mainLayout;
     QWidget *m_mainWidget;
+
+    QPushButton *m_exportButton;
+    QPushButton *m_cancelButton;
+
 private:
     void initUI();
 };

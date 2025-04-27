@@ -6,6 +6,8 @@
 #include <QtWidgets/QFrame>
 
 #include "interface/main_export_dialog.h"
+#include "QtWidgets/qboxlayout.h"
+#include "QtWidgets/qpushbutton.h"
 #include "interface/widgets/CollapsibleContainer.h"
 #include "interface/widgets/GeneralOptions.h"
 
@@ -39,9 +41,20 @@ void USDExportInterface::initUI()
     generalOptionsContainer->addWidget(new GeneralOptions());
     m_mainLayout->addWidget(generalOptionsContainer);
 
-    CollapsibleContainer *selectionOptionsContainer = new CollapsibleContainer("Seleciton Options", this);
+    CollapsibleContainer *selectionOptionsContainer = new CollapsibleContainer("Selection Options", this);
     selectionOptionsContainer->addWidget(new QPushButton("world"));
     m_mainLayout->addWidget(selectionOptionsContainer);
+
+    auto *footerButtonsLayout = new QHBoxLayout();
+    footerButtonsLayout->addStretch();
+    m_exportButton = new QPushButton("Export");
+    m_cancelButton = new QPushButton("Cancel");
+    // close window
+    connect(m_cancelButton, &QPushButton::clicked, this, &USDExportInterface::close); 
+    footerButtonsLayout->addWidget(m_exportButton);
+    footerButtonsLayout->addWidget(m_cancelButton);
+    m_mainLayout->addStretch();
+    m_mainLayout->addLayout(footerButtonsLayout);
 }
 
 // USDExportInterface::USDExportInterface(const QString& text, QWidget* parent)

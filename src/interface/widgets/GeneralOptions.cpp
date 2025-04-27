@@ -39,7 +39,7 @@ void GeneralOptions::openFileDialog()
     QString filePath = QFileDialog::getSaveFileName(this, "Save File", m_fileOutputPath.c_str(), tr("USD Files (*.usd *.usda *.usdc)"));
     // TODO: add validation
     bool isValid = true;
-    if(isValid)
+    if(isValid && filePath.length()>0)
     {
         m_filePathLine->setText(filePath);
         m_fileOutputPath = filePath.toStdString();
