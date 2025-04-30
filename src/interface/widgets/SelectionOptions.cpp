@@ -1,4 +1,5 @@
 #include "interface/widgets/SelectionOptions.h"
+#include "interface/models/DAGSelectionModel.h"
 #include "QtWidgets/qboxlayout.h"
 #include <QtWidgets/QSplitter>
 
@@ -19,7 +20,9 @@ SelectionOptions::SelectionOptions(){
 }
 
 SelectionTree::SelectionTree(){
-
+    m_model = new DAGSelectionModel(); 
+    setModel(m_model);
+    expandAll();
 }
 
 SelectionParameters::SelectionParameters(){

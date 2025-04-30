@@ -3,6 +3,7 @@
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTreeView>
+#include "interface/models/DAGSelectionModel.h"
 
 
 class SelectionParameters : public QWidget {
@@ -15,6 +16,7 @@ class SelectionTree : public QTreeView {
     Q_OBJECT
 public:
     SelectionTree();
+    DAGSelectionModel *m_model;
 };
 
 class SelectionOptions : public QWidget {
