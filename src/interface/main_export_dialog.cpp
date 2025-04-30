@@ -46,6 +46,10 @@ void USDExportInterface::initUI()
     selectionOptionsContainer->addWidget(new SelectionOptions());
     m_mainLayout->addWidget(selectionOptionsContainer);
 
+    CollapsibleContainer *animationOptionsContainer = new CollapsibleContainer("Animation Options", this);
+    // animationOptionsContainer->addWidget(new AnimationOptions());
+    m_mainLayout->addWidget(animationOptionsContainer);
+
     auto *footerButtonsLayout = new QHBoxLayout();
     footerButtonsLayout->addStretch();
     m_exportButton = new QPushButton("Export");

@@ -60,6 +60,7 @@ target_include_directories(maya_usd_export_core
     PUBLIC "${USD_LOCATION}/include"
     PRIVATE "$ENV{DEVKIT_LOCATION}/include"
     PUBLIC include
+    PRIVATE src
 )
 target_link_libraries(maya_usd_export_core
     "${USD_LOCATION}/lib/libusd_usd.so"
@@ -72,21 +73,23 @@ target_link_libraries(maya_usd_export_core
 
 # load devkit
 
-set(SOURCE_FILES
-    src/plugin_entry.cpp
-
-    # interface
+set(interface_sources
     src/interface/main_export_dialog.cpp
-    include/interface/main_export_dialog.h
+    src/interface/main_export_dialog.h
 
-    include/interface/widgets/CollapsibleContainer.h
+    src/interface/widgets/CollapsibleContainer.h
     src/interface/widgets/CollapsibleContainer.cpp
 
-    include/interface/widgets/GeneralOptions.h
+    src/interface/widgets/GeneralOptions.h
     src/interface/widgets/GeneralOptions.cpp
 
-    include/interface/widgets/SelectionOptions.h
+    src/interface/widgets/SelectionOptions.h
     src/interface/widgets/SelectionOptions.cpp
+)
+
+set(SOURCE_FILES
+    src/plugin_entry.cpp
+    ${interface_sources}
     ${RESOURCES}
 
 )
@@ -124,6 +127,7 @@ add_definitions(-std=c++17)
 message(STATUS "QT DIR: ${Qt5_DIR}")
 target_include_directories(${PROJECT_NAME}
     PRIVATE "$ENV{DEVKIT_LOCATION}/include"
+    PRIVATE src
 )
 
 # ----
