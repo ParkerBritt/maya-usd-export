@@ -17,7 +17,9 @@
 #include <tuple>
 
 
-MayaUSDExport::PrimWriter::PrimWriter(){
+MayaUSDExport::PrimWriter::PrimWriter(ExportOptions& _exportOptions)
+: m_exportOptions(_exportOptions)
+{
     std::cout << "constructor\n";    
 }
 
@@ -44,6 +46,7 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
 
         // connect points
+        // set vertexCount and mayaVertexIndices
         MIntArray mayaVertexCount;
         MIntArray mayaVertexIndices;
         mesh.getVertices(mayaVertexCount, mayaVertexIndices);
@@ -72,11 +75,14 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         newPrim.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});
         newPrim.CreateFaceVertexIndicesAttr(pxr::VtValue{usdVertexIndices});
 
-        for(int i=0; i<6; i++)
+        if(m_exportOptions.animate)
         {
-            cout << "frame: " << i << "\n";
-            MGlobal::viewFrame(i);
-            pointsAttr.Set(pxr::VtValue{convertMayaPoints(exportItem.dagPath)}, i);
+            for(int i=m_exportOptions.animRangeStart; i<m_exportOptions.animRangeCount; i++)
+            {
+                cout << "frame: " << i << "\n";
+                MGlobal::viewFrame(i);
+                pointsAttr.Set(pxr::VtValue{convertMayaPoints(exportItem.dagPath)}, i);
+            }
         }
     }
 

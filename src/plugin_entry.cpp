@@ -12,14 +12,20 @@
 #include <maya/MDagPath.h>
 #include <maya/MFnMesh.h>
 #include <maya/MFloatPointArray.h>
+#include <maya/MSyntax.h>
+#include <maya/MArgDatabase.h>
 #include <pxr/usd/usd/stage.h>
 #include <sys/select.h>
 #include "export.h"
 #include "export/exportItem.h"
+#include "export/ExportOptions.h"
 
 // interface
 #include <QtCore/QPointer>
 #include "interface/main_export_dialog.h"
+#include "maya/MApiNamespace.h"
+
+
 
 // ---- cli command ----
 class USDExport : public MPxCommand
@@ -30,15 +36,44 @@ class USDExport : public MPxCommand
         MStatus doIt( const MArgList& );
         bool isUndoable() const;
         static void* creator();
+
+        static MSyntax newSyntax();
 };
+
+MSyntax USDExport::newSyntax()
+{
+        MSyntax syntax;
+        syntax.addFlag("", "-AnimStart", MSyntax::kString);
+
+        return syntax;
+}
+
 USDExport::USDExport() {
     cout << "In USDExport::USDExport()\n";
 }
 USDExport::~USDExport() {
     cout << "In USDExport::~USDExport()\n";
 }
+
+
 MStatus USDExport::doIt( const MArgList& args) {
     cout << "Entry\n";
+    MStatus status;
+    MArgDatabase argData(syntax(), args, &status);
+    cout << "got args\n";
+    if(!status) return status;
+
+    cout << "checking args\n";
+    if (argData.isFlagSet("-AnimStart")) {
+        MString value;
+        argData.getFlagArgument("-AnimStart", 0, value);
+        MGlobal::displayInfo("Got flag value: " + value);
+    }
+    else{
+        MGlobal::displayInfo("invalid flag");
+    }
+
+    return MS::kSuccess;
     std::string exportPath(args.asString(0).asChar());
     pxr::UsdStageRefPtr stage = pxr::UsdStage::CreateNew(exportPath);
 
@@ -46,7 +81,13 @@ MStatus USDExport::doIt( const MArgList& args) {
     MSelectionList selectionList;
     MGlobal::getActiveSelectionList(selectionList);
 
-    MayaUSDExport::PrimWriter primWriter;
+    // set options
+    MayaUSDExport::ExportOptions exportOptions;
+    exportOptions.animate = true;
+    exportOptions.animRangeStart = 0;
+    exportOptions.animRangeCount = 6;
+
+    MayaUSDExport::PrimWriter primWriter(exportOptions);
 
     std::vector<MayaUSDExport::ExportItem> exportItems;
     MDagPath dagPath;
@@ -84,14 +125,22 @@ class USDExportGUI : public MPxCommand
         bool isUndoable() const;
         static void* creator();
 };
+MStatus USDExportGUI::doIt( const MArgList& args) {
+    static QPointer<USDExportInterface> interface;
+
+    if (interface.isNull()) {
+        interface = new USDExportInterface();
+        interface->show();
+    } else {
+        interface->showNormal();
+        interface->raise();
+    }
+    return MS::kSuccess;
+}
+
 USDExportGUI::USDExportGUI() {
     cout << "In USDExportGUI::USDExportGUI()\n";
 }
-// MStatus USDExportGUI::doIt( const MArgList& args) {
-//     cout << "hello world!\n";
-
-//     return MS::kSuccess;
-// }
 bool USDExportGUI::isUndoable() const {
     return false;
 }
@@ -105,11 +154,12 @@ void* USDExportGUI::creator() {
 MStatus initializePlugin( MObject obj )
 {
     MFnPlugin plugin( obj, "Parker Britt", "0.1", "Any" );
-    plugin.registerCommand( "USDExport", USDExport::creator );
+    plugin.registerCommand( "USDExport", USDExport::creator , USDExport::newSyntax);
     plugin.registerCommand( "USDExportGUI", USDExportGUI::creator );
     cout << "In initializePlugin()\n";
     return MS::kSuccess;
 }
+
 MStatus uninitializePlugin( MObject obj )
 {
     MFnPlugin plugin( obj );
@@ -122,17 +172,4 @@ MStatus uninitializePlugin( MObject obj )
 
 
 
-
-MStatus USDExportGUI::doIt( const MArgList& args) {
-    static QPointer<USDExportInterface> interface;
-
-    if (interface.isNull()) {
-        interface = new USDExportInterface();
-        interface->show();
-    } else {
-        interface->showNormal();
-        interface->raise();
-    }
-    return MS::kSuccess;
-}
 
