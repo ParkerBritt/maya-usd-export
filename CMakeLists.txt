@@ -86,8 +86,12 @@ set(interface_sources
     src/interface/widgets/SelectionOptions.h
     src/interface/widgets/SelectionOptions.cpp
 
+    src/interface/widgets/AnimationOptions.h
+    src/interface/widgets/AnimationOptions.cpp
+
     src/interface/models/DAGSelectionModel.cpp
     src/interface/models/DAGSelectionModel.h
+
 )
 
 set(SOURCE_FILES

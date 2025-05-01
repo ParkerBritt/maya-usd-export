@@ -70,6 +70,7 @@ void DAGSelectionModel::populateModel()
 void DAGSelectionModel::formatModelItem(QStandardItem* _item)
 {
     _item->setCheckable(true);
+    _item->setCheckState(Qt::Checked);
     // TODO: add editable functionality
     _item->setEditable(false);
 }

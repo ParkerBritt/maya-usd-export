@@ -11,6 +11,7 @@
 #include "interface/widgets/CollapsibleContainer.h"
 #include "interface/widgets/GeneralOptions.h"
 #include "interface/widgets/SelectionOptions.h"
+#include "interface/widgets/AnimationOptions.h"
 
 USDExportInterface::USDExportInterface(QWidget* parent)
 {
@@ -22,7 +23,7 @@ USDExportInterface::USDExportInterface(QWidget* parent)
 
     auto *scroll = this;
     scroll->setFrameShape(QFrame::NoFrame);
-    this->resize(m_mainWidget->minimumSizeHint().width()*1.5, m_mainWidget->minimumSizeHint().width()*2);
+    this->resize(m_mainWidget->minimumSizeHint().width()*2, m_mainWidget->minimumSizeHint().width()*3);
     scroll->setWidgetResizable(true);
     scroll->setWidget(m_mainWidget);
 
@@ -47,7 +48,7 @@ void USDExportInterface::initUI()
     m_mainLayout->addWidget(selectionOptionsContainer);
 
     CollapsibleContainer *animationOptionsContainer = new CollapsibleContainer("Animation Options", this);
-    // animationOptionsContainer->addWidget(new AnimationOptions());
+    animationOptionsContainer->addWidget(new AnimationOptions());
     m_mainLayout->addWidget(animationOptionsContainer);
 
     auto *footerButtonsLayout = new QHBoxLayout();
