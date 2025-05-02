@@ -25,6 +25,15 @@
 #include "interface/main_export_dialog.h"
 #include "maya/MApiNamespace.h"
 
+// flags
+#define kFlagFile    "-f"
+#define kFlagLongFile    "-file"
+#define kFlagFrameRange    "-fr"
+#define kFlagLongFrameRange     "-frameRange"
+#define kFlagFrameInc      "-fi"
+#define kFlagLongFrameInc       "-frameInc"
+
+
 
 
 // ---- cli command ----
@@ -34,16 +43,25 @@ class USDExport : public MPxCommand
         USDExport();
         virtual ~USDExport();
         MStatus doIt( const MArgList& );
+        MStatus parseArgs( const MArgList& args );
         bool isUndoable() const;
         static void* creator();
 
         static MSyntax newSyntax();
+private:
+    MString m_exportPath;
+    double m_frameStart = 0;
+    double m_frameEnd = 1;
+    double m_frameInc = 1;
+    MayaUSDExport::ExportOptions m_exportOptions;
 };
 
 MSyntax USDExport::newSyntax()
 {
         MSyntax syntax;
-        syntax.addFlag("", "-AnimStart", MSyntax::kString);
+        syntax.addFlag(kFlagFile, kFlagLongFile, MSyntax::kString);
+        syntax.addFlag(kFlagFrameRange, kFlagLongFrameRange, MSyntax::kDouble, MSyntax::kDouble);
+        syntax.addFlag(kFlagFrameInc, kFlagLongFrameInc, MSyntax::kDouble);
 
         return syntax;
 }
@@ -55,39 +73,61 @@ USDExport::~USDExport() {
     cout << "In USDExport::~USDExport()\n";
 }
 
+MStatus USDExport::parseArgs( const MArgList& args )
+{
+    MStatus status = MS::kSuccess;
 
-MStatus USDExport::doIt( const MArgList& args) {
-    cout << "Entry\n";
-    MStatus status;
     MArgDatabase argData(syntax(), args, &status);
     cout << "got args\n";
     if(!status) return status;
 
     cout << "checking args\n";
-    if (argData.isFlagSet("-AnimStart")) {
-        MString value;
-        argData.getFlagArgument("-AnimStart", 0, value);
-        MGlobal::displayInfo("Got flag value: " + value);
+    if (argData.isFlagSet(kFlagFile)) {
+        argData.getFlagArgument(kFlagFile, 0, m_exportPath);
     }
-    else{
-        MGlobal::displayInfo("invalid flag");
+    else {
+        MGlobal::displayError("The -f/--file option is required.");
+        return MS::kFailure;
+    }
+    if (argData.isFlagSet(kFlagFrameRange)) {
+        argData.getFlagArgument(kFlagFrameRange, 0, m_exportOptions.animFrameStart);
+        argData.getFlagArgument(kFlagFrameRange, 1, m_exportOptions.animFrameEnd);
+        if(m_exportOptions.animFrameStart>m_exportOptions.animFrameEnd){
+            MGlobal::displayError("Start frame cannot be greater than end frame");
+            return MS::kFailure;
+        }
+    }
+    if (argData.isFlagSet(kFlagFrameInc)) {
+        argData.getFlagArgument(kFlagFrameInc, 0, m_exportOptions.animFrameInc);
     }
 
-    return MS::kSuccess;
-    std::string exportPath(args.asString(0).asChar());
+    cout << "-----\nexport args\n-----\n";
+    cout << "file: " << m_exportOptions.animFrameStart << "\n";
+    cout << "frame start: " << m_exportOptions.animFrameStart << "\n";
+    cout << "frame count: " << m_exportOptions.animFrameEnd << "\n";
+    cout << "frame inc: " << m_exportOptions.animFrameInc << "\n";
+
+    return status;
+}
+
+MStatus USDExport::doIt( const MArgList& args) {
+    cout << "Entry\n";
+    MStatus status;
+    status = parseArgs(args);
+    if(!status){
+        MGlobal::displayError("failed to parse args");
+        return status;
+    }
+
+    std::string exportPath(m_exportPath.asChar());
     pxr::UsdStageRefPtr stage = pxr::UsdStage::CreateNew(exportPath);
 
     // get items in scene
     MSelectionList selectionList;
     MGlobal::getActiveSelectionList(selectionList);
 
-    // set options
-    MayaUSDExport::ExportOptions exportOptions;
-    exportOptions.animate = true;
-    exportOptions.animRangeStart = 0;
-    exportOptions.animRangeCount = 6;
 
-    MayaUSDExport::PrimWriter primWriter(exportOptions);
+    MayaUSDExport::PrimWriter primWriter(m_exportOptions);
 
     std::vector<MayaUSDExport::ExportItem> exportItems;
     MDagPath dagPath;

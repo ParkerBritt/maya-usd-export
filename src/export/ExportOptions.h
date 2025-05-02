@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace MayaUSDExport
 {
@@ -6,10 +7,9 @@ namespace MayaUSDExport
 class ExportOptions
 {
 public:
-    bool animate=false;
-    int animRangeStart=0;
-    int animRangeCount=0;
-    int animRangeStep=1;
+    int animFrameStart=0;
+    int animFrameEnd=0;
+    int animFrameInc=1;
 
     bool createParents=false;
 };

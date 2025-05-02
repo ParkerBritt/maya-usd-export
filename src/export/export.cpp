@@ -75,14 +75,11 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         newPrim.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});
         newPrim.CreateFaceVertexIndicesAttr(pxr::VtValue{usdVertexIndices});
 
-        if(m_exportOptions.animate)
+        for(int i=m_exportOptions.animFrameStart; i<=m_exportOptions.animFrameEnd; i++)
         {
-            for(int i=m_exportOptions.animRangeStart; i<m_exportOptions.animRangeCount; i++)
-            {
-                cout << "frame: " << i << "\n";
-                MGlobal::viewFrame(i);
-                pointsAttr.Set(pxr::VtValue{convertMayaPoints(exportItem.dagPath)}, i);
-            }
+            cout << "frame: " << i << "\n";
+            MGlobal::viewFrame(i);
+            pointsAttr.Set(pxr::VtValue{convertMayaPoints(exportItem.dagPath)}, i);
         }
     }
 
