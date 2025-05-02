@@ -50,7 +50,7 @@ add_compile_options(
 
 # setup core
 add_library(maya_usd_export_core STATIC
-    src/export/export.cpp
+    src/export/PrimWriter.cpp
     src/export/exportItem.cpp
 )
 

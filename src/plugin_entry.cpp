@@ -16,7 +16,7 @@
 #include <maya/MArgDatabase.h>
 #include <pxr/usd/usd/stage.h>
 #include <sys/select.h>
-#include "export.h"
+#include "export/PrimWriter.h"
 #include "export/exportItem.h"
 #include "export/ExportOptions.h"
 

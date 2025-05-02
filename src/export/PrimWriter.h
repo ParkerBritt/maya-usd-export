@@ -1,9 +1,8 @@
-#ifndef PRIM_WRITER_H
-#define PRIM_WRITER_H
+#pragma once
 
-#include <algorithm>
-#include <memory>
 #include <pxr/usd/usd/stage.h>
+#include <pxr/usd/usdGeom/mesh.h>
+#include <pxr/usd/usdGeom/primvar.h>
 #include "export/exportItem.h"
 #include "export/ExportOptions.h"
 
@@ -17,7 +16,7 @@ public:
 private:
     pxr::VtArray<pxr::GfVec3f> convertMayaPoints(MDagPath _meshPath);
     ExportOptions& m_exportOptions;
+    void animatePoints(pxr::UsdAttribute _pointsAttr, ExportItem _exportItem);
+    pxr::UsdGeomPrimvar buildUVs(pxr::UsdGeomMesh &_usdMesh, MFnMesh &_mayaMesh);
 };
 }
-
-#endif
