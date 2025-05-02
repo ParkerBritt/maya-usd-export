@@ -111,7 +111,7 @@ def test_parenting(new_scene, tmp_dir):
     cmds.select(cube1[0], cube2[0],torus1[0])
 
     export_path = os.path.join(tmp_dir, "export_test.usda")
-    cmds.USDExport(export_path)
+    cmds.USDExport(f=export_path)
 
     stage = Usd.Stage.Open(export_path)
 
@@ -188,7 +188,7 @@ def test_rig_animation(new_scene, tmp_dir):
     cmds.select(cube[0])
 
     export_path = os.path.join(tmp_dir, "export_test.usda")
-    cmds.USDExport(export_path)
+    cmds.USDExport(f=export_path, fr=(1,5))
 
     # ----
     # test check usd
@@ -227,3 +227,57 @@ def test_rig_animation(new_scene, tmp_dir):
         (15, -5, -5),
     ]
     assert positions == expected_positions, f"points not in expected end position: {positions}"
+
+
+def test_uvs(new_scene, tmp_dir):
+    from pxr import Usd, UsdGeom
+    import os
+    import maya.cmds as cmds
+
+    cube = cmds.polyCube(n="cube_geo")
+    cmds.select(cube[0])
+
+    # export the mesh to USD
+    export_path = os.path.join(tmp_dir, "export_uv_test.usda")
+    cmds.USDExport(f=export_path)
+
+    # open the stage and locate the mesh prim
+    stage = Usd.Stage.Open(export_path)
+    prim = stage.GetPrimAtPath("/cube_geo/cube_geo")
+    assert prim.IsValid(), "Invalid prim at /cube_geo/cube_geo"
+    assert prim.GetTypeName() == "Mesh"
+
+    # get the UV primvar
+    api = UsdGeom.PrimvarsAPI(prim)
+    st_primvar = api.GetPrimvar("st")
+    assert st_primvar.GetInterpolation() == UsdGeom.Tokens.faceVarying
+
+    # retrieve and compare UVs
+    uvs = st_primvar.Get()
+    expected_uvs = [
+        (0.33, 0),
+        (0.66333336, 0),
+        (0.66333336, 0.25),
+        (0.33, 0.25),
+        (0.33, 0.25),
+        (0.66333336, 0.25),
+        (0.66333336, 0.5),
+        (0.33, 0.5),
+        (0.33, 0.5),
+        (0.66333336, 0.5),
+        (0.66333336, 0.75),
+        (0.33, 0.75),
+        (0.33, 0.75),
+        (0.66333336, 0.75),
+        (0.66333336, 1),
+        (0.33, 1),
+        (0.66333336, 0),
+        (1, 0),
+        (1, 0.25),
+        (0.66333336, 0.25),
+        (0, 0),
+        (0.33, 0),
+        (0.33, 0.25),
+        (0, 0.25),
+    ]
+    assert uvs == expected_uvs, f"UVs not as expected:\nGot: {uvs}\n  Expected: {expected_uvs}"
