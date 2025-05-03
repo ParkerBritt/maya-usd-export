@@ -4,6 +4,10 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QBoxLayout>
 
+#include "interface/widgets/GeneralOptions.h"
+#include "interface/widgets/SelectionOptions.h"
+#include "interface/widgets/AnimationOptions.h"
+
 class USDExportInterface : public QScrollArea
 {
     Q_OBJECT
@@ -15,6 +19,9 @@ public:
 
     QPushButton *m_exportButton;
     QPushButton *m_cancelButton;
+
+    AnimationOptions* animationOptions;
+
 
 private:
     void initUI();

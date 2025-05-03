@@ -77,6 +77,8 @@ set(interface_sources
     src/interface/main_export_dialog.cpp
     src/interface/main_export_dialog.h
 
+    src/interface/controllers/MainExportDialogController.cpp
+
     src/interface/widgets/CollapsibleContainer.h
     src/interface/widgets/CollapsibleContainer.cpp
 

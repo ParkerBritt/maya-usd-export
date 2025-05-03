@@ -1,4 +1,5 @@
 // plugin
+#include <memory>
 #include <stdio.h>
 #include <maya/MString.h>
 #include <maya/MArgList.h>
@@ -23,6 +24,7 @@
 // interface
 #include <QtCore/QPointer>
 #include "interface/main_export_dialog.h"
+#include "interface/controllers/MainExportDialogController.h"
 #include "maya/MApiNamespace.h"
 
 // flags
@@ -167,14 +169,18 @@ class USDExportGUI : public MPxCommand
 };
 MStatus USDExportGUI::doIt( const MArgList& args) {
     static QPointer<USDExportInterface> interface;
+    std::unique_ptr<MainExportDialogController> mainController;
+
 
     if (interface.isNull()) {
         interface = new USDExportInterface();
+        mainController = std::make_unique<MainExportDialogController>(interface);
         interface->show();
     } else {
         interface->showNormal();
         interface->raise();
     }
+
     return MS::kSuccess;
 }
 

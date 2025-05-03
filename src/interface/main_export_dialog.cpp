@@ -48,7 +48,8 @@ void USDExportInterface::initUI()
     m_mainLayout->addWidget(selectionOptionsContainer);
 
     CollapsibleContainer *animationOptionsContainer = new CollapsibleContainer("Animation Options", this);
-    animationOptionsContainer->addWidget(new AnimationOptions());
+    this->animationOptions = new AnimationOptions();
+    animationOptionsContainer->addWidget(this->animationOptions);
     m_mainLayout->addWidget(animationOptionsContainer);
 
     auto *footerButtonsLayout = new QHBoxLayout();
