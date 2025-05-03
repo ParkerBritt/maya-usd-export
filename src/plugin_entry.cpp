@@ -169,7 +169,7 @@ class USDExportGUI : public MPxCommand
 };
 MStatus USDExportGUI::doIt( const MArgList& args) {
     static QPointer<USDExportInterface> interface;
-    std::unique_ptr<MainExportDialogController> mainController;
+    static std::unique_ptr<MainExportDialogController> mainController;
 
 
     if (interface.isNull()) {

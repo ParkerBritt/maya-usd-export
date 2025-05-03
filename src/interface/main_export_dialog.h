@@ -21,6 +21,7 @@ public:
     QPushButton *m_cancelButton;
 
     AnimationOptions* animationOptions;
+    GeneralOptions* generalOptions;
 
 
 private:

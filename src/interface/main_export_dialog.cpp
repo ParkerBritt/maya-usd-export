@@ -40,7 +40,8 @@ void USDExportInterface::initUI()
 
     // add form items
     CollapsibleContainer *generalOptionsContainer = new CollapsibleContainer("General Options", this);
-    generalOptionsContainer->addWidget(new GeneralOptions());
+    this->generalOptions = new GeneralOptions();
+    generalOptionsContainer->addWidget(this->generalOptions);
     m_mainLayout->addWidget(generalOptionsContainer);
 
     CollapsibleContainer *selectionOptionsContainer = new CollapsibleContainer("Selection Options", this);
