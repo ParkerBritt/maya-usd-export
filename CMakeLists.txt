@@ -91,6 +91,9 @@ set(interface_sources
     src/interface/widgets/AnimationOptions.h
     src/interface/widgets/AnimationOptions.cpp
 
+    src/interface/widgets/SelectionParameters.h
+    src/interface/widgets/SelectionParameters.cpp
+
     src/interface/models/DAGSelectionModel.cpp
     src/interface/models/DAGSelectionModel.h
 

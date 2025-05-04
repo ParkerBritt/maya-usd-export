@@ -25,6 +25,3 @@ SelectionTree::SelectionTree(){
     expandAll();
 }
 
-SelectionParameters::SelectionParameters(){
-
-}

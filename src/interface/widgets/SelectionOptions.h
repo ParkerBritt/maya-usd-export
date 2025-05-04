@@ -4,13 +4,8 @@
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTreeView>
 #include "interface/models/DAGSelectionModel.h"
+#include "interface/widgets/SelectionParameters.h"
 
-
-class SelectionParameters : public QWidget {
-    Q_OBJECT
-public:
-    SelectionParameters();
-};
 
 class SelectionTree : public QTreeView {
     Q_OBJECT
