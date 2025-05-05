@@ -45,7 +45,8 @@ void USDExportInterface::initUI()
     m_mainLayout->addWidget(generalOptionsContainer);
 
     CollapsibleContainer *selectionOptionsContainer = new CollapsibleContainer("Selection Options", this);
-    selectionOptionsContainer->addWidget(new SelectionOptions());
+    this->selectionOptions = new SelectionOptions();
+    selectionOptionsContainer->addWidget(this->selectionOptions);
     m_mainLayout->addWidget(selectionOptionsContainer);
 
     CollapsibleContainer *animationOptionsContainer = new CollapsibleContainer("Animation Options", this);

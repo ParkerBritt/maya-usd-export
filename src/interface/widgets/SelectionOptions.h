@@ -11,7 +11,7 @@ class SelectionTree : public QTreeView {
     Q_OBJECT
 public:
     SelectionTree();
-    DAGSelectionModel *m_model;
+    DAGSelectionModel* model;
 };
 
 class SelectionOptions : public QWidget {

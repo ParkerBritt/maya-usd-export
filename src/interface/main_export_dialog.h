@@ -22,6 +22,7 @@ public:
 
     AnimationOptions* animationOptions;
     GeneralOptions* generalOptions;
+    SelectionOptions* selectionOptions;
 
 
 private:

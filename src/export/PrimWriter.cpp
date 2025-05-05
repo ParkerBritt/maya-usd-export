@@ -9,6 +9,8 @@
 #include <maya/MGlobal.h>
 #include <maya/MDagPath.h>
 #include <maya/MFnMesh.h>
+#include <maya/MFnCamera.h>
+#include <maya/MFnTransform.h>
 #include <maya/MFloatPointArray.h>
 #include <maya/MFloatArray.h>
 
@@ -34,6 +36,35 @@ void MayaUSDExport::PrimWriter::addExportItem(ExportItem _exportItem){
     m_exportItems.push_back(_exportItem);
 }
 
+void MayaUSDExport::PrimWriter::getDagPathType(const MDagPath& dagPath)
+{
+    MStatus status;
+
+    if (dagPath.hasFn(MFn::kCamera)) {
+        MFnCamera cameraFn(dagPath, &status);
+        if (status) {
+            MGlobal::displayInfo("It's a camera.");
+            return;
+        }
+    }
+    if (dagPath.hasFn(MFn::kMesh)) {
+        MFnMesh meshFn(dagPath, &status);
+        if (status) {
+            MGlobal::displayInfo("It's a mesh.");
+            return;
+        }
+    }
+    if (dagPath.hasFn(MFn::kTransform)) {
+        MFnTransform transformFn(dagPath, &status);
+        if (status) {
+            MGlobal::displayInfo("It's a transform.");
+            return;
+        }
+    }
+
+    // fallback
+    MGlobal::displayInfo("Unknown or unhandled node type.");
+}
 
 void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
@@ -42,6 +73,9 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
     for(MayaUSDExport::ExportItem exportItem : m_exportItems){
         cout << "export geo path: " << exportItem.dagPath.fullPathName() << "\n";
+        MGlobal::displayInfo(exportItem.dagPath.fullPathName());
+        getDagPathType(exportItem.dagPath);
+        MGlobal::displayInfo(exportItem.dagPath.node().apiTypeStr());
         MStringArray pathSplit;
         exportItem.dagPath.fullPathName().split('|', pathSplit);
         std::string geoName = pathSplit[pathSplit.length()-1].asChar();
@@ -80,6 +114,8 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         // create prim
         cout << "parent: " << primPathStr << "\n";
         pxr::UsdGeomMesh usdMesh = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr));
+        pxr::UsdPrim usdPrim = usdMesh.GetPrim();
+        setPrimType(usdPrim, exportItem.usdTypeName);
 
         // assign points and vertices
         pxr::UsdAttribute pointsAttr = usdMesh.CreatePointsAttr(pxr::VtValue{convertMayaPoints(exportItem.dagPath)});
@@ -94,6 +130,14 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
     cout << "End\n";
 }
+
+void MayaUSDExport::PrimWriter::setPrimType(pxr::UsdPrim& prim, const pxr::TfToken& primTypeName)
+{
+    if(primTypeName==pxr::TfToken())
+        return;
+    prim.SetTypeName(primTypeName); 
+}
+
 
 pxr::UsdGeomPrimvar MayaUSDExport::PrimWriter::buildUVs(pxr::UsdGeomMesh &_usdMesh, MFnMesh &_mayaMesh)
 {

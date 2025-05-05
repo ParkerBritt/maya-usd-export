@@ -20,8 +20,8 @@ SelectionOptions::SelectionOptions(){
 }
 
 SelectionTree::SelectionTree(){
-    m_model = new DAGSelectionModel(); 
-    setModel(m_model);
+    model = new DAGSelectionModel(); 
+    setModel(model);
     expandAll();
 }
 
