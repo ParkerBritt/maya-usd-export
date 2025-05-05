@@ -25,7 +25,10 @@ void getModelDagPaths(MSelectionList& selectionPaths, QStandardItem* item, std::
     for(int row=0; row<item->rowCount(); ++row)
     {
         QStandardItem* child = item->child(row, 0);
+        // skip if no children exist
         if(!child) continue;
+        // only include checked items
+        if(child->checkState() != Qt::Checked) continue;
         cout << "ITERATING ITEM: " << child->text().toStdString() << "\n";
         std::string constructedPath = parentPath+"|"+child->text().toStdString();
         getModelDagPaths(selectionPaths, child, constructedPath);
