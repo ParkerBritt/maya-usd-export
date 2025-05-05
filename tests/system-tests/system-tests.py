@@ -194,7 +194,7 @@ def test_rig_animation(new_scene, tmp_dir):
     # test check usd
     # ----
     stage = Usd.Stage.Open(export_path)
-    prim = stage.GetPrimAtPath("/rig/skinned_geo/skinned_geo")
+    prim = stage.GetPrimAtPath("/rig/skinned_geo")
     assert prim.IsValid(), "Invalid prim"
     assert prim.GetTypeName() == "Mesh"
     points = UsdGeom.Points(prim)
@@ -243,8 +243,8 @@ def test_uvs(new_scene, tmp_dir):
 
     # open the stage and locate the mesh prim
     stage = Usd.Stage.Open(export_path)
-    prim = stage.GetPrimAtPath("/cube_geo/cube_geo")
-    assert prim.IsValid(), "Invalid prim at /cube_geo/cube_geo"
+    prim = stage.GetPrimAtPath("/cube_geo")
+    assert prim.IsValid(), "Invalid prim at /cube_geo"
     assert prim.GetTypeName() == "Mesh"
 
     # get the UV primvar

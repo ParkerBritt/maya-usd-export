@@ -79,7 +79,7 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
         // create prim
         cout << "parent: " << primPathStr << "\n";
-        pxr::UsdGeomMesh usdMesh = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr+'/'+geoName));
+        pxr::UsdGeomMesh usdMesh = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr));
 
         // assign points and vertices
         pxr::UsdAttribute pointsAttr = usdMesh.CreatePointsAttr(pxr::VtValue{convertMayaPoints(exportItem.dagPath)});
