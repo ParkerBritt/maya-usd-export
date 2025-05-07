@@ -4,6 +4,8 @@
 #include "QtWidgets/qwidget.h"
 #include "interface/main_export_dialog.h"
 #include <QtCore/QPointer>
+#include "interface/controllers/SelectionOptionsController.h"
+#include "export/exportItem.h"
 
 class MainExportDialogController
 : public QObject
@@ -14,6 +16,8 @@ public:
 
 private:
     QPointer<USDExportInterface> m_view;
+    SelectionOptionsController selectionOptionsController;
+    void getExportItems(std::vector<MayaUSDExport::ExportItem>& exportItems, QStandardItem* item, std::string parentPath);
 
 public slots:
     void doExport();

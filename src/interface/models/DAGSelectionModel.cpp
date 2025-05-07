@@ -1,10 +1,15 @@
-#include "interface/models/DAGSelectionModel.h"
+#include "QtGui/qstandarditemmodel.h"
 #include "maya/MApiNamespace.h"
 #include <maya/MDagPath.h>
 #include <maya/MItDag.h>
 #include <maya/MString.h>
 #include <maya/MStringArray.h>
 #include <unordered_map>
+
+#include <QtCore/QList>
+
+#include "interface/models/DAGSelectionModel.h"
+#include "interface/models/DagSelectionModelColumns.h"
 
 DAGSelectionModel::DAGSelectionModel()
 {
@@ -54,11 +59,15 @@ void DAGSelectionModel::populateModel()
             parentItem = pathItemMap.at(parentPath);
         }
 
-        // add item to model
         MString nodeName = pathSplit[pathSplit.length()-1];
-        QStandardItem *nodeItem = new QStandardItem(nodeName.asChar());
-        formatModelItem(nodeItem);
-        parentItem->appendRow(nodeItem);
+
+        // add item to model
+        QList<QStandardItem*> rowItems;
+        QStandardItem *nodeItem = formatModelItem(new QStandardItem(nodeName.asChar()));
+        rowItems.insert(static_cast<int>(SelectionCol::MayaPrimName), nodeItem);
+        rowItems.insert(static_cast<int>(SelectionCol::UsdPrimType), new QStandardItem("Scope"));
+        parentItem->appendRow(rowItems);
+
 
         // add self to pathItemMap
         pathItemMap[std::string(path.asChar())]=nodeItem;
@@ -67,10 +76,12 @@ void DAGSelectionModel::populateModel()
     }
 }
 
-void DAGSelectionModel::formatModelItem(QStandardItem* _item)
+QStandardItem* DAGSelectionModel::formatModelItem(QStandardItem* _item)
 {
     _item->setCheckable(true);
     _item->setCheckState(Qt::Checked);
     // TODO: add editable functionality
     _item->setEditable(false);
+
+    return _item;
 }

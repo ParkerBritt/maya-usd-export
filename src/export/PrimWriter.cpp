@@ -115,7 +115,7 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         cout << "parent: " << primPathStr << "\n";
         pxr::UsdGeomMesh usdMesh = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr));
         pxr::UsdPrim usdPrim = usdMesh.GetPrim();
-        setPrimType(usdPrim, exportItem.usdTypeName);
+        setPrimType(usdPrim, exportItem.getPrimType());
 
         // assign points and vertices
         pxr::UsdAttribute pointsAttr = usdMesh.CreatePointsAttr(pxr::VtValue{convertMayaPoints(exportItem.dagPath)});
@@ -134,7 +134,10 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 void MayaUSDExport::PrimWriter::setPrimType(pxr::UsdPrim& prim, const pxr::TfToken& primTypeName)
 {
     if(primTypeName==pxr::TfToken())
+    {
+        std::cout << "prim writer empty type\n";
         return;
+    }
     prim.SetTypeName(primTypeName); 
 }
 

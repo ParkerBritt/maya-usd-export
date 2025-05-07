@@ -17,7 +17,11 @@ SelectionParameters::SelectionParameters()
     mainLayout_->addLayout(formLayout_);
 
     formLayout_->addRow("Prim Path", new QLineEdit());
-    formLayout_->addRow("Prim Type", new QComboBox());
+
+    primTypeParm = new QComboBox();
+    primTypeParm->addItems({"Scope", "Mesh", "Xform"});
+
+    formLayout_->addRow("Prim Type", primTypeParm);
     formLayout_->addRow("Invert Winding Order", new QCheckBox());
     formLayout_->addRow("Animate", new QCheckBox());
 }

@@ -11,5 +11,5 @@ public:
     DAGSelectionModel();
     void populateModel();
 private:
-    void formatModelItem(QStandardItem* _item);
+    QStandardItem* formatModelItem(QStandardItem* _item);
 };
