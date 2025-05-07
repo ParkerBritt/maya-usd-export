@@ -9,9 +9,12 @@ class ExportItem{
 public:
     ExportItem(MDagPath dagPath);
     MDagPath dagPath;
-    pxr::TfToken usdTypeName;
     // add exportArgs
 
+    void setPrimType(pxr::TfToken usdTypeName) { usdTypeName_ = usdTypeName; }
+    pxr::TfToken getPrimType() { return usdTypeName_; }
+private:
+    pxr::TfToken usdTypeName_;
 };
 }
 
