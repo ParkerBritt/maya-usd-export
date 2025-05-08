@@ -138,6 +138,7 @@ MStatus USDExport::doIt( const MArgList& args) {
         cout << "adding geo path: " << dagPath.fullPathName() << "\n";
 
         MayaUSDExport::ExportItem exportItem(dagPath);
+        exportItem.setPrimType(pxr::TfToken(MayaUSDExport::PrimWriter::derivePrimType(dagPath)));
         primWriter.addExportItem(exportItem);
     }
 

@@ -26,6 +26,7 @@
 #include <pxr/usd/usdGeom/tokens.h>
 #include <pxr/usd/usdGeom/primvarsAPI.h>
 #include <tuple>
+#include <unordered_map>
 
 
 MayaUSDExport::PrimWriter::PrimWriter(ExportOptions& _exportOptions)
@@ -76,7 +77,6 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
     for(MayaUSDExport::ExportItem exportItem : m_exportItems){
         cout << "export geo path: " << exportItem.dagPath.fullPathName() << "\n";
         MGlobal::displayInfo(exportItem.dagPath.fullPathName());
-        getDagPathType(exportItem.dagPath);
         MGlobal::displayInfo(exportItem.dagPath.node().apiTypeStr());
         MStringArray pathSplit;
         exportItem.dagPath.fullPathName().split('|', pathSplit);
@@ -158,6 +158,63 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
 
     cout << "End\n";
 }
+
+std::string MayaUSDExport::PrimWriter::derivePrimType(MDagPath dagPath, bool promoteShapes)
+{
+    std::cout << "deriving path for: " << dagPath.fullPathName() << "\n";
+    std::string primTypeName;
+    std::string defaultType = "None";
+
+    MFn::Type apiType = dagPath.node().apiType();
+
+    std::unordered_map<MFn::Type, std::string> typeMap =
+        {
+            {MFn::Type::kMesh, "Mesh"},
+            {MFn::Type::kTransform, "Xform"},
+        };
+
+    // promotes the type of the shape to the parent
+    // so if foo/fooShape is a mesh foo instead becomes a mesh
+    if(promoteShapes)
+    {
+        // check if path has a shape child
+        bool hasShape = false;
+        MObject shapeObj;
+        for(unsigned int i=0; i<dagPath.childCount(); ++i)
+        {
+            MObject child = dagPath.child(i);
+            if(child.hasFn(MFn::Type::kShape))
+            {
+                hasShape = true;
+                shapeObj = child;
+                break;
+            }
+        }
+
+        // get shape type
+        if(hasShape)
+        {
+            apiType = shapeObj.apiType(); 
+            std::cout << "child has api type: " << shapeObj.apiTypeStr() << '\n';
+        }
+
+    }
+
+    // not in type map
+    if(typeMap.find(apiType)==typeMap.end())
+    {
+        std::cout << "default\n";
+        return defaultType;
+    }
+
+    primTypeName = typeMap[apiType];
+
+    std::cout << "type: " << primTypeName << "\n";
+    
+    return primTypeName;
+}
+
+
 
 void MayaUSDExport::PrimWriter::setTransform(pxr::UsdPrim usdPrim, MDagPath dagPath)
 {

@@ -6,6 +6,7 @@
 #include <pxr/usd/usdGeom/primvar.h>
 #include "export/exportItem.h"
 #include "export/ExportOptions.h"
+#include "maya/MApiNamespace.h"
 
 namespace MayaUSDExport{
 class PrimWriter {
@@ -14,6 +15,8 @@ public:
     void writePrims(pxr::UsdStageRefPtr stage);
     void addExportItem(ExportItem _exportItem);
     std::vector<ExportItem> m_exportItems;
+
+    static std::string derivePrimType(MDagPath dagPath, bool promoteShapes=true);
 private:
     pxr::VtArray<pxr::GfVec3f> convertMayaPoints(MDagPath _meshPath);
     ExportOptions& m_exportOptions;
