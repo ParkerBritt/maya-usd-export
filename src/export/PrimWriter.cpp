@@ -1,6 +1,7 @@
 #include "export/PrimWriter.h"
 #include "export/exportItem.h"
 #include "maya/MApiNamespace.h"
+#include "maya/MFn.h"
 #include "maya/MTypes.h"
 #include "pxr/usd/sdf/path.h"
 #include "pxr/usd/usd/attribute.h"
@@ -13,6 +14,7 @@
 #include <maya/MFnTransform.h>
 #include <maya/MFloatPointArray.h>
 #include <maya/MFloatArray.h>
+#include <maya/MMatrix.h>
 
 #include <pxr/usd/usd/stage.h>
 #include <pxr/usd/usdGeom/xform.h>
@@ -82,6 +84,8 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         cout << "geo name: " << geoName << "\n";
         MFnMesh mayaMesh(exportItem.dagPath);
 
+        cout << "DAG PATH: " << exportItem.dagPath.transform().apiTypeStr() << "\n";
+
         pxr::VtArray<int> usdVertexCount;
         pxr::VtArray<int> usdVertexIndices;
 
@@ -111,25 +115,68 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
             }
         }
 
+        pxr::UsdPrim usdPrim;
+        pxr::TfToken usdPrimType = exportItem.getPrimType();
+        pxr::SdfPath primPath(primPathStr);
+
         // create prim
-        cout << "parent: " << primPathStr << "\n";
-        pxr::UsdGeomMesh usdMesh = pxr::UsdGeomMesh::Define(stage, pxr::SdfPath(primPathStr));
-        pxr::UsdPrim usdPrim = usdMesh.GetPrim();
-        setPrimType(usdPrim, exportItem.getPrimType());
+        if(usdPrimType==pxr::TfToken("Mesh"))
+        {
+            cout << "parent: " << primPathStr << "\n";
+            pxr::UsdGeomMesh usdMesh = pxr::UsdGeomMesh::Define(stage, primPath);
+            usdPrim = usdMesh.GetPrim();
 
-        // assign points and vertices
-        pxr::UsdAttribute pointsAttr = usdMesh.CreatePointsAttr(pxr::VtValue{convertMayaPoints(exportItem.dagPath)});
-        usdMesh.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});
-        usdMesh.CreateFaceVertexIndicesAttr(pxr::VtValue{usdVertexIndices});
+            // assign points and vertices
+            pxr::UsdAttribute pointsAttr = usdMesh.CreatePointsAttr(pxr::VtValue{convertMayaPoints(exportItem.dagPath)});
+            usdMesh.CreateFaceVertexCountsAttr(pxr::VtValue{usdVertexCount});
+            usdMesh.CreateFaceVertexIndicesAttr(pxr::VtValue{usdVertexIndices});
 
-        buildUVs(usdMesh, mayaMesh);
+            buildUVs(usdMesh, mayaMesh);
 
-        animatePoints(pointsAttr, exportItem);
+            animatePoints(pointsAttr, exportItem);
+            setPrimType(usdPrim, usdPrimType);
+            setTransform(usdPrim, exportItem.dagPath);
+        }
+        else if (usdPrimType == pxr::TfToken("Xform"))
+        {
+            usdPrim = stage->DefinePrim(primPath, usdPrimType);
+        }
+        else if (usdPrimType == pxr::TfToken("Scope"))
+        {
+            usdPrim = stage->DefinePrim(primPath, usdPrimType);
+        }
+        else
+        {
+            usdPrim = stage->DefinePrim(primPath, usdPrimType);
+            std::string errMsg = "Invalid prim type: " + usdPrimType.GetString();
+            MGlobal::displayError(MString(errMsg.c_str()));
+            continue;
+        }
+
     }
 
 
     cout << "End\n";
 }
+
+void MayaUSDExport::PrimWriter::setTransform(pxr::UsdPrim usdPrim, MDagPath dagPath)
+{
+    if(!dagPath.hasFn(MFn::kTransform))
+    {
+        MGlobal::displayError(MString("Cannot set transform on type:") + dagPath.node().apiTypeStr() + " " + dagPath.fullPathName());
+        return;
+    }
+    MFnTransform transformFn(dagPath);
+    MTransformationMatrix mayaTransformApi = transformFn.transformation();
+    MMatrix mayaTransformMatrix = mayaTransformApi.asMatrix();
+    double mDouble[4][4];
+    mayaTransformMatrix.get(mDouble);
+
+    pxr::UsdGeomXformable geom(usdPrim);
+    pxr::UsdGeomXformOp XformOp = geom.AddTransformOp();
+    XformOp.Set(pxr::GfMatrix4d(mDouble));
+}
+
 
 void MayaUSDExport::PrimWriter::setPrimType(pxr::UsdPrim& prim, const pxr::TfToken& primTypeName)
 {

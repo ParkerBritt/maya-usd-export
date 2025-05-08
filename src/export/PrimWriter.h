@@ -21,5 +21,7 @@ private:
     pxr::UsdGeomPrimvar buildUVs(pxr::UsdGeomMesh &_usdMesh, MFnMesh &_mayaMesh);
     void getDagPathType(const MDagPath& dagPath);
     void setPrimType(pxr::UsdPrim& prim, const pxr::TfToken& primTypeName);
+    void setTransform(pxr::UsdPrim usdPrim, MDagPath dagPath);
+
 };
 }
