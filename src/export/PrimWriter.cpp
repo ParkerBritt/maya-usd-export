@@ -163,7 +163,7 @@ std::string MayaUSDExport::PrimWriter::derivePrimType(MDagPath dagPath, bool pro
 {
     std::cout << "deriving path for: " << dagPath.fullPathName() << "\n";
     std::string primTypeName;
-    std::string defaultType = "None";
+    std::string defaultType = "";
 
     MFn::Type apiType = dagPath.node().apiType();
 
@@ -171,6 +171,7 @@ std::string MayaUSDExport::PrimWriter::derivePrimType(MDagPath dagPath, bool pro
         {
             {MFn::Type::kMesh, "Mesh"},
             {MFn::Type::kTransform, "Xform"},
+            {MFn::Type::kCamera, "Camera"},
         };
 
     // promotes the type of the shape to the parent

@@ -1,4 +1,5 @@
 #include "QtGui/qstandarditemmodel.h"
+#include "export/PrimWriter.h"
 #include "maya/MApiNamespace.h"
 #include <maya/MDagPath.h>
 #include <maya/MItDag.h>
@@ -65,7 +66,8 @@ void DAGSelectionModel::populateModel()
         QList<QStandardItem*> rowItems;
         QStandardItem *nodeItem = formatModelItem(new QStandardItem(nodeName.asChar()));
         rowItems.insert(static_cast<int>(SelectionCol::MayaPrimName), nodeItem);
-        rowItems.insert(static_cast<int>(SelectionCol::UsdPrimType), new QStandardItem("Scope"));
+        std::string type = MayaUSDExport::PrimWriter::derivePrimType(dagPath);
+        rowItems.insert(static_cast<int>(SelectionCol::UsdPrimType), new QStandardItem(type.c_str()));
         parentItem->appendRow(rowItems);
 
 

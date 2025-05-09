@@ -19,7 +19,7 @@ SelectionParameters::SelectionParameters()
     formLayout_->addRow("Prim Path", new QLineEdit());
 
     primTypeParm = new QComboBox();
-    primTypeParm->addItems({"Scope", "Mesh", "Xform"});
+    primTypeParm->addItems({"Scope", "Mesh", "Xform", "Camera"});
 
     formLayout_->addRow("Prim Type", primTypeParm);
     formLayout_->addRow("Invert Winding Order", new QCheckBox());
