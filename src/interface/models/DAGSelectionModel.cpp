@@ -33,6 +33,15 @@ void DAGSelectionModel::populateModel()
         MDagPath dagPath;
         dagIter.getPath(dagPath);
         MString path = dagIter.fullPathName();
+        
+        // don't include shapes
+        if(dagPath.hasFn(MFn::Type::kShape) && dagPath.childCount()==0)
+        {
+            std::cout << "is shape, not including: " << path << "\n";
+            dagIter.next();
+            continue;
+        }
+
 
 
         // separate the path into nodes
