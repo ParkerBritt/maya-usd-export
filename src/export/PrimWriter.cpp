@@ -140,6 +140,7 @@ void MayaUSDExport::PrimWriter::writePrims(pxr::UsdStageRefPtr stage){
         else if (usdPrimType == pxr::TfToken("Xform"))
         {
             usdPrim = stage->DefinePrim(primPath, usdPrimType);
+            setTransform(usdPrim, exportItem.dagPath);
         }
         else if (usdPrimType == pxr::TfToken("Scope"))
         {
