@@ -51,7 +51,7 @@ add_compile_options(
 # setup core
 add_library(maya_usd_export_core STATIC
     src/export/PrimWriter.cpp
-    src/export/exportItem.cpp
+    src/export/ExportItem.cpp
 )
 
 set_target_properties(maya_usd_export_core PROPERTIES POSITION_INDEPENDENT_CODE ON)

@@ -15,7 +15,7 @@
 
 #include "export/PrimWriter.h"
 #include "export/ExportOptions.h"
-#include "export/exportItem.h"
+#include "export/ExportItem.h"
 #include "maya/MApiNamespace.h"
 
 MainExportDialogController::MainExportDialogController(QPointer<USDExportInterface> _view)

@@ -4,7 +4,7 @@
 #include <pxr/usd/usd/prim.h>
 #include <pxr/usd/usdGeom/mesh.h>
 #include <pxr/usd/usdGeom/primvar.h>
-#include "export/exportItem.h"
+#include "export/ExportItem.h"
 #include "export/ExportOptions.h"
 #include "maya/MApiNamespace.h"
 

@@ -18,7 +18,7 @@
 #include <pxr/usd/usd/stage.h>
 #include <sys/select.h>
 #include "export/PrimWriter.h"
-#include "export/exportItem.h"
+#include "export/ExportItem.h"
 #include "export/ExportOptions.h"
 
 // interface

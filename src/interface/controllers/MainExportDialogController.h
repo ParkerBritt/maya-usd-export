@@ -5,7 +5,7 @@
 #include "interface/main_export_dialog.h"
 #include <QtCore/QPointer>
 #include "interface/controllers/SelectionOptionsController.h"
-#include "export/exportItem.h"
+#include "export/ExportItem.h"
 
 class MainExportDialogController
 : public QObject

@@ -1,5 +1,5 @@
 #include "export/PrimWriter.h"
-#include "export/exportItem.h"
+#include "export/ExportItem.h"
 #include "maya/MApiNamespace.h"
 #include "maya/MFn.h"
 #include "maya/MTypes.h"
