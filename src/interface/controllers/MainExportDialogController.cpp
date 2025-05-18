@@ -75,6 +75,17 @@ void MainExportDialogController::getExportItems(std::vector<MayaUSDExport::Expor
 void MainExportDialogController::doExport()
 {
     std::string exportPath = m_view->generalOptions->m_filePathLine->text().toStdString();
+    if(
+        !(
+            (exportPath.size()>=4 && exportPath.substr(exportPath.size()-4, 4) == ".usd") ||
+            (exportPath.size()>=5 && exportPath.substr(exportPath.size()-5, 5) == ".usda") ||
+            (exportPath.size()>=5 && exportPath.substr(exportPath.size()-5, 5) == ".usdc")
+        )
+    )
+    {
+        MGlobal::displayError("Invalid export path, must end with .usd, .usda, or .usdc");
+        return;
+    }
 
     QStandardItemModel* model = m_view -> selectionOptions -> m_selectionTree -> model;
 
@@ -83,7 +94,6 @@ void MainExportDialogController::doExport()
     pxr::UsdStageRefPtr stage = pxr::UsdStage::CreateNew(exportPath);
 
     // get items in scene
-    // MGlobal::getActiveSelectionList(selectionList);
     std::vector<MayaUSDExport::ExportItem> exportItems;
     getExportItems(exportItems, model->invisibleRootItem(), std::string());
 
