@@ -18,6 +18,12 @@
 
 DAGSelectionModel::DAGSelectionModel()
 {
+    // set header names
+    this->setColumnCount(2);
+    this->setHeaderData(0, Qt::Horizontal, "Name");
+    this->setHeaderData(1, Qt::Horizontal, "Type");
+
+    // pupulate the model from dag paths
     populateModel();
 
 }
