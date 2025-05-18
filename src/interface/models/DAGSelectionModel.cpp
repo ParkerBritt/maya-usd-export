@@ -115,9 +115,15 @@ void DAGSelectionModel::populateModel()
             nodeItem->setCheckState(state); 
         }
 
+        // add prim to model
         rowItems.insert(static_cast<int>(SelectionCol::MayaPrimName), nodeItem);
         std::string type = MayaUSDExport::PrimWriter::derivePrimType(dagPath);
-        rowItems.insert(static_cast<int>(SelectionCol::UsdPrimType), new QStandardItem(type.c_str()));
+
+        //  add type to model
+        QStandardItem* typeItem = new QStandardItem(type.c_str());
+        rowItems.insert(static_cast<int>(SelectionCol::UsdPrimType), typeItem);
+        typeItem->setEditable(false);
+
         parentItem->appendRow(rowItems);
 
 

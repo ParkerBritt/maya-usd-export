@@ -24,25 +24,14 @@ void SelectionOptionsController::updateParms(const QItemSelection &selected, con
     QStandardItemModel* model = view_->selectionOptions->m_selectionTree->model;
     SelectionParameters* parms = view_->selectionOptions->m_selectionParameters;
 
-    // ----
-    // handle previous selection
-    // ----
-    // if(!deselected.indexes().isEmpty())
-    // {
-    //     QModelIndex prevIndex = deselected.indexes().first();
-    //     QStandardItem* usdTypeItem = model->item(prevIndex.row(), static_cast<int>(SelectionCol::UsdPrimType));
-    //     parms->primTypeParm->currentText();
-    // }
-
-    // ----
-    // handle current selection
-    // ----
     if(!selected.indexes().isEmpty())
     {
         QModelIndex curIndex = selected.indexes().first();
         // get correct column
+
         curIndex = curIndex.siblingAtColumn(static_cast<int>(SelectionCol::UsdPrimType));
-        QStandardItem* usdTypeItem = model->item(curIndex.row(), static_cast<int>(SelectionCol::UsdPrimType));
+        QStandardItem* usdTypeItem = model->itemFromIndex(curIndex);
+
         // set combobox to model value
         parms->primTypeParm->blockSignals(true);
         parms->primTypeParm->setCurrentText(usdTypeItem->text());
