@@ -292,6 +292,13 @@ void MayaUSDExport::PrimWriter::animatePoints(pxr::UsdAttribute _pointsAttr, Exp
     }
 }
 
+void MayaUSDExport::PrimWriter::setAnim(float frameStart, float frameEnd)
+{
+    m_exportOptions.animFrameStart = frameStart;
+    m_exportOptions.animFrameEnd = frameEnd;
+}
+
+
 pxr::VtArray<pxr::GfVec3f> MayaUSDExport::PrimWriter::convertMayaPoints(MDagPath _meshPath){
     MFnMesh mesh;
     // MGlobal::viewFrame(i);

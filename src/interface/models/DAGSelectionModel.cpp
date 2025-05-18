@@ -1,3 +1,4 @@
+#include "QtCore/qnamespace.h"
 #include "QtGui/qstandarditemmodel.h"
 #include "export/PrimWriter.h"
 #include "maya/MApiNamespace.h"
@@ -5,12 +6,15 @@
 #include <maya/MItDag.h>
 #include <maya/MString.h>
 #include <maya/MStringArray.h>
+#include <maya/MSelectionList.h>
+#include <maya/MGlobal.h>
 #include <unordered_map>
 
 #include <QtCore/QList>
 
 #include "interface/models/DAGSelectionModel.h"
 #include "interface/models/DagSelectionModelColumns.h"
+#include "maya/MStatus.h"
 
 DAGSelectionModel::DAGSelectionModel()
 {
@@ -24,6 +28,9 @@ void DAGSelectionModel::populateModel()
     QStandardItem *rootNode = invisibleRootItem();
     MItDag dagIter;
     std::unordered_map<std::string, QStandardItem*> pathItemMap;
+
+    MSelectionList selectedObjects;
+    MGlobal::getActiveSelectionList(selectedObjects);
 
     // iterate dag
     while(!dagIter.isDone())
@@ -74,6 +81,34 @@ void DAGSelectionModel::populateModel()
         // add item to model
         QList<QStandardItem*> rowItems;
         QStandardItem *nodeItem = formatModelItem(new QStandardItem(nodeName.asChar()));
+        
+        // set selection
+        {
+            MDagPath checkPath = dagPath;
+            Qt::CheckState state = Qt::CheckState::Unchecked;
+            while (true)
+            {
+                if(selectedObjects.hasItem(checkPath))
+                {
+                    state = Qt::CheckState::Checked;
+                    break;
+                }
+
+                if(!checkPath.length())
+                {
+                    break;
+                }
+
+                // move up a level
+                MStatus status = checkPath.pop();
+                if(status != MStatus::kSuccess)
+                {
+                    break;
+                }
+            }
+            nodeItem->setCheckState(state); 
+        }
+
         rowItems.insert(static_cast<int>(SelectionCol::MayaPrimName), nodeItem);
         std::string type = MayaUSDExport::PrimWriter::derivePrimType(dagPath);
         rowItems.insert(static_cast<int>(SelectionCol::UsdPrimType), new QStandardItem(type.c_str()));
@@ -89,6 +124,7 @@ void DAGSelectionModel::populateModel()
 
 QStandardItem* DAGSelectionModel::formatModelItem(QStandardItem* _item)
 {
+
     _item->setCheckable(true);
     _item->setCheckState(Qt::Checked);
     // TODO: add editable functionality

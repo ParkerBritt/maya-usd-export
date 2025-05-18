@@ -88,6 +88,10 @@ void MainExportDialogController::doExport()
 
     MayaUSDExport::ExportOptions exportOptions;
 
+    exportOptions.animFrameStart = m_view->animationOptions->m_animRangeStart->value();
+    exportOptions.animFrameEnd = m_view->animationOptions->m_animRangeEnd->value();
+    exportOptions.animFrameInc = m_view->animationOptions->m_animRangeStep->value();
+
     MayaUSDExport::PrimWriter primWriter(exportOptions);
 
     MDagPath dagPath;

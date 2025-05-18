@@ -15,6 +15,7 @@ public:
     void writePrims(pxr::UsdStageRefPtr stage);
     void addExportItem(ExportItem _exportItem);
     std::vector<ExportItem> m_exportItems;
+    void setAnim(float frameStart, float frameEnd);
 
     static std::string derivePrimType(MDagPath dagPath, bool promoteShapes=true);
 private:
