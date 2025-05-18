@@ -7,6 +7,7 @@
 #include <maya/MSelectionList.h>
 
 #include "interface/controllers/MainExportDialogController.h"
+#include "QtCore/qnamespace.h"
 #include "QtGui/qstandarditemmodel.h"
 #include "interface/main_export_dialog.h"
 #include "interface/widgets/SelectionParameters.h"
@@ -88,9 +89,12 @@ void MainExportDialogController::doExport()
 
     MayaUSDExport::ExportOptions exportOptions;
 
-    exportOptions.animFrameStart = m_view->animationOptions->m_animRangeStart->value();
-    exportOptions.animFrameEnd = m_view->animationOptions->m_animRangeEnd->value();
-    exportOptions.animFrameInc = m_view->animationOptions->m_animRangeStep->value();
+    if(m_view->animationOptions->m_doAnimationToggle->checkState() == Qt::CheckState::Checked)
+    {
+        exportOptions.animFrameStart = m_view->animationOptions->m_animRangeStart->value();
+        exportOptions.animFrameEnd = m_view->animationOptions->m_animRangeEnd->value();
+        exportOptions.animFrameInc = m_view->animationOptions->m_animRangeStep->value();
+    }
 
     MayaUSDExport::PrimWriter primWriter(exportOptions);
 
