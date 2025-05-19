@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['exportitem_0',['exportitem',['../classMayaUSDExport_1_1ExportItem.html',1,'MayaUSDExport::ExportItem'],['../classMayaUSDExport_1_1ExportItem.html#a389c52be98c837066309190b26cd8869',1,'MayaUSDExport::ExportItem::ExportItem()']]],
-  ['exportitem_2eh_1',['ExportItem.h',['../ExportItem_8h.html',1,'']]],
-  ['exportoptions_2',['ExportOptions',['../classMayaUSDExport_1_1ExportOptions.html',1,'MayaUSDExport']]],
-  ['exportoptions_2eh_3',['ExportOptions.h',['../ExportOptions_8h.html',1,'']]]
+  ['dagpath_0',['dagPath',['../classMayaUSDExport_1_1ExportItem.html#ad77e495e8ea31d87bd4474b66904641a',1,'MayaUSDExport::ExportItem']]],
+  ['deriveprimtype_1',['derivePrimType',['../classMayaUSDExport_1_1PrimWriter.html#a2ec73f0477dfaa1e055aea0fbfae5dfc',1,'MayaUSDExport::PrimWriter']]]
 ];

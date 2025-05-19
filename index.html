@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Maya USD Export: Main Page</title>
+<title>Maya USD Export: Maya USD Export</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -68,10 +68,63 @@ $(function() {
 </div>
 </div>
 
-<div class="header">
-  <div class="headertitle"><div class="title">Maya USD Export Documentation</div></div>
+<div><div class="header">
+  <div class="headertitle"><div class="title">Maya USD Export </div></div>
 </div><!--header-->
 <div class="contents">
+<div class="textblock"><p><a class="anchor" id="md_README"></a> </p><h1 align="center">Maya USD Export</h1>
+<p align="center"></p>
+<p><img src="https://img.shields.io/badge/Maya-37A5CC?style=for-the-badge&amp;logo=autodeskmaya&amp;logoColor=white" alt="" class="inline"/> <img src="https://img.shields.io/badge/Qt-41CD52?style=for-the-badge&amp;logo=Qt&amp;logoColor=white" alt="" class="inline"/> <a href="https://github.com/ParkerBritt?tab=repositories&amp;q=&amp;type=&amp;language=c%2B%2B&amp;sort="><img src="https://parkerbritt.com/badge?label=C%2B%2B&amp;icon=cpp&amp;color=00599C" alt="" class="inline"/></a> </p>
+<p><img src="screenshots/user_interface.png" alt="interface" align="right" height="400px" class="inline"/> <br  />
+<br  />
+ </p>
+<p>This repository provides a standalone Maya plugin for exporting USD (Universal Scene Description) files. It also includes a lightweight GUI for convenience and quick integration into tools and workflows.</p>
+<p>While the functionality is similar to Autodesk's maya-usd plugin, this version is designed for modularity and ease of use. It does not require maya-usd, but remains compatible with it. This makes it simpler to modify and embed in other projects.</p>
+<p>Future development will aim for feature parity with maya-usd, alongside new functionality such as reverse winding orders. </p>
+<p><br  />
+<br  />
+<br  />
+</p>
+<h2><a class="anchor" id="autotoc_md0"></a>
+Features</h2>
+<ul>
+<li>Vertex Animations</li>
+<li>Copies XForm</li>
+<li>Select Individual Prims</li>
+<li>Set Individual Types</li>
+<li>Set Output Path</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md1"></a>
+Installation From Source</h2>
+<blockquote class="doxtable">
+<p>&zwj;Tested on Maya 2023.3 with maya-usd 0.20.0 Tested on Maya 2024.2 with maya-usd 0.25.0 &amp; 0.22.11 </p>
+</blockquote>
+<h3><a class="anchor" id="autotoc_md2"></a>
+Prerequisites</h3>
+<ul>
+<li><a href="https://github.com/PixarAnimationStudios/OpenUSD">OpenUSD</a><ul>
+<li>For maya-usd compatability, check <a href="https://github.com/Autodesk/maya-usd/releases">releases</a> to find out which version you need</li>
+</ul>
+</li>
+<li><a href="https://aps.autodesk.com/developer/overview/maya">Maya Devkit</a></li>
+<li>Ninja</li>
+<li>Cmake</li>
+<li>Qt5</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md3"></a>
+Build</h3>
+<div class="fragment"><div class="line">git clone git@github.com:ParkerBritt/maya-usd-export.git</div>
+<div class="line">cd maya-usd-export</div>
+<div class="line"> </div>
+<div class="line"># point these to your actual paths</div>
+<div class="line">export USD_LOCATION=&quot;/path/to/usd/build&quot;</div>
+<div class="line">export DEVKIT_LOCATION=&quot;/path/to/devkit&quot;</div>
+<div class="line"> </div>
+<div class="line">./build.sh</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
+Install</h3>
+<div class="fragment"><div class="line">./install.sh</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

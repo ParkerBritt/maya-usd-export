@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['m_5fexportitems_0',['m_exportItems',['../classMayaUSDExport_1_1PrimWriter.html#a7c2dec1eface3ca065ad825c3175116c',1,'MayaUSDExport::PrimWriter']]]
+  ['features_0',['Features',['../index.html#autotoc_md0',1,'']]],
+  ['from_20source_1',['Installation From Source',['../index.html#autotoc_md1',1,'']]]
 ];
