@@ -1,1 +1,8 @@
 *.pyc
+
+uv.lock
+.python-version
+build
+*.egg-info
+
+.cache

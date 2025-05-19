@@ -1,44 +1,38 @@
-import sys
-import os
+import sys, os
+import maya.standalone
+import maya.cmds as cmds
 
-# check scripts
-scripts_dir = os.path.join(os.getenv("HOME"), "maya", "scripts")
-if not os.path.exists(scripts_dir):
-    raise Exception (f"Scripts directory does not exist {scripts_dir}")
-sys.path.append(scripts_dir)
+try:
+    maya.standalone.initialize(name='python')
+except Exception as e:
+    sys.stderr.write("Error initializing Maya standalone: {e}\n")
+    sys.exit(1)
 
-# from maya_usd_export import interface
-import pytest
-import maya_usd_export
-from maya_usd_export import selection
-import maya.cmds as cmd
+plugin_path = sys.argv[1]
 
-import maya.standalone 
-maya.standalone.initialize(name="python")
-
-
-
-def test_selection():
-    # create new file
-    cmd.file(new=True, force=True)
-    cube = cmd.polyCube(name="cube")[0]
-
-    # create rig groups
-    render_grp = cmd.group(empty=True, name="render")
-    geo_grp = cmd.group(empty=True, name="geo")
-    foo_grp = cmd.group(empty=True, name="foo_rig")
-
-    # parent rig heirarcy
-    cmd.parent(cube, render_grp)
-    cmd.parent(render_grp, geo_grp)
-    cmd.parent(geo_grp, foo_grp)
-
-    selection_instance = selection.Selection(render_geo_whitelist=['render'], export_rig=False)
-    assert selection_instance
-    assert selection_instance.return_data() == {'|foo_rig': {'root_prim': 'foo_rig', 'filtered_children': ['render'], 'joint_grp_path': None, 'group_name': '|foo_rig|geo', 'namespace': None}}
-
-    # cmd.file(rename="/home/parker/Downloads/new_scene.ma")
-    # cmd.file(save=True, type="mayaAscii")
-
-def pytest_sessionfinish(session, exitstatus):
+try:
+    if not cmds.pluginInfo(plugin_path, query=True, loaded=True):
+        cmds.loadPlugin(plugin_path)
+        print("Plugin loaded successfully!")
+    else:
+        print("Plugin is already loaded.")
+except Exception as e:
+    sys.stderr.write(f"Failed to load plugin: {e}\n")
     maya.standalone.uninitialize()
+    sys.exit(1)
+
+cube1 = cmds.polyCube()
+cube2 = cmds.polyCube()
+torus1 = cmds.polyTorus()
+cmds.select([torus1[0]])
+
+try:
+    cmds.helloWorld(f"{os.getenv('HOME')}/Downloads/cpp_export_test.usd")
+    print("helloWorld command executed successfully!")
+except Exception as e:
+    sys.stderr.write("Error executing helloWorld: {}\n".format(e))
+    maya.standalone.uninitialize()
+    sys.exit(1)
+
+maya.standalone.uninitialize()
+
