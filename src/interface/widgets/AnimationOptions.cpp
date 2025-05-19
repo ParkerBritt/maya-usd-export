@@ -9,7 +9,7 @@ AnimationOptions::AnimationOptions()
     setLayout(m_formLayout);
     m_formLayout->setLabelAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 
-    m_doAnimationToggle = new QCheckBox();
+    doAnimationToggle = new QCheckBox();
 
     QHBoxLayout* animRangeLayout = new QHBoxLayout();
     m_animRangeStart = new QSpinBox();
@@ -29,7 +29,7 @@ AnimationOptions::AnimationOptions()
     animRangeLayout->addWidget(m_animRangeEnd, 3);
     animRangeLayout->addWidget(m_animRangeStep, 1);
 
-    m_formLayout->addRow("Animation", m_doAnimationToggle);
+    m_formLayout->addRow("Animation", doAnimationToggle);
     m_formLayout->addRow("Range", animRangeLayout);
 
     

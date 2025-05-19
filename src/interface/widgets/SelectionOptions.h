@@ -19,8 +19,8 @@ class SelectionOptions : public QWidget {
 public:
     SelectionOptions();
 
-    QVBoxLayout *m_mainLayout;
-    QSplitter *m_splitter;
+    QVBoxLayout *mainLayout;
+    QSplitter *splitter;
     SelectionTree *m_selectionTree;
     SelectionParameters *m_selectionParameters;
 private:

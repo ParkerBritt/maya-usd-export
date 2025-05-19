@@ -11,7 +11,7 @@ public:
     AnimationOptions();
 
     QFormLayout *m_formLayout;
-    QCheckBox *m_doAnimationToggle;
+    QCheckBox *doAnimationToggle;
 
     QSpinBox* m_animRangeStart;
     QSpinBox* m_animRangeEnd;
