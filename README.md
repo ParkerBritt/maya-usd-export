@@ -26,8 +26,8 @@ Future development will aim for feature parity with maya-usd, alongside new func
 - Set Output Path
 
 ## Installation From Source
-> Tested on Maya 2023.3 with maya-usd 0.20.0
-> Tested on Maya 2024.2 with maya-usd 0.25.0 & 0.22.11
+> Tested on Maya 2023.3 with maya-usd 0.20.0  
+> Tested on Maya 2024.2 with maya-usd 0.25.0 & OpenUSD 0.22.11
 
 ### Prerequisites
 - [OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD)
@@ -53,4 +53,12 @@ export DEVKIT_LOCATION="/path/to/devkit"
 ```bash
 ./install.sh
 ```
+## API
+Access the API docs here:
+https://parkerbritt.github.io/maya-usd-export
 
+Or build the docs locally with:
+```bash
+cd maya-usd-export
+doxygen
+```
