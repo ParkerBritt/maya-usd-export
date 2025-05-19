@@ -4,19 +4,19 @@
 #include <QtWidgets/QSplitter>
 
 SelectionOptions::SelectionOptions(){
-    m_mainLayout = new QVBoxLayout();
-    setLayout(m_mainLayout);
+    mainLayout = new QVBoxLayout();
+    setLayout(mainLayout);
 
-    m_splitter = new QSplitter();
+    splitter = new QSplitter();
 
-    m_mainLayout->addWidget(m_splitter);
+    mainLayout->addWidget(splitter);
 
 
     m_selectionTree = new SelectionTree();
-    m_splitter->addWidget(m_selectionTree);
+    splitter->addWidget(m_selectionTree);
 
     m_selectionParameters = new SelectionParameters();
-    m_splitter->addWidget(m_selectionParameters);
+    splitter->addWidget(m_selectionParameters);
 }
 
 SelectionTree::SelectionTree(){

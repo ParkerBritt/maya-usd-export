@@ -99,7 +99,7 @@ void MainExportDialogController::doExport()
 
     MayaUSDExport::ExportOptions exportOptions;
 
-    if(m_view->animationOptions->m_doAnimationToggle->checkState() == Qt::CheckState::Checked)
+    if(m_view->animationOptions->doAnimationToggle->checkState() == Qt::CheckState::Checked)
     {
         exportOptions.animFrameStart = m_view->animationOptions->m_animRangeStart->value();
         exportOptions.animFrameEnd = m_view->animationOptions->m_animRangeEnd->value();
