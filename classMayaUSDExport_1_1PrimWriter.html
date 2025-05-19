@@ -81,34 +81,206 @@ $(function() {
   <div class="headertitle"><div class="title">MayaUSDExport::PrimWriter Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Responsible for writing Maya primitives to a USD stage.  
+ <a href="classMayaUSDExport_1_1PrimWriter.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="PrimWriter_8h_source.html">PrimWriter.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad0c112fe7a37f68d9ba8e09bedd96389" id="r_ad0c112fe7a37f68d9ba8e09bedd96389"><td class="memItemLeft" align="right" valign="top"><a id="ad0c112fe7a37f68d9ba8e09bedd96389" name="ad0c112fe7a37f68d9ba8e09bedd96389"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>PrimWriter</b> (<a class="el" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a> &amp;_exportOptions)</td></tr>
+<tr class="memitem:ad0c112fe7a37f68d9ba8e09bedd96389" id="r_ad0c112fe7a37f68d9ba8e09bedd96389"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1PrimWriter.html#ad0c112fe7a37f68d9ba8e09bedd96389">PrimWriter</a> (<a class="el" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a> &amp;_exportOptions)</td></tr>
+<tr class="memdesc:ad0c112fe7a37f68d9ba8e09bedd96389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="classMayaUSDExport_1_1PrimWriter.html" title="Responsible for writing Maya primitives to a USD stage.">PrimWriter</a>.  <br /></td></tr>
 <tr class="separator:ad0c112fe7a37f68d9ba8e09bedd96389"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6803e89f357cf7460ad2f8563819305" id="r_ae6803e89f357cf7460ad2f8563819305"><td class="memItemLeft" align="right" valign="top"><a id="ae6803e89f357cf7460ad2f8563819305" name="ae6803e89f357cf7460ad2f8563819305"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>writePrims</b> (pxr::UsdStageRefPtr stage)</td></tr>
+<tr class="memitem:ae6803e89f357cf7460ad2f8563819305" id="r_ae6803e89f357cf7460ad2f8563819305"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1PrimWriter.html#ae6803e89f357cf7460ad2f8563819305">writePrims</a> (pxr::UsdStageRefPtr stage)</td></tr>
+<tr class="memdesc:ae6803e89f357cf7460ad2f8563819305"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write all added export items to the given USD stage.  <br /></td></tr>
 <tr class="separator:ae6803e89f357cf7460ad2f8563819305"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3495651716d0899c25e9d973b5e473b6" id="r_a3495651716d0899c25e9d973b5e473b6"><td class="memItemLeft" align="right" valign="top"><a id="a3495651716d0899c25e9d973b5e473b6" name="a3495651716d0899c25e9d973b5e473b6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addExportItem</b> (<a class="el" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> _exportItem)</td></tr>
+<tr class="memitem:a3495651716d0899c25e9d973b5e473b6" id="r_a3495651716d0899c25e9d973b5e473b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1PrimWriter.html#a3495651716d0899c25e9d973b5e473b6">addExportItem</a> (<a class="el" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> _exportItem)</td></tr>
+<tr class="memdesc:a3495651716d0899c25e9d973b5e473b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a new export item to be written to USD.  <br /></td></tr>
 <tr class="separator:a3495651716d0899c25e9d973b5e473b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc602ccc65b0eefc7f61eb40fdee3ba5" id="r_afc602ccc65b0eefc7f61eb40fdee3ba5"><td class="memItemLeft" align="right" valign="top"><a id="afc602ccc65b0eefc7f61eb40fdee3ba5" name="afc602ccc65b0eefc7f61eb40fdee3ba5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAnim</b> (float frameStart, float frameEnd)</td></tr>
+<tr class="memitem:afc602ccc65b0eefc7f61eb40fdee3ba5" id="r_afc602ccc65b0eefc7f61eb40fdee3ba5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1PrimWriter.html#afc602ccc65b0eefc7f61eb40fdee3ba5">setAnim</a> (float frameStart, float frameEnd)</td></tr>
+<tr class="memdesc:afc602ccc65b0eefc7f61eb40fdee3ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the animation frame range for exporting animated geometry.  <br /></td></tr>
 <tr class="separator:afc602ccc65b0eefc7f61eb40fdee3ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a2ec73f0477dfaa1e055aea0fbfae5dfc" id="r_a2ec73f0477dfaa1e055aea0fbfae5dfc"><td class="memItemLeft" align="right" valign="top"><a id="a2ec73f0477dfaa1e055aea0fbfae5dfc" name="a2ec73f0477dfaa1e055aea0fbfae5dfc"></a>
-static std::string&#160;</td><td class="memItemRight" valign="bottom"><b>derivePrimType</b> (MDagPath dagPath, bool promoteShapes=true)</td></tr>
+<tr class="memitem:a2ec73f0477dfaa1e055aea0fbfae5dfc" id="r_a2ec73f0477dfaa1e055aea0fbfae5dfc"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1PrimWriter.html#a2ec73f0477dfaa1e055aea0fbfae5dfc">derivePrimType</a> (MDagPath dagPath, bool promoteShapes=true)</td></tr>
+<tr class="memdesc:a2ec73f0477dfaa1e055aea0fbfae5dfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derive the USD primitive type from a given Maya DAG path.  <br /></td></tr>
 <tr class="separator:a2ec73f0477dfaa1e055aea0fbfae5dfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a7c2dec1eface3ca065ad825c3175116c" id="r_a7c2dec1eface3ca065ad825c3175116c"><td class="memItemLeft" align="right" valign="top"><a id="a7c2dec1eface3ca065ad825c3175116c" name="a7c2dec1eface3ca065ad825c3175116c"></a>
 std::vector&lt; <a class="el" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_exportItems</b></td></tr>
+<tr class="memdesc:a7c2dec1eface3ca065ad825c3175116c"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of export items queued for writing. <br /></td></tr>
 <tr class="separator:a7c2dec1eface3ca065ad825c3175116c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Responsible for writing Maya primitives to a USD stage. </p>
+<p>This class provides functionality to export scene elements (primitives) from Maya into a USD file. It handles the conversion of Maya geometry, animation data, and scene hierarchy into appropriate USD representations. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad0c112fe7a37f68d9ba8e09bedd96389" name="ad0c112fe7a37f68d9ba8e09bedd96389"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c112fe7a37f68d9ba8e09bedd96389">&#9670;&#160;</a></span>PrimWriter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MayaUSDExport::PrimWriter::PrimWriter </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a> &amp;&#160;</td>
+          <td class="paramname"><em>_exportOptions</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor for the <a class="el" href="classMayaUSDExport_1_1PrimWriter.html" title="Responsible for writing Maya primitives to a USD stage.">PrimWriter</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_exportOptions</td><td>Reference to export options that guide the export behavior. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3495651716d0899c25e9d973b5e473b6" name="a3495651716d0899c25e9d973b5e473b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3495651716d0899c25e9d973b5e473b6">&#9670;&#160;</a></span>addExportItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MayaUSDExport::PrimWriter::addExportItem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a>&#160;</td>
+          <td class="paramname"><em>_exportItem</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a new export item to be written to USD. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">_exportItem</td><td>The item containing Maya DAG information and metadata for export. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2ec73f0477dfaa1e055aea0fbfae5dfc" name="a2ec73f0477dfaa1e055aea0fbfae5dfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ec73f0477dfaa1e055aea0fbfae5dfc">&#9670;&#160;</a></span>derivePrimType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string MayaUSDExport::PrimWriter::derivePrimType </td>
+          <td>(</td>
+          <td class="paramtype">MDagPath&#160;</td>
+          <td class="paramname"><em>dagPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>promoteShapes</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Derive the USD primitive type from a given Maya DAG path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dagPath</td><td>The DAG path to analyze. </td></tr>
+    <tr><td class="paramname">promoteShapes</td><td>Whether to promote Maya shapes to their corresponding USD types. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A string representing the USD primitive type name. </dd></dl>
+
+</div>
+</div>
+<a id="afc602ccc65b0eefc7f61eb40fdee3ba5" name="afc602ccc65b0eefc7f61eb40fdee3ba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc602ccc65b0eefc7f61eb40fdee3ba5">&#9670;&#160;</a></span>setAnim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MayaUSDExport::PrimWriter::setAnim </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>frameStart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>frameEnd</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set the animation frame range for exporting animated geometry. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">frameStart</td><td>The starting frame of the animation. </td></tr>
+    <tr><td class="paramname">frameEnd</td><td>The ending frame of the animation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae6803e89f357cf7460ad2f8563819305" name="ae6803e89f357cf7460ad2f8563819305"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6803e89f357cf7460ad2f8563819305">&#9670;&#160;</a></span>writePrims()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MayaUSDExport::PrimWriter::writePrims </td>
+          <td>(</td>
+          <td class="paramtype">pxr::UsdStageRefPtr&#160;</td>
+          <td class="paramname"><em>stage</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Write all added export items to the given USD stage. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stage</td><td>A reference pointer to the USD stage where primitives will be written. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/export/<a class="el" href="PrimWriter_8h_source.html">PrimWriter.h</a></li>
 <li>src/export/<b>PrimWriter.cpp</b></li>

@@ -81,30 +81,37 @@ $(document).ready(function() { init_codefold(0); });
   <div class="headertitle"><div class="title">ExportItem.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef EXPORT_ITEM_H</span></div>
+<a href="ExportItem_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef EXPORT_ITEM_H</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define EXPORT_ITEM_H</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;maya/MDagPath.h&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;pxr/base/tf/token.h&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keyword">namespace </span>MayaUSDExport{</div>
-<div class="foldopen" id="foldopen00008" data-start="{" data-end="};">
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1ExportItem.html">    8</a></span><span class="keyword">class </span><a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a>{</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a>(MDagPath dagPath);</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    MDagPath dagPath;</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="comment">// add exportArgs</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span>MayaUSDExport {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordtype">void</span> setPrimType(pxr::TfToken usdTypeName) { usdTypeName_ = usdTypeName; }</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    pxr::TfToken getPrimType() { <span class="keywordflow">return</span> usdTypeName_; }</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    pxr::TfToken usdTypeName_;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>};</div>
+<div class="foldopen" id="foldopen00024" data-start="{" data-end="};">
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1ExportItem.html">   24</a></span><span class="keyword">class </span><a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a>(MDagPath <a class="code hl_variable" href="classMayaUSDExport_1_1ExportItem.html#ad77e495e8ea31d87bd4474b66904641a">dagPath</a>);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1ExportItem.html#ad77e495e8ea31d87bd4474b66904641a">   36</a></span>    MDagPath <a class="code hl_variable" href="classMayaUSDExport_1_1ExportItem.html#ad77e495e8ea31d87bd4474b66904641a">dagPath</a>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1ExportItem.html#a20589c73d777c5f74e69ab1a78b0a13d">   44</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMayaUSDExport_1_1ExportItem.html#a20589c73d777c5f74e69ab1a78b0a13d">setPrimType</a>(pxr::TfToken usdTypeName) { usdTypeName_ = usdTypeName; }</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1ExportItem.html#a0db6badb8fefa93852fb49ae62bb02f1">   51</a></span>    pxr::TfToken <a class="code hl_function" href="classMayaUSDExport_1_1ExportItem.html#a0db6badb8fefa93852fb49ae62bb02f1">getPrimType</a>() { <span class="keywordflow">return</span> usdTypeName_; }</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    pxr::TfToken usdTypeName_;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
 </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>}</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html">MayaUSDExport::ExportItem</a></div><div class="ttdef"><b>Definition</b> ExportItem.h:8</div></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>} <span class="comment">// namespace MayaUSDExport</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#endif </span><span class="comment">// EXPORT_ITEM_H</span></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html">MayaUSDExport::ExportItem</a></div><div class="ttdoc">Represents a single Maya DAG node intended for export to USD.</div><div class="ttdef"><b>Definition</b> ExportItem.h:24</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html_a0db6badb8fefa93852fb49ae62bb02f1"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html#a0db6badb8fefa93852fb49ae62bb02f1">MayaUSDExport::ExportItem::getPrimType</a></div><div class="ttdeci">pxr::TfToken getPrimType()</div><div class="ttdoc">Gets the USD primitive type assigned to this item.</div><div class="ttdef"><b>Definition</b> ExportItem.h:51</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html_a20589c73d777c5f74e69ab1a78b0a13d"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html#a20589c73d777c5f74e69ab1a78b0a13d">MayaUSDExport::ExportItem::setPrimType</a></div><div class="ttdeci">void setPrimType(pxr::TfToken usdTypeName)</div><div class="ttdoc">Sets the USD primitive type for this item.</div><div class="ttdef"><b>Definition</b> ExportItem.h:44</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html_ad77e495e8ea31d87bd4474b66904641a"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html#ad77e495e8ea31d87bd4474b66904641a">MayaUSDExport::ExportItem::dagPath</a></div><div class="ttdeci">MDagPath dagPath</div><div class="ttdoc">The DAG path of the Maya node associated with this export item.</div><div class="ttdef"><b>Definition</b> ExportItem.h:36</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -79,22 +79,99 @@ $(function() {
   <div class="headertitle"><div class="title">MayaUSDExport::ExportOptions Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Holds configuration options that control the behavior of a Maya to USD export.  
+ <a href="classMayaUSDExport_1_1ExportOptions.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ExportOptions_8h_source.html">ExportOptions.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:aae2540c1155028221b679feb4808bb54" id="r_aae2540c1155028221b679feb4808bb54"><td class="memItemLeft" align="right" valign="top"><a id="aae2540c1155028221b679feb4808bb54" name="aae2540c1155028221b679feb4808bb54"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>animFrameStart</b> =0</td></tr>
+<tr class="memitem:aae2540c1155028221b679feb4808bb54" id="r_aae2540c1155028221b679feb4808bb54"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportOptions.html#aae2540c1155028221b679feb4808bb54">animFrameStart</a> = 0</td></tr>
+<tr class="memdesc:aae2540c1155028221b679feb4808bb54"><td class="mdescLeft">&#160;</td><td class="mdescRight">The start frame for animation export.  <br /></td></tr>
 <tr class="separator:aae2540c1155028221b679feb4808bb54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acda22f5babf44a698c0ecc08eb4f18b9" id="r_acda22f5babf44a698c0ecc08eb4f18b9"><td class="memItemLeft" align="right" valign="top"><a id="acda22f5babf44a698c0ecc08eb4f18b9" name="acda22f5babf44a698c0ecc08eb4f18b9"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>animFrameEnd</b> =0</td></tr>
+<tr class="memitem:acda22f5babf44a698c0ecc08eb4f18b9" id="r_acda22f5babf44a698c0ecc08eb4f18b9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportOptions.html#acda22f5babf44a698c0ecc08eb4f18b9">animFrameEnd</a> = 0</td></tr>
+<tr class="memdesc:acda22f5babf44a698c0ecc08eb4f18b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The end frame for animation export.  <br /></td></tr>
 <tr class="separator:acda22f5babf44a698c0ecc08eb4f18b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d12b64904ce1978779655ff54eabf42" id="r_a4d12b64904ce1978779655ff54eabf42"><td class="memItemLeft" align="right" valign="top"><a id="a4d12b64904ce1978779655ff54eabf42" name="a4d12b64904ce1978779655ff54eabf42"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>animFrameInc</b> =1</td></tr>
+<tr class="memitem:a4d12b64904ce1978779655ff54eabf42" id="r_a4d12b64904ce1978779655ff54eabf42"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportOptions.html#a4d12b64904ce1978779655ff54eabf42">animFrameInc</a> = 1</td></tr>
+<tr class="memdesc:a4d12b64904ce1978779655ff54eabf42"><td class="mdescLeft">&#160;</td><td class="mdescRight">The increment between animation frames to export.  <br /></td></tr>
 <tr class="separator:a4d12b64904ce1978779655ff54eabf42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ad9c1638228c535bd6f65aa9637430e" id="r_a2ad9c1638228c535bd6f65aa9637430e"><td class="memItemLeft" align="right" valign="top"><a id="a2ad9c1638228c535bd6f65aa9637430e" name="a2ad9c1638228c535bd6f65aa9637430e"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>createParents</b> =false</td></tr>
+<tr class="memitem:a2ad9c1638228c535bd6f65aa9637430e" id="r_a2ad9c1638228c535bd6f65aa9637430e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportOptions.html#a2ad9c1638228c535bd6f65aa9637430e">createParents</a> = false</td></tr>
+<tr class="memdesc:a2ad9c1638228c535bd6f65aa9637430e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether to automatically create any missing parent nodes in the USD hierarchy.  <br /></td></tr>
 <tr class="separator:a2ad9c1638228c535bd6f65aa9637430e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Holds configuration options that control the behavior of a Maya to USD export. </p>
+<p>This class provides basic options for animation frame range and structural control during the export process. It's planned to be extended in the future to support more advanced settings. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
+<a id="acda22f5babf44a698c0ecc08eb4f18b9" name="acda22f5babf44a698c0ecc08eb4f18b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acda22f5babf44a698c0ecc08eb4f18b9">&#9670;&#160;</a></span>animFrameEnd</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MayaUSDExport::ExportOptions::animFrameEnd = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The end frame for animation export. </p>
+<p>Only frames up to this value (inclusive) will be included in the exported USD data. </p>
+
+</div>
+</div>
+<a id="a4d12b64904ce1978779655ff54eabf42" name="a4d12b64904ce1978779655ff54eabf42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d12b64904ce1978779655ff54eabf42">&#9670;&#160;</a></span>animFrameInc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MayaUSDExport::ExportOptions::animFrameInc = 1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The increment between animation frames to export. </p>
+<p>For example, if set to 2, every other frame will be exported. </p>
+
+</div>
+</div>
+<a id="aae2540c1155028221b679feb4808bb54" name="aae2540c1155028221b679feb4808bb54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae2540c1155028221b679feb4808bb54">&#9670;&#160;</a></span>animFrameStart</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MayaUSDExport::ExportOptions::animFrameStart = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The start frame for animation export. </p>
+<p>Only frames starting from this value (inclusive) will be included in the exported USD data. </p>
+
+</div>
+</div>
+<a id="a2ad9c1638228c535bd6f65aa9637430e" name="a2ad9c1638228c535bd6f65aa9637430e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ad9c1638228c535bd6f65aa9637430e">&#9670;&#160;</a></span>createParents</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool MayaUSDExport::ExportOptions::createParents = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Whether to automatically create any missing parent nodes in the USD hierarchy. </p>
+<p>If true, the exporter will generate parent USD primitives for any nodes that do not have a complete hierarchy exported from Maya. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/export/<a class="el" href="ExportOptions_8h_source.html">ExportOptions.h</a></li>
 </ul>

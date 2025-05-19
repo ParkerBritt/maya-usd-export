@@ -87,36 +87,57 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;pxr/usd/usd/prim.h&gt;</span></div>
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;pxr/usd/usdGeom/mesh.h&gt;</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;pxr/usd/usdGeom/primvar.h&gt;</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;export/ExportItem.h&quot;</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;export/ExportOptions.h&quot;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="ExportItem_8h.html">export/ExportItem.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="ExportOptions_8h.html">export/ExportOptions.h</a>&quot;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;maya/MApiNamespace.h&quot;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>MayaUSDExport{</div>
-<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1PrimWriter.html">   12</a></span><span class="keyword">class </span><a class="code hl_class" href="classMayaUSDExport_1_1PrimWriter.html">PrimWriter</a> {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <a class="code hl_class" href="classMayaUSDExport_1_1PrimWriter.html">PrimWriter</a>(<a class="code hl_class" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a>&amp; _exportOptions);</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">void</span> writePrims(pxr::UsdStageRefPtr stage);</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">void</span> addExportItem(<a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> _exportItem);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    std::vector&lt;ExportItem&gt; m_exportItems;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">void</span> setAnim(<span class="keywordtype">float</span> frameStart, <span class="keywordtype">float</span> frameEnd);</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keyword">static</span> std::string derivePrimType(MDagPath dagPath, <span class="keywordtype">bool</span> promoteShapes=<span class="keyword">true</span>);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    pxr::VtArray&lt;pxr::GfVec3f&gt; convertMayaPoints(MDagPath _meshPath);</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_class" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a>&amp; m_exportOptions;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">void</span> animatePoints(pxr::UsdAttribute _pointsAttr, <a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> _exportItem);</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    pxr::UsdGeomPrimvar buildUVs(pxr::UsdGeomMesh &amp;_usdMesh, MFnMesh &amp;_mayaMesh);</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">void</span> getDagPathType(<span class="keyword">const</span> MDagPath&amp; dagPath);</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordtype">void</span> setPrimType(pxr::UsdPrim&amp; prim, <span class="keyword">const</span> pxr::TfToken&amp; primTypeName);</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">void</span> setTransform(pxr::UsdPrim usdPrim, MDagPath dagPath);</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>MayaUSDExport {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1PrimWriter.html">   21</a></span><span class="keyword">class </span><a class="code hl_class" href="classMayaUSDExport_1_1PrimWriter.html">PrimWriter</a> {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <a class="code hl_class" href="classMayaUSDExport_1_1PrimWriter.html">PrimWriter</a>(<a class="code hl_class" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a>&amp; _exportOptions);</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>};</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMayaUSDExport_1_1PrimWriter.html#ae6803e89f357cf7460ad2f8563819305">writePrims</a>(pxr::UsdStageRefPtr stage);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMayaUSDExport_1_1PrimWriter.html#a3495651716d0899c25e9d973b5e473b6">addExportItem</a>(<a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> _exportItem);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classMayaUSDExport_1_1PrimWriter.html#afc602ccc65b0eefc7f61eb40fdee3ba5">setAnim</a>(<span class="keywordtype">float</span> frameStart, <span class="keywordtype">float</span> frameEnd);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keyword">static</span> std::string <a class="code hl_function" href="classMayaUSDExport_1_1PrimWriter.html#a2ec73f0477dfaa1e055aea0fbfae5dfc">derivePrimType</a>(MDagPath dagPath, <span class="keywordtype">bool</span> promoteShapes = <span class="keyword">true</span>);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classMayaUSDExport_1_1PrimWriter.html#a7c2dec1eface3ca065ad825c3175116c">   58</a></span>    std::vector&lt;ExportItem&gt; <a class="code hl_variable" href="classMayaUSDExport_1_1PrimWriter.html#a7c2dec1eface3ca065ad825c3175116c">m_exportItems</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    pxr::VtArray&lt;pxr::GfVec3f&gt; convertMayaPoints(MDagPath _meshPath);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <a class="code hl_class" href="classMayaUSDExport_1_1ExportOptions.html">ExportOptions</a>&amp; m_exportOptions;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">void</span> animatePoints(pxr::UsdAttribute _pointsAttr, <a class="code hl_class" href="classMayaUSDExport_1_1ExportItem.html">ExportItem</a> _exportItem);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    pxr::UsdGeomPrimvar buildUVs(pxr::UsdGeomMesh&amp; _usdMesh, MFnMesh&amp; _mayaMesh);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordtype">void</span> getDagPathType(<span class="keyword">const</span> MDagPath&amp; dagPath);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordtype">void</span> setPrimType(pxr::UsdPrim&amp; prim, <span class="keyword">const</span> pxr::TfToken&amp; primTypeName);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keywordtype">void</span> setTransform(pxr::UsdPrim usdPrim, MDagPath dagPath);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>};</div>
 </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>}</div>
-<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html">MayaUSDExport::ExportItem</a></div><div class="ttdef"><b>Definition</b> ExportItem.h:8</div></div>
-<div class="ttc" id="aclassMayaUSDExport_1_1ExportOptions_html"><div class="ttname"><a href="classMayaUSDExport_1_1ExportOptions.html">MayaUSDExport::ExportOptions</a></div><div class="ttdef"><b>Definition</b> ExportOptions.h:8</div></div>
-<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html">MayaUSDExport::PrimWriter</a></div><div class="ttdef"><b>Definition</b> PrimWriter.h:12</div></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>}</div>
+<div class="ttc" id="aExportItem_8h_html"><div class="ttname"><a href="ExportItem_8h.html">ExportItem.h</a></div><div class="ttdoc">Defines the ExportItem class used in the Maya to USD export process.</div></div>
+<div class="ttc" id="aExportOptions_8h_html"><div class="ttname"><a href="ExportOptions_8h.html">ExportOptions.h</a></div><div class="ttdoc">Defines export configuration options for Maya to USD export.</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1ExportItem_html"><div class="ttname"><a href="classMayaUSDExport_1_1ExportItem.html">MayaUSDExport::ExportItem</a></div><div class="ttdoc">Represents a single Maya DAG node intended for export to USD.</div><div class="ttdef"><b>Definition</b> ExportItem.h:24</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1ExportOptions_html"><div class="ttname"><a href="classMayaUSDExport_1_1ExportOptions.html">MayaUSDExport::ExportOptions</a></div><div class="ttdoc">Holds configuration options that control the behavior of a Maya to USD export.</div><div class="ttdef"><b>Definition</b> ExportOptions.h:21</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html">MayaUSDExport::PrimWriter</a></div><div class="ttdoc">Responsible for writing Maya primitives to a USD stage.</div><div class="ttdef"><b>Definition</b> PrimWriter.h:21</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html_a2ec73f0477dfaa1e055aea0fbfae5dfc"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html#a2ec73f0477dfaa1e055aea0fbfae5dfc">MayaUSDExport::PrimWriter::derivePrimType</a></div><div class="ttdeci">static std::string derivePrimType(MDagPath dagPath, bool promoteShapes=true)</div><div class="ttdoc">Derive the USD primitive type from a given Maya DAG path.</div><div class="ttdef"><b>Definition</b> PrimWriter.cpp:163</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html_a3495651716d0899c25e9d973b5e473b6"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html#a3495651716d0899c25e9d973b5e473b6">MayaUSDExport::PrimWriter::addExportItem</a></div><div class="ttdeci">void addExportItem(ExportItem _exportItem)</div><div class="ttdoc">Add a new export item to be written to USD.</div><div class="ttdef"><b>Definition</b> PrimWriter.cpp:38</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html_a7c2dec1eface3ca065ad825c3175116c"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html#a7c2dec1eface3ca065ad825c3175116c">MayaUSDExport::PrimWriter::m_exportItems</a></div><div class="ttdeci">std::vector&lt; ExportItem &gt; m_exportItems</div><div class="ttdoc">List of export items queued for writing.</div><div class="ttdef"><b>Definition</b> PrimWriter.h:58</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html_ae6803e89f357cf7460ad2f8563819305"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html#ae6803e89f357cf7460ad2f8563819305">MayaUSDExport::PrimWriter::writePrims</a></div><div class="ttdeci">void writePrims(pxr::UsdStageRefPtr stage)</div><div class="ttdoc">Write all added export items to the given USD stage.</div><div class="ttdef"><b>Definition</b> PrimWriter.cpp:72</div></div>
+<div class="ttc" id="aclassMayaUSDExport_1_1PrimWriter_html_afc602ccc65b0eefc7f61eb40fdee3ba5"><div class="ttname"><a href="classMayaUSDExport_1_1PrimWriter.html#afc602ccc65b0eefc7f61eb40fdee3ba5">MayaUSDExport::PrimWriter::setAnim</a></div><div class="ttdeci">void setAnim(float frameStart, float frameEnd)</div><div class="ttdoc">Set the animation frame range for exporting animated geometry.</div><div class="ttdef"><b>Definition</b> PrimWriter.cpp:296</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

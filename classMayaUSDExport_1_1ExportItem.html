@@ -80,25 +80,125 @@ $(function() {
   <div class="headertitle"><div class="title">MayaUSDExport::ExportItem Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Represents a single Maya DAG node intended for export to USD.  
+ <a href="classMayaUSDExport_1_1ExportItem.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ExportItem_8h_source.html">ExportItem.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a389c52be98c837066309190b26cd8869" id="r_a389c52be98c837066309190b26cd8869"><td class="memItemLeft" align="right" valign="top"><a id="a389c52be98c837066309190b26cd8869" name="a389c52be98c837066309190b26cd8869"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ExportItem</b> (MDagPath dagPath)</td></tr>
+<tr class="memitem:a389c52be98c837066309190b26cd8869" id="r_a389c52be98c837066309190b26cd8869"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportItem.html#a389c52be98c837066309190b26cd8869">ExportItem</a> (MDagPath <a class="el" href="classMayaUSDExport_1_1ExportItem.html#ad77e495e8ea31d87bd4474b66904641a">dagPath</a>)</td></tr>
+<tr class="memdesc:a389c52be98c837066309190b26cd8869"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor that initializes the export item with a Maya DAG path.  <br /></td></tr>
 <tr class="separator:a389c52be98c837066309190b26cd8869"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a20589c73d777c5f74e69ab1a78b0a13d" id="r_a20589c73d777c5f74e69ab1a78b0a13d"><td class="memItemLeft" align="right" valign="top"><a id="a20589c73d777c5f74e69ab1a78b0a13d" name="a20589c73d777c5f74e69ab1a78b0a13d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setPrimType</b> (pxr::TfToken usdTypeName)</td></tr>
+<tr class="memitem:a20589c73d777c5f74e69ab1a78b0a13d" id="r_a20589c73d777c5f74e69ab1a78b0a13d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportItem.html#a20589c73d777c5f74e69ab1a78b0a13d">setPrimType</a> (pxr::TfToken usdTypeName)</td></tr>
+<tr class="memdesc:a20589c73d777c5f74e69ab1a78b0a13d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the USD primitive type for this item.  <br /></td></tr>
 <tr class="separator:a20589c73d777c5f74e69ab1a78b0a13d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0db6badb8fefa93852fb49ae62bb02f1" id="r_a0db6badb8fefa93852fb49ae62bb02f1"><td class="memItemLeft" align="right" valign="top"><a id="a0db6badb8fefa93852fb49ae62bb02f1" name="a0db6badb8fefa93852fb49ae62bb02f1"></a>
-pxr::TfToken&#160;</td><td class="memItemRight" valign="bottom"><b>getPrimType</b> ()</td></tr>
+<tr class="memitem:a0db6badb8fefa93852fb49ae62bb02f1" id="r_a0db6badb8fefa93852fb49ae62bb02f1"><td class="memItemLeft" align="right" valign="top">pxr::TfToken&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMayaUSDExport_1_1ExportItem.html#a0db6badb8fefa93852fb49ae62bb02f1">getPrimType</a> ()</td></tr>
+<tr class="memdesc:a0db6badb8fefa93852fb49ae62bb02f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the USD primitive type assigned to this item.  <br /></td></tr>
 <tr class="separator:a0db6badb8fefa93852fb49ae62bb02f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad77e495e8ea31d87bd4474b66904641a" id="r_ad77e495e8ea31d87bd4474b66904641a"><td class="memItemLeft" align="right" valign="top"><a id="ad77e495e8ea31d87bd4474b66904641a" name="ad77e495e8ea31d87bd4474b66904641a"></a>
 MDagPath&#160;</td><td class="memItemRight" valign="bottom"><b>dagPath</b></td></tr>
+<tr class="memdesc:ad77e495e8ea31d87bd4474b66904641a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The DAG path of the Maya node associated with this export item. <br /></td></tr>
 <tr class="separator:ad77e495e8ea31d87bd4474b66904641a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a single Maya DAG node intended for export to USD. </p>
+<p><a class="el" href="classMayaUSDExport_1_1ExportItem.html" title="Represents a single Maya DAG node intended for export to USD.">ExportItem</a> encapsulates the essential data required to export a Maya object to USD. It stores the DAG path of the Maya object and the corresponding USD primitive type that it should be represented as.</p>
+<dl class="section note"><dt>Note</dt><dd>Future implementations may include export arguments for finer control. </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a389c52be98c837066309190b26cd8869" name="a389c52be98c837066309190b26cd8869"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a389c52be98c837066309190b26cd8869">&#9670;&#160;</a></span>ExportItem()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">MayaUSDExport::ExportItem::ExportItem </td>
+          <td>(</td>
+          <td class="paramtype">MDagPath&#160;</td>
+          <td class="paramname"><em>dagPath</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor that initializes the export item with a Maya DAG path. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dagPath</td><td>The DAG path of the Maya object to be exported. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0db6badb8fefa93852fb49ae62bb02f1" name="a0db6badb8fefa93852fb49ae62bb02f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0db6badb8fefa93852fb49ae62bb02f1">&#9670;&#160;</a></span>getPrimType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pxr::TfToken MayaUSDExport::ExportItem::getPrimType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the USD primitive type assigned to this item. </p>
+<dl class="section return"><dt>Returns</dt><dd>A TfToken representing the USD primitive type. </dd></dl>
+
+</div>
+</div>
+<a id="a20589c73d777c5f74e69ab1a78b0a13d" name="a20589c73d777c5f74e69ab1a78b0a13d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20589c73d777c5f74e69ab1a78b0a13d">&#9670;&#160;</a></span>setPrimType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MayaUSDExport::ExportItem::setPrimType </td>
+          <td>(</td>
+          <td class="paramtype">pxr::TfToken&#160;</td>
+          <td class="paramname"><em>usdTypeName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the USD primitive type for this item. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">usdTypeName</td><td>A TfToken specifying the USD primitive type (e.g., "Mesh", "Xform"). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/export/<a class="el" href="ExportItem_8h_source.html">ExportItem.h</a></li>
 <li>src/export/<b>ExportItem.cpp</b></li>
