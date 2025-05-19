@@ -28,6 +28,7 @@ Future development will aim for feature parity with maya-usd, alongside new func
 
 ## Installation From Source
 > Tested on Maya 2023.3 with maya-usd 0.20.0
+> Tested on Maya 2024.2 with maya-usd 0.25.0 & 0.22.11
 
 ### Prerequisites
 - [OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD)
