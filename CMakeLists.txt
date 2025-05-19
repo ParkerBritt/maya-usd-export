@@ -12,7 +12,6 @@ project(${PROJECT_NAME})
 option(BUILD_TESTS "builds tests" OFF)
 
 # set vars
-set(MAYA_LOCATION "/usr/autodesk/maya" CACHE PATH "Path to maya installation")
 # set from USD_LOCATION environment variable if exists
 if(NOT DEFINED USD_LOCATION AND DEFINED ENV{USD_LOCATION})
     set(USD_LOCATION $ENV{USD_LOCATION} CACHE PATH "Path to USD installation")
@@ -20,7 +19,6 @@ else()
     set(USD_LOCATION "/opt/USD" CACHE PATH "Path to USD installation")
 endif()
 
-message(STATUS "Setting MAYA_LOCATION to '${MAYA_LOCATION}'")
 message(STATUS "Setting USD_LOCATION to '${USD_LOCATION}'")
 message(STATUS "Setting DEVKIT_LOCATION to '$ENV{DEVKIT_LOCATION}'")
 if(NOT DEFINED ENV{DEVKIT_LOCATION})
