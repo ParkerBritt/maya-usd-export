@@ -17,6 +17,7 @@ Future development will aim for feature parity with maya-usd, alongside new func
 </p>
 <br><br><br>
 
+
 ## Features
 - Vertex Animations
 - Copies XForm
@@ -24,13 +25,31 @@ Future development will aim for feature parity with maya-usd, alongside new func
 - Set Individual Types
 - Set Output Path
 
-## Installation
-todo
+## Installation From Source
+> Tested on Maya 2023.3 with maya-usd 0.20.0
 
-# Development
-### Dependencies
+### Prerequisites
+- [OpenUSD](https://github.com/PixarAnimationStudios/OpenUSD)
+    - For maya-usd compatability, check [releases](https://github.com/Autodesk/maya-usd/releases) to find out which version you need
+- [Maya Devkit](https://aps.autodesk.com/developer/overview/maya)
 - Ninja
 - Cmake
-- Maya Devkit
-- USD
 - Qt5
+
+### Build
+```bash
+git clone git@github.com:ParkerBritt/maya-usd-export.git
+cd maya-usd-export
+
+# point these to your actual paths
+export USD_LOCATION="/path/to/usd/build"
+export DEVKIT_LOCATION="/path/to/devkit"
+
+./build.sh
+```
+
+### Install
+```bash
+./install.sh
+```
+
