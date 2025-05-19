@@ -16,6 +16,7 @@
 USDExportInterface::USDExportInterface(QWidget* parent)
 {
     setWindowTitle("Maya USD Export");
+    setAttribute(Qt::WA_DeleteOnClose);
 
 
 
