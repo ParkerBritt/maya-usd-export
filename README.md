@@ -1,9 +1,8 @@
 <h1 align="center">Maya USD Export</h1>
-<p align="center"}>
+<p align="center">
   <img src="https://img.shields.io/badge/Maya-37A5CC?style=for-the-badge&logo=autodeskmaya&logoColor=white">
   <img src="https://img.shields.io/badge/Qt-41CD52?style=for-the-badge&logo=Qt&logoColor=white">
   <a href="https://github.com/ParkerBritt?tab=repositories&q=&type=&language=c%2B%2B&sort="><img src="https://parkerbritt.com/badge?label=C%2B%2B&icon=cpp&color=00599C"></a>
-
 </p>
 
 <img align="right" height=400px src="screenshots/user_interface.png" alt="interface">
