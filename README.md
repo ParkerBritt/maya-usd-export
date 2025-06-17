@@ -1,4 +1,4 @@
-<h1 align="center">Maya USD Export</h1>
+<h1 align="center">USD Export for Maya</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/Maya-37A5CC?style=for-the-badge&logo=autodeskmaya&logoColor=white">
   <img src="https://img.shields.io/badge/Qt-41CD52?style=for-the-badge&logo=Qt&logoColor=white">
