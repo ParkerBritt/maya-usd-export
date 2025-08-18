@@ -1,8 +1,8 @@
 <h1 align="center">USD Export for Maya</h1>
 <p align="center">
-  <img src="https://img.shields.io/badge/Maya-37A5CC?style=for-the-badge&logo=autodeskmaya&logoColor=white">
-  <img src="https://img.shields.io/badge/Qt-41CD52?style=for-the-badge&logo=Qt&logoColor=white">
-  <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white">
+  <a href="https://www.autodesk.com/"><img src="https://parkerbritt.com/badge?label=Maya&icon=autodeskmaya&color=37A5CC"></a>
+  <a href="https://www.qt.io/"><img src="https://parkerbritt.com/badge?label=Qt&icon=qt&color=41CD52"></a>
+  <a href="https://github.com/ParkerBritt?tab=repositories&q=&type=&language=c%2B%2B&sort="><img src="https://parkerbritt.com/badge?label=C%2B%2B&icon=cplusplus&color=00599C"></a>
 </p>
 <video src="https://github.com/user-attachments/assets/e336f5bf-d99c-45f9-a92d-c1b990ed5071"></video>
 
@@ -58,3 +58,4 @@ Or build the docs locally with:
 cd maya-usd-export
 doxygen
 ```
+
